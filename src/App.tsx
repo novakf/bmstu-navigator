@@ -1,26 +1,51 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React, { useEffect } from "react"
+import ReactDOM from "react-dom/client"
+import "./App.css"
+import Editor from "./svgedit/editor/Editor"
+import "./svgedit/editor/svgedit.css"
+import { TopPanelGlobal } from "./TopPanelGlobal"
+import { Provider } from "react-redux"
+import { store } from "./state"
 
 function App() {
+  useEffect(() => {
+    if (window.svgEditor) return
+
+    const svgEditor = new Editor(
+      document.getElementById("container") as HTMLElement
+    )
+
+    svgEditor.setConfig({
+      allowInitialUserOverride: true,
+      extensions: [],
+      noDefaultExtensions: false,
+      userExtensions: [
+        /* { pathName: '/packages/react-test/dist/react-test.js' } */
+      ],
+    })
+
+    window.editor = svgEditor
+
+    svgEditor.init().then(() => {
+      const topPanelGlobal = ReactDOM.createRoot(
+        document.querySelector("#top-panel-global") as HTMLElement
+      )
+
+      topPanelGlobal.render(
+        <React.StrictMode>
+          <Provider store={store}>
+            <TopPanelGlobal editor={svgEditor} />
+          </Provider>
+        </React.StrictMode>
+      )
+    })
+  }, [])
+
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <div id="container" style={{ width: "100%", height: "100vh" }}></div>
     </div>
-  );
+  )
 }
 
-export default App;
+export default App
