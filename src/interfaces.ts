@@ -6,3 +6,11 @@ export enum UniverObjectType {
   "LadderPoint" = "ladder-point",
   "FloorPoint" = "floor-point",
 }
+
+export type UniverObject = {
+  name: string
+  svgId: string
+  type: UniverObjectType
+  xCoord?: string
+  yCoord?: string
+}

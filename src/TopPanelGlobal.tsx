@@ -7,6 +7,7 @@ import {
   setSelectedElementAction,
   useSelectedElement,
 } from "./state/editor/slice"
+import { UOLinkToolbar } from "./components/uo-link/uo-link-toolbar"
 
 type Props = {
   editor: Editor
@@ -73,6 +74,7 @@ export const TopPanelGlobal: FC<Props> = ({ editor }) => {
           <GenericUniverObjectForm onSubmit={onSubmit} onCancel={onCancel} />
         )}
       </Modal>
+      <UOLinkToolbar />
     </div>
   )
 }
