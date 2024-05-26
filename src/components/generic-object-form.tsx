@@ -4,15 +4,25 @@ import { AuditoriumForm } from "./object-form/auditorium-form"
 import { AuditoriumPointForm } from "./object-form/auditorium-point-form"
 import { HallwayPointForm } from "./object-form/hallway-point"
 import { FC, useState } from "react"
-import { useSelectedElement } from "../state/editor/slice"
+import {
+  setUoItemsAction,
+  useSelectedElement,
+  useUoItems,
+} from "../state/editor/slice"
 import { LadderPointForm } from "./object-form/ladder-point"
 import { FloorPointForm } from "./object-form/floor-point"
+import { HallwayForm } from "./object-form/hallway-form"
+import { GuideForm } from "./object-form/guide-form"
+import { useDispatch } from "react-redux"
+import { LadderForm } from "./object-form/ladder-form"
 
 const univerObjectFormMap = {
   [UniverObjectType.Auditorium]: AuditoriumForm,
   [UniverObjectType.AuditoriumPoint]: AuditoriumPointForm,
+  [UniverObjectType.Guide]: GuideForm,
+  [UniverObjectType.Hallway]: HallwayForm,
   [UniverObjectType.HallwayPoint]: HallwayPointForm,
-  [UniverObjectType.Ladder]: HallwayPointForm,
+  [UniverObjectType.Ladder]: LadderForm,
   [UniverObjectType.LadderPoint]: LadderPointForm,
   [UniverObjectType.FloorPoint]: FloorPointForm,
 }
@@ -23,6 +33,8 @@ type Props = {
 }
 
 export const GenericUniverObjectForm: FC<Props> = ({ onSubmit, onCancel }) => {
+  const dispatch = useDispatch()
+  const uoItems = useUoItems()
   const selectedElement = useSelectedElement()
   const [currentUOForm, setCurrentUOForm] = useState<UniverObjectType | null>(
     null
@@ -47,6 +59,9 @@ export const GenericUniverObjectForm: FC<Props> = ({ onSubmit, onCancel }) => {
       label: "Точка аудитории (дверь)",
       disabled: element.tagName !== "circle",
     },
+    { value: UniverObjectType.Guide, label: "Направляющая" },
+    { value: UniverObjectType.Hallway, label: "Коридор" },
+    { value: UniverObjectType.Ladder, label: "Лестница" },
     {
       value: UniverObjectType.HallwayPoint,
       label: "Точка коридора",
@@ -65,14 +80,12 @@ export const GenericUniverObjectForm: FC<Props> = ({ onSubmit, onCancel }) => {
   ]
 
   const onFinish = (values: any) => {
-    const uoItems = JSON.parse(localStorage.getItem("uoIds") || "[]")
-
-    uoItems.push(values.svgId)
-    localStorage.setItem("uoIds", JSON.stringify(uoItems))
-
-    localStorage.setItem(values.svgId, JSON.stringify(values))
-
-    console.log(values)
+    dispatch(
+      setUoItemsAction({
+        ...uoItems,
+        [values.id]: values,
+      })
+    )
 
     onSubmit()
   }

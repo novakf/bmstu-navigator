@@ -1,9 +1,13 @@
 import { configureStore } from "@reduxjs/toolkit"
 import editorReducer from "./editor/slice"
+import userReducer from "./user"
+import viewerReducer from "./viewer"
 
 export const store = configureStore({
   reducer: {
     editor: editorReducer,
+    user: userReducer,
+    viewer: viewerReducer,
   },
 })
 

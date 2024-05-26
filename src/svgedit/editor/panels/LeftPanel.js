@@ -1,5 +1,5 @@
-import SvgCanvas from '@svgedit/svgcanvas'
-import leftPanelHTML from './LeftPanel.html'
+import SvgCanvas from "@svgedit/svgcanvas"
+import leftPanelHTML from "./LeftPanel.html"
 
 const { $id, $qa, $click } = SvgCanvas
 
@@ -13,7 +13,7 @@ class LeftPanel {
   /**
    * @param {PlainObject} editor svgedit handler
    */
-  constructor (editor) {
+  constructor(editor) {
     this.editor = editor
   }
 
@@ -26,10 +26,10 @@ class LeftPanel {
    * @param {string|Element} button The DOM element or string selector representing the toolbar button
    * @returns {boolean} Whether the button was disabled or not
    */
-  updateLeftPanel (button) {
+  updateLeftPanel(button) {
     if (button.disabled) return false
     // remove the pressed state on other(s) button(s)
-    $qa('#tools_left *[pressed]').forEach((b) => {
+    $qa("#tools_left *[pressed]").forEach((b) => {
       b.pressed = false
     })
     // pressed state for the clicked button
@@ -43,10 +43,10 @@ class LeftPanel {
    * @function module:SVGEditor.clickSelect
    * @returns {void}
    */
-  clickSelect () {
-    if (this.updateLeftPanel('tool_select')) {
-      this.editor.workarea.style.cursor = 'auto'
-      this.editor.svgCanvas.setMode('select')
+  clickSelect() {
+    if (this.updateLeftPanel("tool_select")) {
+      this.editor.workarea.style.cursor = "auto"
+      this.editor.svgCanvas.setMode("select")
     }
   }
 
@@ -54,9 +54,9 @@ class LeftPanel {
    *
    * @returns {void}
    */
-  clickFHPath () {
-    if (this.updateLeftPanel('tool_fhpath')) {
-      this.editor.svgCanvas.setMode('fhpath')
+  clickFHPath() {
+    if (this.updateLeftPanel("tool_fhpath")) {
+      this.editor.svgCanvas.setMode("fhpath")
     }
   }
 
@@ -64,9 +64,9 @@ class LeftPanel {
    *
    * @returns {void}
    */
-  clickLine () {
-    if (this.updateLeftPanel('tool_line')) {
-      this.editor.svgCanvas.setMode('line')
+  clickLine() {
+    if (this.updateLeftPanel("tool_line")) {
+      this.editor.svgCanvas.setMode("line")
     }
   }
 
@@ -74,9 +74,9 @@ class LeftPanel {
    *
    * @returns {void}
    */
-  clickSquare () {
-    if (this.updateLeftPanel('tool_square')) {
-      this.editor.svgCanvas.setMode('square')
+  clickSquare() {
+    if (this.updateLeftPanel("tool_square")) {
+      this.editor.svgCanvas.setMode("square")
     }
   }
 
@@ -84,9 +84,9 @@ class LeftPanel {
    *
    * @returns {void}
    */
-  clickRect () {
-    if (this.updateLeftPanel('tool_rect')) {
-      this.editor.svgCanvas.setMode('rect')
+  clickRect() {
+    if (this.updateLeftPanel("tool_rect")) {
+      this.editor.svgCanvas.setMode("rect")
     }
   }
 
@@ -94,9 +94,9 @@ class LeftPanel {
    *
    * @returns {void}
    */
-  clickFHRect () {
-    if (this.updateLeftPanel('tool_fhrect')) {
-      this.editor.svgCanvas.setMode('fhrect')
+  clickFHRect() {
+    if (this.updateLeftPanel("tool_fhrect")) {
+      this.editor.svgCanvas.setMode("fhrect")
     }
   }
 
@@ -104,9 +104,9 @@ class LeftPanel {
    *
    * @returns {void}
    */
-  clickCircle () {
-    if (this.updateLeftPanel('tool_circle')) {
-      this.editor.svgCanvas.setMode('circle')
+  clickCircle() {
+    if (this.updateLeftPanel("tool_circle")) {
+      this.editor.svgCanvas.setMode("circle")
     }
   }
 
@@ -114,9 +114,9 @@ class LeftPanel {
    *
    * @returns {void}
    */
-  clickEllipse () {
-    if (this.updateLeftPanel('tool_ellipse')) {
-      this.editor.svgCanvas.setMode('ellipse')
+  clickEllipse() {
+    if (this.updateLeftPanel("tool_ellipse")) {
+      this.editor.svgCanvas.setMode("ellipse")
     }
   }
 
@@ -124,9 +124,9 @@ class LeftPanel {
    *
    * @returns {void}
    */
-  clickFHEllipse () {
-    if (this.updateLeftPanel('tool_fhellipse')) {
-      this.editor.svgCanvas.setMode('fhellipse')
+  clickFHEllipse() {
+    if (this.updateLeftPanel("tool_fhellipse")) {
+      this.editor.svgCanvas.setMode("fhellipse")
     }
   }
 
@@ -134,9 +134,9 @@ class LeftPanel {
    *
    * @returns {void}
    */
-  clickImage () {
-    if (this.updateLeftPanel('tool_image')) {
-      this.editor.svgCanvas.setMode('image')
+  clickImage() {
+    if (this.updateLeftPanel("tool_image")) {
+      this.editor.svgCanvas.setMode("image")
     }
   }
 
@@ -144,9 +144,9 @@ class LeftPanel {
    *
    * @returns {void}
    */
-  clickZoom () {
-    if (this.updateLeftPanel('tool_zoom')) {
-      this.editor.svgCanvas.setMode('zoom')
+  clickZoom() {
+    if (this.updateLeftPanel("tool_zoom")) {
+      this.editor.svgCanvas.setMode("zoom")
       this.editor.workarea.style.cursor = this.editor.zoomInIcon
     }
   }
@@ -155,8 +155,8 @@ class LeftPanel {
    *
    * @returns {void}
    */
-  dblclickZoom () {
-    if (this.updateLeftPanel('tool_zoom')) {
+  dblclickZoom() {
+    if (this.updateLeftPanel("tool_zoom")) {
       this.editor.zoomImage()
       this.clickSelect()
     }
@@ -166,9 +166,9 @@ class LeftPanel {
    *
    * @returns {void}
    */
-  clickText () {
-    if (this.updateLeftPanel('tool_text')) {
-      this.editor.svgCanvas.setMode('text')
+  clickText() {
+    if (this.updateLeftPanel("tool_text")) {
+      this.editor.svgCanvas.setMode("text")
     }
   }
 
@@ -176,16 +176,16 @@ class LeftPanel {
    *
    * @returns {void}
    */
-  clickPath () {
-    if (this.updateLeftPanel('tool_path')) {
-      this.editor.svgCanvas.setMode('path')
+  clickPath() {
+    if (this.updateLeftPanel("tool_path")) {
+      this.editor.svgCanvas.setMode("path")
     }
   }
 
   /**
    * @type {module}
    */
-  add (id, handler) {
+  add(id, handler) {
     $click($id(id), () => {
       if (this.updateLeftPanel(id)) {
         handler()
@@ -196,28 +196,28 @@ class LeftPanel {
   /**
    * @type {module}
    */
-  init () {
+  init() {
     // add Left panel
-    const template = document.createElement('template')
+    const template = document.createElement("template")
     template.innerHTML = leftPanelHTML
     this.editor.$svgEditor.append(template.content.cloneNode(true))
     // register actions for left panel
-    $click($id('tool_select'), this.clickSelect.bind(this))
-    $click($id('tool_fhpath'), this.clickFHPath.bind(this))
-    $click($id('tool_text'), this.clickText.bind(this))
-    $click($id('tool_image'), this.clickImage.bind(this))
-    $click($id('tool_zoom'), this.clickZoom.bind(this))
-    $id('tool_zoom').addEventListener('dblclick', this.dblclickZoom.bind(this))
-    $click($id('tool_path'), this.clickPath.bind(this))
-    $click($id('tool_line'), this.clickLine.bind(this))
+    $click($id("tool_select"), this.clickSelect.bind(this))
+    $click($id("tool_fhpath"), this.clickFHPath.bind(this))
+    $click($id("tool_text"), this.clickText.bind(this))
+    $click($id("tool_image"), this.clickImage.bind(this))
+    $click($id("tool_zoom"), this.clickZoom.bind(this))
+    $id("tool_zoom").addEventListener("dblclick", this.dblclickZoom.bind(this))
+    $click($id("tool_path"), this.clickPath.bind(this))
+    $click($id("tool_line"), this.clickLine.bind(this))
 
     // flyout
-    $click($id('tool_rect'), this.clickRect.bind(this))
-    $click($id('tool_square'), this.clickSquare.bind(this))
-    $click($id('tool_fhrect'), this.clickFHRect.bind(this))
-    $click($id('tool_ellipse'), this.clickEllipse.bind(this))
-    $click($id('tool_circle'), this.clickCircle.bind(this))
-    $click($id('tool_fhellipse'), this.clickFHEllipse.bind(this))
+    $click($id("tool_rect"), this.clickRect.bind(this))
+    $click($id("tool_square"), this.clickSquare.bind(this))
+    $click($id("tool_fhrect"), this.clickFHRect.bind(this))
+    $click($id("tool_ellipse"), this.clickEllipse.bind(this))
+    $click($id("tool_circle"), this.clickCircle.bind(this))
+    $click($id("tool_fhellipse"), this.clickFHEllipse.bind(this))
   }
 }
 

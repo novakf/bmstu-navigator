@@ -5,10 +5,10 @@
  * @copyright 2011 Jeff Schiller
  */
 
-import { jsPDF as JsPDF } from 'jspdf'
-import 'svg2pdf.js'
-import html2canvas from 'html2canvas'
-import * as hstry from './history.js'
+import { jsPDF as JsPDF } from "jspdf"
+import "svg2pdf.js"
+import html2canvas from "html2canvas"
+import * as hstry from "./history.js"
 import {
   text2xml,
   cleanupElement,
@@ -21,26 +21,26 @@ import {
   dataURLToObjectURL,
   walkTree,
   getBBox as utilsGetBBox,
-  hashCode
-} from './utilities.js'
+  hashCode,
+} from "./utilities.js"
 import {
   transformPoint,
   transformListToTransform,
-  getTransformList
-} from './math.js'
-import { convertUnit, shortFloat, convertToNum } from './units.js'
-import { isGecko, isChrome, isWebkit } from '../common/browser.js'
-import * as pathModule from './path.js'
-import { NS } from './namespaces.js'
-import * as draw from './draw.js'
-import { recalculateDimensions } from './recalculate.js'
-import { getParents, getClosest } from '../common/util.js'
+  getTransformList,
+} from "./math.js"
+import { convertUnit, shortFloat, convertToNum } from "./units.js"
+import { isGecko, isChrome, isWebkit } from "../common/browser.js"
+import * as pathModule from "./path.js"
+import { NS } from "./namespaces.js"
+import * as draw from "./draw.js"
+import { recalculateDimensions } from "./recalculate.js"
+import { getParents, getClosest } from "../common/util.js"
 
 const {
   InsertElementCommand,
   RemoveElementCommand,
   ChangeElementCommand,
-  BatchCommand
+  BatchCommand,
 } = hstry
 
 let svgCanvas = null
@@ -50,7 +50,7 @@ let svgCanvas = null
  * @param {module:svg-exec.SvgCanvas#init} svgContext
  * @returns {void}
  */
-export const init = canvas => {
+export const init = (canvas) => {
   svgCanvas = canvas
   svgCanvas.setSvgString = setSvgString
   svgCanvas.importSvgString = importSvgString
@@ -79,7 +79,7 @@ const svgCanvasToString = () => {
   // Keep SVG-Edit comment on top
   const childNodesElems = svgCanvas.getSvgContent().childNodes
   childNodesElems.forEach((node, i) => {
-    if (i && node.nodeType === 8 && node.data.includes('Created with')) {
+    if (i && node.nodeType === 8 && node.data.includes("Created with")) {
       svgCanvas.getSvgContent().firstChild.before(node)
     }
   })
@@ -93,12 +93,12 @@ const svgCanvasToString = () => {
   const nakedSvgs = []
 
   // Unwrap gsvg if it has no special attributes (only id and style)
-  const gsvgElems = svgCanvas.getSvgContent().querySelectorAll('g[data-gsvg]')
-  Array.prototype.forEach.call(gsvgElems, element => {
+  const gsvgElems = svgCanvas.getSvgContent().querySelectorAll("g[data-gsvg]")
+  Array.prototype.forEach.call(gsvgElems, (element) => {
     const attrs = element.attributes
     let len = attrs.length
     for (let i = 0; i < len; i++) {
-      if (attrs[i].nodeName === 'id' || attrs[i].nodeName === 'style') {
+      if (attrs[i].nodeName === "id" || attrs[i].nodeName === "style") {
         len--
       }
     }
@@ -113,7 +113,7 @@ const svgCanvasToString = () => {
 
   // Rewrap gsvg
   if (nakedSvgs.length) {
-    Array.prototype.forEach.call(nakedSvgs, el => {
+    Array.prototype.forEach.call(nakedSvgs, (el) => {
       svgCanvas.groupSvgElem(el)
     })
   }
@@ -133,7 +133,7 @@ const svgToString = (elem, indent) => {
   const nsMap = svgCanvas.getNsMap()
   const out = []
   const unit = curConfig.baseUnit
-  const unitRe = new RegExp('^-?[\\d\\.]+' + unit + '$')
+  const unitRe = new RegExp("^-?[\\d\\.]+" + unit + "$")
 
   if (elem) {
     cleanupElement(elem)
@@ -144,15 +144,15 @@ const svgToString = (elem, indent) => {
     })
 
     for (let i = 0; i < indent; i++) {
-      out.push(' ')
+      out.push(" ")
     }
-    out.push('<')
+    out.push("<")
     out.push(elem.nodeName)
-    if (elem.id === 'svgcontent') {
+    if (elem.id === "svgcontent") {
       // Process root element separately
       const res = svgCanvas.getResolution()
 
-      let vb = ''
+      let vb = ""
       // TODO: Allow this by dividing all values by current baseVal
       // Note that this also means we should properly deal with this on import
       // if (curConfig.baseUnit !== 'px') {
@@ -165,10 +165,10 @@ const svgToString = (elem, indent) => {
       //   res.h += unit;
       // }
       if (curConfig.dynamicOutput) {
-        vb = elem.getAttribute('viewBox')
+        vb = elem.getAttribute("viewBox")
         out.push(' viewBox="' + vb + '" xmlns="' + NS.SVG + '"')
       } else {
-        if (unit !== 'px') {
+        if (unit !== "px") {
           res.w = convertUnit(res.w, unit) + unit
           res.h = convertUnit(res.h, unit) + unit
         }
@@ -180,10 +180,10 @@ const svgToString = (elem, indent) => {
       const nsuris = {}
 
       // Check elements for namespaces, add if found
-      const csElements = elem.querySelectorAll('*')
+      const csElements = elem.querySelectorAll("*")
       const cElements = Array.prototype.slice.call(csElements)
       cElements.push(elem)
-      Array.prototype.forEach.call(cElements, el => {
+      Array.prototype.forEach.call(cElements, (el) => {
         // const el = this;
         // for some elements have no attribute
         const uri = el.namespaceURI
@@ -191,18 +191,18 @@ const svgToString = (elem, indent) => {
           uri &&
           !nsuris[uri] &&
           nsMap[uri] &&
-          nsMap[uri] !== 'xmlns' &&
-          nsMap[uri] !== 'xml'
+          nsMap[uri] !== "xmlns" &&
+          nsMap[uri] !== "xml"
         ) {
           nsuris[uri] = true
-          out.push(' xmlns:' + nsMap[uri] + '="' + uri + '"')
+          out.push(" xmlns:" + nsMap[uri] + '="' + uri + '"')
         }
         if (el.attributes.length > 0) {
           for (const [, attr] of Object.entries(el.attributes)) {
             const u = attr.namespaceURI
-            if (u && !nsuris[u] && nsMap[u] !== 'xmlns' && nsMap[u] !== 'xml') {
+            if (u && !nsuris[u] && nsMap[u] !== "xmlns" && nsMap[u] !== "xml") {
               nsuris[u] = true
-              out.push(' xmlns:' + nsMap[u] + '="' + u + '"')
+              out.push(" xmlns:" + nsMap[u] + '="' + u + '"')
             }
           }
         }
@@ -210,31 +210,31 @@ const svgToString = (elem, indent) => {
 
       let i = attrs.length
       const attrNames = [
-        'width',
-        'height',
-        'xmlns',
-        'x',
-        'y',
-        'viewBox',
-        'id',
-        'overflow'
+        "width",
+        "height",
+        "xmlns",
+        "x",
+        "y",
+        "viewBox",
+        "id",
+        "overflow",
       ]
       while (i--) {
         const attr = attrs[i]
         const attrVal = toXml(attr.value)
 
         // Namespaces have already been dealt with, so skip
-        if (attr.nodeName.startsWith('xmlns:')) {
+        if (attr.nodeName.startsWith("xmlns:")) {
           continue
         }
 
         // only serialize attributes we don't use internally
         if (
-          attrVal !== '' &&
+          attrVal !== "" &&
           !attrNames.includes(attr.localName) &&
           (!attr.namespaceURI || nsMap[attr.namespaceURI])
         ) {
-          out.push(' ')
+          out.push(" ")
           out.push(attr.nodeName)
           out.push('="')
           out.push(attrVal)
@@ -243,11 +243,11 @@ const svgToString = (elem, indent) => {
       }
     } else {
       // Skip empty defs
-      if (elem.nodeName === 'defs' && !elem.firstChild) {
-        return ''
+      if (elem.nodeName === "defs" && !elem.firstChild) {
+        return ""
       }
 
-      const mozAttrs = ['-moz-math-font-style', '_moz-math-font-style']
+      const mozAttrs = ["-moz-math-font-style", "_moz-math-font-style"]
       for (let i = attrs.length - 1; i >= 0; i--) {
         const attr = attrs[i]
         let attrVal = toXml(attr.value)
@@ -255,23 +255,23 @@ const svgToString = (elem, indent) => {
         if (mozAttrs.includes(attr.localName)) {
           continue
         }
-        if (attrVal === 'null') {
-          const styleName = attr.localName.replace(/-[a-z]/g, s =>
+        if (attrVal === "null") {
+          const styleName = attr.localName.replace(/-[a-z]/g, (s) =>
             s[1].toUpperCase()
           )
           if (Object.prototype.hasOwnProperty.call(elem.style, styleName)) {
             continue
           }
         }
-        if (attrVal !== '') {
-          if (attrVal.startsWith('pointer-events')) {
+        if (attrVal !== "") {
+          if (attrVal.startsWith("pointer-events")) {
             continue
           }
-          if (attr.localName === 'class' && attrVal.startsWith('se_')) {
+          if (attr.localName === "class" && attrVal.startsWith("se_")) {
             continue
           }
-          out.push(' ')
-          if (attr.localName === 'd') {
+          out.push(" ")
+          if (attr.localName === "d") {
             attrVal = svgCanvas.pathActions.convertPath(elem, true)
           }
           if (!isNaN(attrVal)) {
@@ -283,10 +283,10 @@ const svgToString = (elem, indent) => {
           // Embed images when saving
           if (
             svgCanvas.getSvgOptionApply() &&
-            elem.nodeName === 'image' &&
-            attr.localName === 'href' &&
+            elem.nodeName === "image" &&
+            attr.localName === "href" &&
             svgCanvas.getSvgOptionImages() &&
-            svgCanvas.getSvgOptionImages() === 'embed'
+            svgCanvas.getSvgOptionImages() === "embed"
           ) {
             const img = svgCanvas.getEncodableImages(attrVal)
             if (img) {
@@ -311,7 +311,7 @@ const svgToString = (elem, indent) => {
     }
 
     if (elem.hasChildNodes()) {
-      out.push('>')
+      out.push(">")
       indent++
       let bOneLine = false
 
@@ -319,49 +319,49 @@ const svgToString = (elem, indent) => {
         const child = childs.item(i)
         switch (child.nodeType) {
           case 1: // element node
-            out.push('\n')
+            out.push("\n")
             out.push(svgCanvas.svgToString(child, indent))
             break
           case 3: {
             // text node
-            const str = child.nodeValue.replace(/^\s+|\s+$/g, '')
-            if (str !== '') {
+            const str = child.nodeValue.replace(/^\s+|\s+$/g, "")
+            if (str !== "") {
               bOneLine = true
               out.push(String(toXml(str)))
             }
             break
           }
           case 4: // cdata node
-            out.push('\n')
-            out.push(new Array(indent + 1).join(' '))
-            out.push('<![CDATA[')
+            out.push("\n")
+            out.push(new Array(indent + 1).join(" "))
+            out.push("<![CDATA[")
             out.push(child.nodeValue)
-            out.push(']]>')
+            out.push("]]>")
             break
           case 8: // comment
-            out.push('\n')
-            out.push(new Array(indent + 1).join(' '))
-            out.push('<!--')
+            out.push("\n")
+            out.push(new Array(indent + 1).join(" "))
+            out.push("<!--")
             out.push(child.data)
-            out.push('-->')
+            out.push("-->")
             break
         } // switch on node type
       }
       indent--
       if (!bOneLine) {
-        out.push('\n')
+        out.push("\n")
         for (let i = 0; i < indent; i++) {
-          out.push(' ')
+          out.push(" ")
         }
       }
-      out.push('</')
+      out.push("</")
       out.push(elem.nodeName)
-      out.push('>')
+      out.push(">")
     } else {
-      out.push('/>')
+      out.push("/>")
     }
   }
-  return out.join('')
+  return out.join("")
 } // end svgToString()
 
 /**
@@ -392,7 +392,7 @@ const setSvgString = (xmlString, preventUndo) => {
 
     svgCanvas.prepareSvg(newDoc)
 
-    const batchCmd = new BatchCommand('Change Source')
+    const batchCmd = new BatchCommand("Change Source")
 
     // remove old svg document
     const { nextSibling } = svgCanvas.getSvgContent()
@@ -426,18 +426,18 @@ const setSvgString = (xmlString, preventUndo) => {
     // retrieve or set the nonce
     const nonce = svgCanvas.getCurrentDrawing().getNonce()
     if (nonce) {
-      svgCanvas.call('setnonce', nonce)
+      svgCanvas.call("setnonce", nonce)
     } else {
-      svgCanvas.call('unsetnonce')
+      svgCanvas.call("unsetnonce")
     }
 
     // change image href vals if possible
-    const elements = content.querySelectorAll('image')
-    Array.prototype.forEach.call(elements, image => {
+    const elements = content.querySelectorAll("image")
+    Array.prototype.forEach.call(elements, (image) => {
       preventClickDefault(image)
       const val = svgCanvas.getHref(image)
       if (val) {
-        if (val.startsWith('data:')) {
+        if (val.startsWith("data:")) {
           // Check if an SVG-edit data URI
           const m = val.match(/svgedit_url=(.*?);/)
           // const m = val.match(/svgedit_url=(?<url>.*?);/);
@@ -445,8 +445,8 @@ const setSvgString = (xmlString, preventUndo) => {
             const url = decodeURIComponent(m[1])
             // const url = decodeURIComponent(m.groups.url);
             const iimg = new Image()
-            iimg.addEventListener('load', () => {
-              image.setAttributeNS(NS.XLINK, 'xlink:href', url)
+            iimg.addEventListener("load", () => {
+              image.setAttributeNS(NS.XLINK, "xlink:href", url)
             })
             iimg.src = url
           }
@@ -456,12 +456,12 @@ const setSvgString = (xmlString, preventUndo) => {
       }
     })
     // Duplicate id replace changes
-    const nodes = content.querySelectorAll('[id]')
+    const nodes = content.querySelectorAll("[id]")
     const ids = {}
     const totalNodes = nodes.length
 
     for (let i = 0; i < totalNodes; i++) {
-      const currentId = nodes[i].id ? nodes[i].id : 'undefined'
+      const currentId = nodes[i].id ? nodes[i].id : "undefined"
       if (isNaN(ids[currentId])) {
         ids[currentId] = 0
       }
@@ -472,16 +472,16 @@ const setSvgString = (xmlString, preventUndo) => {
       if (value > 1) {
         const nodes = content.querySelectorAll('[id="' + key + '"]')
         for (let i = 1; i < nodes.length; i++) {
-          nodes[i].setAttribute('id', svgCanvas.getNextId())
+          nodes[i].setAttribute("id", svgCanvas.getNextId())
         }
       }
     })
 
     // Wrap child SVGs in group elements
-    const svgElements = content.querySelectorAll('svg')
-    Array.prototype.forEach.call(svgElements, element => {
+    const svgElements = content.querySelectorAll("svg")
+    Array.prototype.forEach.call(svgElements, (element) => {
       // Skip if it's in a <defs>
-      if (getClosest(element.parentNode, 'defs')) {
+      if (getClosest(element.parentNode, "defs")) {
         return
       }
 
@@ -489,8 +489,8 @@ const setSvgString = (xmlString, preventUndo) => {
 
       // Check if it already has a gsvg group
       const pa = element.parentNode
-      if (pa.childNodes.length === 1 && pa.nodeName === 'g') {
-        dataStorage.put(pa, 'gsvg', element)
+      if (pa.childNodes.length === 1 && pa.nodeName === "g") {
+        dataStorage.put(pa, "gsvg", element)
         pa.id = pa.id || svgCanvas.getNextId()
       } else {
         svgCanvas.groupSvgElem(element)
@@ -501,9 +501,9 @@ const setSvgString = (xmlString, preventUndo) => {
     if (isGecko()) {
       const svgDefs = findDefs()
       const findElems = content.querySelectorAll(
-        'linearGradient, radialGradient, pattern'
+        "linearGradient, radialGradient, pattern"
       )
-      Array.prototype.forEach.call(findElems, ele => {
+      Array.prototype.forEach.call(findElems, (ele) => {
         svgDefs.appendChild(ele)
       })
     }
@@ -516,24 +516,24 @@ const setSvgString = (xmlString, preventUndo) => {
     svgCanvas.convertGradients(content)
 
     const attrs = {
-      id: 'svgcontent',
-      overflow: curConfig.show_outside_canvas ? 'visible' : 'hidden'
+      id: "svgcontent",
+      overflow: curConfig.show_outside_canvas ? "visible" : "hidden",
     }
 
     let percs = false
 
     // determine proper size
-    if (content.getAttribute('viewBox')) {
-      const viBox = content.getAttribute('viewBox')
-      const vb = viBox.split(' ')
+    if (content.getAttribute("viewBox")) {
+      const viBox = content.getAttribute("viewBox")
+      const vb = viBox.split(" ")
       attrs.width = vb[2]
       attrs.height = vb[3]
       // handle content that doesn't have a viewBox
     } else {
-      ;['width', 'height'].forEach(dim => {
+      ;["width", "height"].forEach((dim) => {
         // Set to 100 if not given
-        const val = content.getAttribute(dim) || '100%'
-        if (String(val).substr(-1) === '%') {
+        const val = content.getAttribute(dim) || "100%"
+        if (String(val).substr(-1) === "%") {
           // Use user units if percentage given
           percs = true
         } else {
@@ -547,9 +547,9 @@ const setSvgString = (xmlString, preventUndo) => {
 
     // Give ID for any visible layer children missing one
     const chiElems = content.children
-    Array.prototype.forEach.call(chiElems, chiElem => {
+    Array.prototype.forEach.call(chiElems, (chiElem) => {
       const visElems = chiElem.querySelectorAll(svgCanvas.getVisElems())
-      Array.prototype.forEach.call(visElems, elem => {
+      Array.prototype.forEach.call(visElems, (elem) => {
         if (!elem.id) {
           elem.id = svgCanvas.getNextId()
         }
@@ -580,8 +580,8 @@ const setSvgString = (xmlString, preventUndo) => {
 
     batchCmd.addSubCommand(new InsertElementCommand(svgCanvas.getSvgContent()))
     // update root to the correct size
-    const width = content.getAttribute('width')
-    const height = content.getAttribute('height')
+    const width = content.getAttribute("width")
+    const height = content.getAttribute("height")
     const changes = { width, height }
     batchCmd.addSubCommand(
       new ChangeElementCommand(svgCanvas.getSvgRoot(), changes)
@@ -595,7 +595,7 @@ const setSvgString = (xmlString, preventUndo) => {
     svgCanvas.getSvgRoot().append(svgCanvas.selectorManager.selectorParentGroup)
 
     if (!preventUndo) svgCanvas.addCommandToHistory(batchCmd)
-    svgCanvas.call('sourcechanged', [svgCanvas.getSvgContent()])
+    svgCanvas.call("sourcechanged", [svgCanvas.getSvgContent()])
   } catch (e) {
     console.error(e)
     return false
@@ -631,13 +631,13 @@ const importSvgString = (xmlString, preserveDimension) => {
     let useExisting = false
     // Look for symbol and make sure symbol exists in image
     if (svgCanvas.getImportIds(uid) && svgCanvas.getImportIds(uid).symbol) {
-      const parents = getParents(svgCanvas.getImportIds(uid).symbol, '#svgroot')
+      const parents = getParents(svgCanvas.getImportIds(uid).symbol, "#svgroot")
       if (parents?.length) {
         useExisting = true
       }
     }
 
-    const batchCmd = new BatchCommand('Import Image')
+    const batchCmd = new BatchCommand("Import Image")
     let symbol
     if (useExisting) {
       symbol = svgCanvas.getImportIds(uid).symbol
@@ -656,29 +656,29 @@ const importSvgString = (xmlString, preserveDimension) => {
 
       svgCanvas.uniquifyElems(svg)
 
-      const innerw = convertToNum('width', svg.getAttribute('width'))
-      const innerh = convertToNum('height', svg.getAttribute('height'))
-      const innervb = svg.getAttribute('viewBox')
+      const innerw = convertToNum("width", svg.getAttribute("width"))
+      const innerh = convertToNum("height", svg.getAttribute("height"))
+      const innervb = svg.getAttribute("viewBox")
       // if no explicit viewbox, create one out of the width and height
-      const vb = innervb ? innervb.split(' ') : [0, 0, innerw, innerh]
+      const vb = innervb ? innervb.split(" ") : [0, 0, innerw, innerh]
       for (j = 0; j < 4; ++j) {
         vb[j] = Number(vb[j])
       }
 
       // TODO: properly handle preserveAspectRatio
       const // canvasw = +svgContent.getAttribute('width'),
-        canvash = Number(svgCanvas.getSvgContent().getAttribute('height'))
+        canvash = Number(svgCanvas.getSvgContent().getAttribute("height"))
       // imported content should be 1/3 of the canvas on its largest dimension
 
       ts =
         innerh > innerw
-          ? 'scale(' + canvash / 3 / vb[3] + ')'
-          : 'scale(' + canvash / 3 / vb[2] + ')'
+          ? "scale(" + canvash / 3 / vb[3] + ")"
+          : "scale(" + canvash / 3 / vb[2] + ")"
 
       // Hack to make recalculateDimensions understand how to scale
-      ts = 'translate(0) ' + ts + ' translate(0)'
+      ts = "translate(0) " + ts + " translate(0)"
 
-      symbol = svgCanvas.getDOMDocument().createElementNS(NS.SVG, 'symbol')
+      symbol = svgCanvas.getDOMDocument().createElementNS(NS.SVG, "symbol")
       const defs = findDefs()
 
       if (isGecko()) {
@@ -686,9 +686,9 @@ const importSvgString = (xmlString, preserveDimension) => {
         // https://bugzilla.mozilla.org/show_bug.cgi?id=353575
         // TODO: Make this properly undo-able.
         const elements = svg.querySelectorAll(
-          'linearGradient, radialGradient, pattern'
+          "linearGradient, radialGradient, pattern"
         )
-        Array.prototype.forEach.call(elements, el => {
+        Array.prototype.forEach.call(elements, (el) => {
           defs.appendChild(el)
         })
       }
@@ -707,16 +707,16 @@ const importSvgString = (xmlString, preserveDimension) => {
       // Store data
       svgCanvas.setImportIds(uid, {
         symbol,
-        xform: ts
+        xform: ts,
       })
 
       findDefs().append(symbol)
       batchCmd.addSubCommand(new InsertElementCommand(symbol))
     }
 
-    useEl = svgCanvas.getDOMDocument().createElementNS(NS.SVG, 'use')
+    useEl = svgCanvas.getDOMDocument().createElementNS(NS.SVG, "use")
     useEl.id = svgCanvas.getNextId()
-    svgCanvas.setHref(useEl, '#' + symbol.id)
+    svgCanvas.setHref(useEl, "#" + symbol.id)
     ;(
       svgCanvas.getCurrentGroup() ||
       svgCanvas.getCurrentDrawing().getCurrentLayer()
@@ -725,11 +725,11 @@ const importSvgString = (xmlString, preserveDimension) => {
     svgCanvas.clearSelection()
 
     if (!preserveDimension) {
-      useEl.setAttribute('transform', ts)
+      useEl.setAttribute("transform", ts)
       recalculateDimensions(useEl)
     }
-    dataStorage.put(useEl, 'symbol', symbol)
-    dataStorage.put(useEl, 'ref', symbol)
+    dataStorage.put(useEl, "symbol", symbol)
+    dataStorage.put(useEl, "ref", symbol)
     svgCanvas.addToSelection([useEl])
 
     // TODO: Find way to add this in a recalculateDimensions-parsable way
@@ -737,7 +737,7 @@ const importSvgString = (xmlString, preserveDimension) => {
     //   ts = 'translate(' + (-vb[0]) + ',' + (-vb[1]) + ') ' + ts;
     // }
     svgCanvas.addCommandToHistory(batchCmd)
-    svgCanvas.call('changed', [svgCanvas.getSvgContent()])
+    svgCanvas.call("changed", [svgCanvas.getSvgContent()])
   } catch (e) {
     console.error(e)
     return null
@@ -758,22 +758,22 @@ const importSvgString = (xmlString, preserveDimension) => {
  * @param {string} src - The path/URL of the image
  * @returns {Promise<string|false>} Resolves to a Data URL (string|false)
  */
-const embedImage = src => {
+const embedImage = (src) => {
   // Todo: Remove this Promise in favor of making an async/await `Image.load` utility
   return new Promise((resolve, reject) => {
     // load in the image and once it's loaded, get the dimensions
     const imgI = new Image()
-    imgI.addEventListener('load', e => {
+    imgI.addEventListener("load", (e) => {
       // create a canvas the same size as the raster image
-      const cvs = document.createElement('canvas')
+      const cvs = document.createElement("canvas")
       cvs.width = e.currentTarget.width
       cvs.height = e.currentTarget.height
       // load the raster image into the canvas
-      cvs.getContext('2d').drawImage(e.currentTarget, 0, 0)
+      cvs.getContext("2d").drawImage(e.currentTarget, 0, 0)
       // retrieve the data: URL
       try {
-        let urldata = ';svgedit_url=' + encodeURIComponent(src)
-        urldata = cvs.toDataURL().replace(';base64', urldata + ';base64')
+        let urldata = ";svgedit_url=" + encodeURIComponent(src)
+        urldata = cvs.toDataURL().replace(";base64", urldata + ";base64")
         svgCanvas.setEncodableImages(src, urldata)
       } catch (e) {
         svgCanvas.setEncodableImages(src, false)
@@ -781,14 +781,14 @@ const embedImage = src => {
       svgCanvas.setGoodImage(src)
       resolve(svgCanvas.getEncodableImages(src))
     })
-    imgI.addEventListener('error', e => {
+    imgI.addEventListener("error", (e) => {
       reject(
         new Error(
           `error loading image: ${e.currentTarget.attributes.src.value}`
         )
       )
     })
-    imgI.setAttribute('src', src)
+    imgI.setAttribute("src", src)
   })
 }
 
@@ -815,12 +815,12 @@ const getIssues = () => {
   const issueList = {
     feGaussianBlur: uiStrings.NoBlur,
     foreignObject: uiStrings.NoforeignObject,
-    '[stroke-dasharray]': uiStrings.NoDashArray
+    "[stroke-dasharray]": uiStrings.NoDashArray,
   }
   const content = svgCanvas.getSvgContent()
 
   // Add font/text check if Canvas Text API is not implemented
-  if (!('font' in document.querySelector('CANVAS').getContext('2d'))) {
+  if (!("font" in document.querySelector("CANVAS").getContext("2d"))) {
     issueList.text = uiStrings.NoText
   }
 
@@ -860,12 +860,12 @@ const getIssues = () => {
  * @returns {Promise<module:svgcanvas.ImageedResults>} Resolves to {@link module:svgcanvas.ImageedResults}
  */
 const rasterExport = async (imgType, quality, WindowName, opts = {}) => {
-  const type = imgType === 'ICO' ? 'BMP' : imgType || 'PNG'
-  const mimeType = 'image/' + type.toLowerCase()
+  const type = imgType === "ICO" ? "BMP" : imgType || "PNG"
+  const mimeType = "image/" + type.toLowerCase()
   const { issues, issueCodes } = getIssues()
   const svg = svgCanvas.svgCanvasToString()
 
-  const iframe = document.createElement('iframe')
+  const iframe = document.createElement("iframe")
   iframe.onload = () => {
     const iframedoc = iframe.contentDocument || iframe.contentWindow.document
     const ele = svgCanvas.getSvgContent()
@@ -874,12 +874,12 @@ const rasterExport = async (imgType, quality, WindowName, opts = {}) => {
     setTimeout(() => {
       // eslint-disable-next-line promise/catch-or-return
       html2canvas(iframedoc.body, { useCORS: true, allowTaint: true }).then(
-        canvas => {
-          return new Promise(resolve => {
+        (canvas) => {
+          return new Promise((resolve) => {
             const dataURLType = type.toLowerCase()
             const datauri = quality
-              ? canvas.toDataURL('image/' + dataURLType, quality)
-              : canvas.toDataURL('image/' + dataURLType)
+              ? canvas.toDataURL("image/" + dataURLType, quality)
+              : canvas.toDataURL("image/" + dataURLType)
             iframe.parentNode.removeChild(iframe)
             let bloburl
 
@@ -893,16 +893,16 @@ const rasterExport = async (imgType, quality, WindowName, opts = {}) => {
                 type: imgType,
                 mimeType,
                 quality,
-                WindowName
+                WindowName,
               }
               if (!opts.avoidEvent) {
-                svgCanvas.call('exported', obj)
+                svgCanvas.call("exported", obj)
               }
               resolve(obj)
             }
             if (canvas.toBlob) {
               canvas.toBlob(
-                blob => {
+                (blob) => {
                   bloburl = createObjectURL(blob)
                   done()
                 },
@@ -955,12 +955,12 @@ const rasterExport = async (imgType, quality, WindowName, opts = {}) => {
  */
 const exportPDF = async (
   WindowName,
-  outputType = isChrome() ? 'save' : undefined
+  outputType = isChrome() ? "save" : undefined
 ) => {
   const res = svgCanvas.getResolution()
-  const orientation = res.w > res.h ? 'landscape' : 'portrait'
-  const unit = 'pt' // curConfig.baseUnit; // We could use baseUnit, but that is presumably not intended for  purposes
-  const iframe = document.createElement('iframe')
+  const orientation = res.w > res.h ? "landscape" : "portrait"
+  const unit = "pt" // curConfig.baseUnit; // We could use baseUnit, but that is presumably not intended for  purposes
+  const iframe = document.createElement("iframe")
   iframe.onload = () => {
     const iframedoc = iframe.contentDocument || iframe.contentWindow.document
     const ele = svgCanvas.getSvgContent()
@@ -969,27 +969,27 @@ const exportPDF = async (
     setTimeout(() => {
       // eslint-disable-next-line promise/catch-or-return
       html2canvas(iframedoc.body, { useCORS: true, allowTaint: true }).then(
-        canvas => {
-          const imgData = canvas.toDataURL('image/png')
+        (canvas) => {
+          const imgData = canvas.toDataURL("image/png")
           const doc = new JsPDF({
             orientation,
             unit,
-            format: [res.w, res.h]
+            format: [res.w, res.h],
           })
           const docTitle = svgCanvas.getDocumentTitle()
           doc.setProperties({
-            title: docTitle
+            title: docTitle,
           })
-          doc.addImage(imgData, 'PNG', 0, 0, res.w, res.h)
+          doc.addImage(imgData, "PNG", 0, 0, res.w, res.h)
           iframe.parentNode.removeChild(iframe)
           const { issues, issueCodes } = getIssues()
-          outputType = outputType || 'dataurlstring'
+          outputType = outputType || "dataurlstring"
           const obj = { issues, issueCodes, WindowName, outputType }
           obj.output = doc.output(
             outputType,
-            outputType === 'save' ? WindowName || 'svg.pdf' : undefined
+            outputType === "save" ? WindowName || "svg.pdf" : undefined
           )
-          svgCanvas.call('edPDF', obj)
+          svgCanvas.call("edPDF", obj)
           return obj
         }
       )
@@ -1003,7 +1003,7 @@ const exportPDF = async (
  * @param {Element} g - The parent element of the tree to give unique IDs
  * @returns {void}
  */
-const uniquifyElemsMethod = g => {
+const uniquifyElemsMethod = (g) => {
   const ids = {}
   // TODO: Handle markers and connectors. These are not yet re-identified properly
   // as their referring elements do not get remapped.
@@ -1014,16 +1014,16 @@ const uniquifyElemsMethod = g => {
   // Problem #1: if svg_1 gets renamed, we do not update the polyline's se:connector attribute
   // Problem #2: if the polyline svg_7 gets renamed, we do not update the marker id nor the polyline's marker-end attribute
   const refElems = [
-    'filter',
-    'linearGradient',
-    'pattern',
-    'radialGradient',
-    'symbol',
-    'textPath',
-    'use'
+    "filter",
+    "linearGradient",
+    "pattern",
+    "radialGradient",
+    "symbol",
+    "textPath",
+    "use",
   ]
 
-  walkTree(g, n => {
+  walkTree(g, (n) => {
     // if it's an element node
     if (n.nodeType === 1) {
       // and the element has an ID
@@ -1038,7 +1038,7 @@ const uniquifyElemsMethod = g => {
 
       // now search for all attributes on this element that might refer
       // to other elements
-      svgCanvas.getrefAttrs().forEach(attr => {
+      svgCanvas.getrefAttrs().forEach((attr) => {
         const attrnode = n.getAttributeNode(attr)
         if (attrnode) {
           // the incoming file has been sanitized, so we should be able to safely just strip off the leading #
@@ -1087,7 +1087,7 @@ const uniquifyElemsMethod = g => {
       let j = attrs.length
       while (j--) {
         const attr = attrs[j]
-        attr.ownerElement.setAttribute(attr.name, 'url(#' + newid + ')')
+        attr.ownerElement.setAttribute(attr.name, "url(#" + newid + ")")
       }
 
       // remap all href attributes
@@ -1095,7 +1095,7 @@ const uniquifyElemsMethod = g => {
       let k = hreffers.length
       while (k--) {
         const hreffer = hreffers[k]
-        svgCanvas.setHref(hreffer, '#' + newid)
+        svgCanvas.setHref(hreffer, "#" + newid)
       }
     }
   }
@@ -1107,12 +1107,12 @@ const uniquifyElemsMethod = g => {
  * @param {Element} parent
  * @returns {void}
  */
-const setUseDataMethod = parent => {
+const setUseDataMethod = (parent) => {
   let elems = parent
 
-  if (parent.tagName !== 'use') {
+  if (parent.tagName !== "use") {
     // elems = elems.find('use');
-    elems = elems.querySelectorAll('use')
+    elems = elems.querySelectorAll("use")
   }
 
   Array.prototype.forEach.call(elems, (el, _) => {
@@ -1122,10 +1122,10 @@ const setUseDataMethod = parent => {
     if (!refElem) {
       return
     }
-    dataStorage.put(el, 'ref', refElem)
-    if (refElem.tagName === 'symbol' || refElem.tagName === 'svg') {
-      dataStorage.put(el, 'symbol', refElem)
-      dataStorage.put(el, 'ref', refElem)
+    dataStorage.put(el, "ref", refElem)
+    if (refElem.tagName === "symbol" || refElem.tagName === "svg") {
+      dataStorage.put(el, "symbol", refElem)
+      dataStorage.put(el, "ref", refElem)
     }
   })
 }
@@ -1137,7 +1137,7 @@ const setUseDataMethod = parent => {
  * @returns {Integer} The number of elements that were removed
  */
 const removeUnusedDefElemsMethod = () => {
-  const defs = svgCanvas.getSvgContent().getElementsByTagNameNS(NS.SVG, 'defs')
+  const defs = svgCanvas.getSvgContent().getElementsByTagNameNS(NS.SVG, "defs")
   if (!defs || !defs.length) {
     return 0
   }
@@ -1147,16 +1147,16 @@ const removeUnusedDefElemsMethod = () => {
   const defelemUses = []
   let numRemoved = 0
   const attrs = [
-    'fill',
-    'stroke',
-    'filter',
-    'marker-start',
-    'marker-mid',
-    'marker-end'
+    "fill",
+    "stroke",
+    "filter",
+    "marker-start",
+    "marker-mid",
+    "marker-end",
   ]
   const alen = attrs.length
 
-  const allEls = svgCanvas.getSvgContent().getElementsByTagNameNS(NS.SVG, '*')
+  const allEls = svgCanvas.getSvgContent().getElementsByTagNameNS(NS.SVG, "*")
   const allLen = allEls.length
 
   let i
@@ -1172,14 +1172,14 @@ const removeUnusedDefElemsMethod = () => {
 
     // gradients can refer to other gradients
     const href = getHref(el)
-    if (href && href.startsWith('#')) {
+    if (href && href.startsWith("#")) {
       defelemUses.push(href.substr(1))
     }
   }
 
   Array.prototype.forEach.call(defs, (def, i) => {
     const defelems = def.querySelectorAll(
-      'linearGradient, radialGradient, filter, marker, svg, symbol'
+      "linearGradient, radialGradient, filter, marker, svg, symbol"
     )
     i = defelems.length
     while (i--) {
@@ -1202,16 +1202,19 @@ const removeUnusedDefElemsMethod = () => {
  * @param {Element} elem
  * @returns {void}
  */
-const convertGradientsMethod = elem => {
-  let elems = elem.querySelectorAll('linearGradient, radialGradient')
+const convertGradientsMethod = (elem) => {
+  let elems = elem.querySelectorAll("linearGradient, radialGradient")
   if (!elems.length && isWebkit()) {
     // Bug in webkit prevents regular *Gradient selector search
-    elems = Array.prototype.filter.call(elem.querySelectorAll('*'), curThis => {
-      return curThis.tagName.includes('Gradient')
-    })
+    elems = Array.prototype.filter.call(
+      elem.querySelectorAll("*"),
+      (curThis) => {
+        return curThis.tagName.includes("Gradient")
+      }
+    )
   }
-  Array.prototype.forEach.call(elems, grad => {
-    if (grad.getAttribute('gradientUnits') === 'userSpaceOnUse') {
+  Array.prototype.forEach.call(elems, (grad) => {
+    if (grad.getAttribute("gradientUnits") === "userSpaceOnUse") {
       const svgContent = svgCanvas.getSvgContent()
       // TODO: Support more than one element with this ref by duplicating parent grad
       let fillStrokeElems = svgContent.querySelectorAll(
@@ -1225,10 +1228,10 @@ const convertGradientsMethod = elem => {
           return
         } else {
           if (
-            (tmpFillStrokeElems[0].tagName === 'linearGradient' ||
-              tmpFillStrokeElems[0].tagName === 'radialGradient') &&
-            tmpFillStrokeElems[0].getAttribute('gradientUnits') ===
-              'userSpaceOnUse'
+            (tmpFillStrokeElems[0].tagName === "linearGradient" ||
+              tmpFillStrokeElems[0].tagName === "radialGradient") &&
+            tmpFillStrokeElems[0].getAttribute("gradientUnits") ===
+              "userSpaceOnUse"
           ) {
             fillStrokeElems = svgContent.querySelectorAll(
               '[fill="url(#' +
@@ -1250,12 +1253,12 @@ const convertGradientsMethod = elem => {
       if (!bb) {
         return
       }
-      if (grad.tagName === 'linearGradient') {
+      if (grad.tagName === "linearGradient") {
         const gCoords = {
-          x1: grad.getAttribute('x1'),
-          y1: grad.getAttribute('y1'),
-          x2: grad.getAttribute('x2'),
-          y2: grad.getAttribute('y2')
+          x1: grad.getAttribute("x1"),
+          y1: grad.getAttribute("y1"),
+          x2: grad.getAttribute("x2"),
+          y2: grad.getAttribute("y2"),
         }
 
         // If has transform, convert
@@ -1269,13 +1272,13 @@ const convertGradientsMethod = elem => {
           gCoords.y1 = pt1.y
           gCoords.x2 = pt2.x
           gCoords.y2 = pt2.y
-          grad.removeAttribute('gradientTransform')
+          grad.removeAttribute("gradientTransform")
         }
-        grad.setAttribute('x1', (gCoords.x1 - bb.x) / bb.width)
-        grad.setAttribute('y1', (gCoords.y1 - bb.y) / bb.height)
-        grad.setAttribute('x2', (gCoords.x2 - bb.x) / bb.width)
-        grad.setAttribute('y2', (gCoords.y2 - bb.y) / bb.height)
-        grad.removeAttribute('gradientUnits')
+        grad.setAttribute("x1", (gCoords.x1 - bb.x) / bb.width)
+        grad.setAttribute("y1", (gCoords.y1 - bb.y) / bb.height)
+        grad.setAttribute("x2", (gCoords.x2 - bb.x) / bb.width)
+        grad.setAttribute("y2", (gCoords.y2 - bb.y) / bb.height)
+        grad.removeAttribute("gradientUnits")
       }
     }
   })

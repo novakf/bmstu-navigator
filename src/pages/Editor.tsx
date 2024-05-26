@@ -1,15 +1,23 @@
-import React, { useEffect } from "react"
+import React, { FC, useEffect } from "react"
 import ReactDOM from "react-dom/client"
-import "./App.css"
-import Editor from "./svgedit/editor/Editor"
-import "./svgedit/editor/svgedit.css"
-import { TopPanelGlobal } from "./TopPanelGlobal"
-import { Provider } from "react-redux"
-import { store } from "./state"
+import Editor from "../svgedit/editor/Editor"
+import "../svgedit/editor/svgedit.css"
+import { TopPanelGlobal } from "../TopPanelGlobal"
+import { Provider, useDispatch } from "react-redux"
+import { AppDispatch, store } from "../state"
+import { initEditor } from "../state/editor/slice"
+import { useCurrentUser } from "../state/user"
+import { Navigate } from "react-router-dom"
 
-function App() {
+const EditorComp: FC = () => {
+  const dispatch = useDispatch<AppDispatch>()
+  const user = useCurrentUser()
+
   useEffect(() => {
     if (window.svgEditor) return
+    if (!user) return
+
+    dispatch(initEditor())
 
     const svgEditor = new Editor(
       document.getElementById("container") as HTMLElement
@@ -41,11 +49,9 @@ function App() {
     })
   }, [])
 
-  return (
-    <div className="App">
-      <div id="container" style={{ width: "100%", height: "100vh" }}></div>
-    </div>
-  )
+  if (!user) return <Navigate to={"/auth"} />
+
+  return <div id={"container"}></div>
 }
 
-export default App
+export { EditorComp as Editor }

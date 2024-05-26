@@ -6,9 +6,9 @@
  * @copyright 2010 Alexis Deveria, 2010 Jeff Schiller
  */
 
-import { NS } from './namespaces.js'
-import * as hstry from './history.js'
-import * as pathModule from './path.js'
+import { NS } from "./namespaces.js"
+import * as hstry from "./history.js"
+import * as pathModule from "./path.js"
 import {
   getStrokedBBoxDefaultVisible,
   setHref,
@@ -21,24 +21,24 @@ import {
   getBBox as utilsGetBBox,
   walkTreePost,
   assignAttributes,
-  getFeGaussianBlur
-} from './utilities.js'
+  getFeGaussianBlur,
+} from "./utilities.js"
 import {
   transformPoint,
   matrixMultiply,
   transformListToTransform,
-  getTransformList
-} from './math.js'
-import { recalculateDimensions } from './recalculate.js'
-import { isGecko } from '../common/browser.js'
-import { getParents } from '../common/util.js'
+  getTransformList,
+} from "./math.js"
+import { recalculateDimensions } from "./recalculate.js"
+import { isGecko } from "../common/browser.js"
+import { getParents } from "../common/util.js"
 
 const {
   MoveElementCommand,
   BatchCommand,
   InsertElementCommand,
   RemoveElementCommand,
-  ChangeElementCommand
+  ChangeElementCommand,
 } = hstry
 
 let svgCanvas = null
@@ -48,7 +48,7 @@ let svgCanvas = null
  * @param {module:selected-elem.elementContext} elementContext
  * @returns {void}
  */
-export const init = canvas => {
+export const init = (canvas) => {
   svgCanvas = canvas
   svgCanvas.copySelectedElements = copySelectedElements
   svgCanvas.groupSelectedElements = groupSelectedElements // Wraps all the selected elements in a group (`g`) element.
@@ -83,9 +83,9 @@ const moveToTopSelectedElem = () => {
     // event handler.
     if (oldNextSibling !== t.nextSibling) {
       svgCanvas.addCommandToHistory(
-        new MoveElementCommand(t, oldNextSibling, oldParent, 'top')
+        new MoveElementCommand(t, oldNextSibling, oldParent, "top")
       )
-      svgCanvas.call('changed', [t])
+      svgCanvas.call("changed", [t])
     }
   }
 }
@@ -104,12 +104,12 @@ const moveToBottomSelectedElem = () => {
     const oldParent = t.parentNode
     const oldNextSibling = t.nextSibling
     let { firstChild } = t.parentNode
-    if (firstChild.tagName === 'title') {
+    if (firstChild.tagName === "title") {
       firstChild = firstChild.nextSibling
     }
     // This can probably be removed, as the defs should not ever apppear
     // inside a layer group
-    if (firstChild.tagName === 'defs') {
+    if (firstChild.tagName === "defs") {
       firstChild = firstChild.nextSibling
     }
     t = t.parentNode.insertBefore(t, firstChild)
@@ -117,9 +117,9 @@ const moveToBottomSelectedElem = () => {
     // event handler.
     if (oldNextSibling !== t.nextSibling) {
       svgCanvas.addCommandToHistory(
-        new MoveElementCommand(t, oldNextSibling, oldParent, 'bottom')
+        new MoveElementCommand(t, oldNextSibling, oldParent, "bottom")
       )
-      svgCanvas.call('changed', [t])
+      svgCanvas.call("changed", [t])
     }
   }
 }
@@ -132,7 +132,7 @@ const moveToBottomSelectedElem = () => {
  * @fires module:selected-elem.SvgCanvas#event:changed
  * @returns {void}
  */
-const moveUpDownSelected = dir => {
+const moveUpDownSelected = (dir) => {
   const selectedElements = svgCanvas.getSelectedElements()
   const selected = selectedElements[0]
   if (!selected) {
@@ -146,11 +146,11 @@ const moveUpDownSelected = dir => {
   const list = svgCanvas.getIntersectionList(
     getStrokedBBoxDefaultVisible([selected])
   )
-  if (dir === 'Down') {
+  if (dir === "Down") {
     list.reverse()
   }
 
-  Array.prototype.forEach.call(list, el => {
+  Array.prototype.forEach.call(list, (el) => {
     if (!foundCur) {
       if (el === selected) {
         foundCur = true
@@ -169,18 +169,18 @@ const moveUpDownSelected = dir => {
   const t = selected
   const oldParent = t.parentNode
   const oldNextSibling = t.nextSibling
-  if (dir === 'Down') {
-    closest.insertAdjacentElement('beforebegin', t)
+  if (dir === "Down") {
+    closest.insertAdjacentElement("beforebegin", t)
   } else {
-    closest.insertAdjacentElement('afterend', t)
+    closest.insertAdjacentElement("afterend", t)
   }
   // If the element actually moved position, add the command and fire the changed
   // event handler.
   if (oldNextSibling !== t.nextSibling) {
     svgCanvas.addCommandToHistory(
-      new MoveElementCommand(t, oldNextSibling, oldParent, 'Move ' + dir)
+      new MoveElementCommand(t, oldNextSibling, oldParent, "Move " + dir)
     )
-    svgCanvas.call('changed', [t])
+    svgCanvas.call("changed", [t])
   }
 }
 
@@ -204,7 +204,7 @@ const moveSelectedElements = (dx, dy, undoable = true) => {
     dy /= zoom
   }
 
-  const batchCmd = new BatchCommand('position')
+  const batchCmd = new BatchCommand("position")
   selectedElements.forEach((selected, i) => {
     if (selected) {
       const xform = svgCanvas.getSvgRoot().createSVGTransform()
@@ -228,17 +228,14 @@ const moveSelectedElements = (dx, dy, undoable = true) => {
         batchCmd.addSubCommand(cmd)
       }
 
-      svgCanvas
-        .gettingSelectorManager()
-        .requestSelector(selected)
-        .resize()
+      svgCanvas.gettingSelectorManager().requestSelector(selected).resize()
     }
   })
   if (!batchCmd.isEmpty()) {
     if (undoable) {
       svgCanvas.addCommandToHistory(batchCmd)
     }
-    svgCanvas.call('changed', selectedElements)
+    svgCanvas.call("changed", selectedElements)
     return batchCmd
   }
   return undefined
@@ -257,11 +254,11 @@ const cloneSelectedElements = (x, y) => {
   const currentGroup = svgCanvas.getCurrentGroup()
   let i
   let elem
-  const batchCmd = new BatchCommand('Clone Elements')
+  const batchCmd = new BatchCommand("Clone Elements")
   // find all the elements selected (stop at first null)
   const len = selectedElements.length
 
-  const index = el => {
+  const index = (el) => {
     if (!el) return -1
     let i = 0
     do {
@@ -325,8 +322,10 @@ const alignSelectedElements = (type, relativeTo) => {
   let miny = Number.MAX_VALUE
   let maxy = Number.MIN_VALUE
 
-  const isHorizontalAlign = (type) => ['l', 'c', 'r', 'left', 'center', 'right'].includes(type)
-  const isVerticalAlign = (type) => ['t', 'm', 'b', 'top', 'middle', 'bottom'].includes(type)
+  const isHorizontalAlign = (type) =>
+    ["l", "c", "r", "left", "center", "right"].includes(type)
+  const isVerticalAlign = (type) =>
+    ["t", "m", "b", "top", "middle", "bottom"].includes(type)
 
   for (let i = 0; i < len; ++i) {
     if (!selectedElements[i]) {
@@ -337,12 +336,15 @@ const alignSelectedElements = (type, relativeTo) => {
   }
 
   // distribute horizontal and vertical align is not support smallest and largest
-  if (['smallest', 'largest'].includes(relativeTo) && ['dh', 'distrib_horiz', 'dv', 'distrib_verti'].includes(type)) {
-    relativeTo = 'selected'
+  if (
+    ["smallest", "largest"].includes(relativeTo) &&
+    ["dh", "distrib_horiz", "dv", "distrib_verti"].includes(type)
+  ) {
+    relativeTo = "selected"
   }
 
   switch (relativeTo) {
-    case 'smallest':
+    case "smallest":
       if (isHorizontalAlign(type) || isVerticalAlign(type)) {
         const sortedBboxes = bboxes.slice().sort((a, b) => a.width - b.width)
         const minBbox = sortedBboxes[0]
@@ -352,7 +354,7 @@ const alignSelectedElements = (type, relativeTo) => {
         maxy = minBbox.y + minBbox.height
       }
       break
-    case 'largest':
+    case "largest":
       if (isHorizontalAlign(type) || isVerticalAlign(type)) {
         const sortedBboxes = bboxes.slice().sort((a, b) => a.width - b.width)
         const maxBbox = sortedBboxes[bboxes.length - 1]
@@ -362,7 +364,7 @@ const alignSelectedElements = (type, relativeTo) => {
         maxy = maxBbox.y + maxBbox.height
       }
       break
-    case 'page':
+    case "page":
       minx = 0
       miny = 0
       maxx = svgCanvas.getContentW()
@@ -370,22 +372,49 @@ const alignSelectedElements = (type, relativeTo) => {
       break
     default:
       // 'selected'
-      minx = Math.min(...bboxes.map(box => box.x))
-      miny = Math.min(...bboxes.map(box => box.y))
-      maxx = Math.max(...bboxes.map(box => box.x + box.width))
-      maxy = Math.max(...bboxes.map(box => box.y + box.height))
+      minx = Math.min(...bboxes.map((box) => box.x))
+      miny = Math.min(...bboxes.map((box) => box.y))
+      maxx = Math.max(...bboxes.map((box) => box.x + box.width))
+      maxy = Math.max(...bboxes.map((box) => box.y + box.height))
       break
   } // adjust min/max
 
   let dx = []
   let dy = []
 
-  if (['dh', 'distrib_horiz'].includes(type)) { // distribute horizontal align
-    [dx, dy] = _getDistributeHorizontalDistances(relativeTo, selectedElements, bboxes, minx, maxx, miny, maxy)
-  } else if (['dv', 'distrib_verti'].includes(type)) { // distribute vertical align
-    [dx, dy] = _getDistributeVerticalDistances(relativeTo, selectedElements, bboxes, minx, maxx, miny, maxy)
-  } else { // normal align (top, left, right, ...)
-    [dx, dy] = _getNormalDistances(type, selectedElements, bboxes, minx, maxx, miny, maxy)
+  if (["dh", "distrib_horiz"].includes(type)) {
+    // distribute horizontal align
+    ;[dx, dy] = _getDistributeHorizontalDistances(
+      relativeTo,
+      selectedElements,
+      bboxes,
+      minx,
+      maxx,
+      miny,
+      maxy
+    )
+  } else if (["dv", "distrib_verti"].includes(type)) {
+    // distribute vertical align
+    ;[dx, dy] = _getDistributeVerticalDistances(
+      relativeTo,
+      selectedElements,
+      bboxes,
+      minx,
+      maxx,
+      miny,
+      maxy
+    )
+  } else {
+    // normal align (top, left, right, ...)
+    ;[dx, dy] = _getNormalDistances(
+      type,
+      selectedElements,
+      bboxes,
+      minx,
+      maxx,
+      miny,
+      maxy
+    )
   }
 
   moveSelectedElements(dx, dy)
@@ -413,7 +442,15 @@ const alignSelectedElements = (type, relativeTo) => {
  * @returns {Array.Float[]} x and y distances array
  * @private
  */
-const _getDistributeHorizontalDistances = (relativeTo, selectedElements, bboxes, minx, maxx, miny, maxy) => {
+const _getDistributeHorizontalDistances = (
+  relativeTo,
+  selectedElements,
+  bboxes,
+  minx,
+  maxx,
+  miny,
+  maxy
+) => {
   const dx = []
   const dy = []
 
@@ -421,37 +458,46 @@ const _getDistributeHorizontalDistances = (relativeTo, selectedElements, bboxes,
     dy[i] = 0
   }
 
-  const bboxesSortedClone = bboxes
-    .slice()
-    .sort((firstBox, secondBox) => {
-      const firstMaxX = firstBox.x + firstBox.width
-      const secondMaxX = secondBox.x + secondBox.width
+  const bboxesSortedClone = bboxes.slice().sort((firstBox, secondBox) => {
+    const firstMaxX = firstBox.x + firstBox.width
+    const secondMaxX = secondBox.x + secondBox.width
 
-      if (firstMaxX === secondMaxX) { return 0 } else if (firstMaxX > secondMaxX) { return 1 } else { return -1 }
-    })
+    if (firstMaxX === secondMaxX) {
+      return 0
+    } else if (firstMaxX > secondMaxX) {
+      return 1
+    } else {
+      return -1
+    }
+  })
 
-  if (relativeTo === 'page') {
+  if (relativeTo === "page") {
     bboxesSortedClone.unshift({ x: 0, y: 0, width: 0, height: maxy }) // virtual left box
     bboxesSortedClone.push({ x: maxx, y: 0, width: 0, height: maxy }) // virtual right box
   }
 
   const totalWidth = maxx - minx
-  const totalBoxWidth = bboxesSortedClone.map(b => b.width).reduce((w1, w2) => w1 + w2, 0)
+  const totalBoxWidth = bboxesSortedClone
+    .map((b) => b.width)
+    .reduce((w1, w2) => w1 + w2, 0)
   const space = (totalWidth - totalBoxWidth) / (bboxesSortedClone.length - 1)
   const _dx = []
 
   for (let i = 0; i < bboxesSortedClone.length; ++i) {
     _dx[i] = 0
 
-    if (i === 0) { continue }
+    if (i === 0) {
+      continue
+    }
 
     const orgX = bboxesSortedClone[i].x
-    bboxesSortedClone[i].x = bboxesSortedClone[i - 1].x + bboxesSortedClone[i - 1].width + space
+    bboxesSortedClone[i].x =
+      bboxesSortedClone[i - 1].x + bboxesSortedClone[i - 1].width + space
     _dx[i] = bboxesSortedClone[i].x - orgX
   }
 
   bboxesSortedClone.forEach((boxClone, idx) => {
-    const orgIdx = bboxes.findIndex(box => box === boxClone)
+    const orgIdx = bboxes.findIndex((box) => box === boxClone)
     if (orgIdx !== -1) {
       dx[orgIdx] = _dx[idx]
     }
@@ -474,7 +520,15 @@ const _getDistributeHorizontalDistances = (relativeTo, selectedElements, bboxes,
  * @returns {Array.Float[]}} x and y distances array
  * @private
  */
-const _getDistributeVerticalDistances = (relativeTo, selectedElements, bboxes, minx, maxx, miny, maxy) => {
+const _getDistributeVerticalDistances = (
+  relativeTo,
+  selectedElements,
+  bboxes,
+  minx,
+  maxx,
+  miny,
+  maxy
+) => {
   const dx = []
   const dy = []
 
@@ -482,37 +536,46 @@ const _getDistributeVerticalDistances = (relativeTo, selectedElements, bboxes, m
     dx[i] = 0
   }
 
-  const bboxesSortedClone = bboxes
-    .slice()
-    .sort((firstBox, secondBox) => {
-      const firstMaxY = firstBox.y + firstBox.height
-      const secondMaxY = secondBox.y + secondBox.height
+  const bboxesSortedClone = bboxes.slice().sort((firstBox, secondBox) => {
+    const firstMaxY = firstBox.y + firstBox.height
+    const secondMaxY = secondBox.y + secondBox.height
 
-      if (firstMaxY === secondMaxY) { return 0 } else if (firstMaxY > secondMaxY) { return 1 } else { return -1 }
-    })
+    if (firstMaxY === secondMaxY) {
+      return 0
+    } else if (firstMaxY > secondMaxY) {
+      return 1
+    } else {
+      return -1
+    }
+  })
 
-  if (relativeTo === 'page') {
+  if (relativeTo === "page") {
     bboxesSortedClone.unshift({ x: 0, y: 0, width: maxx, height: 0 }) // virtual top box
     bboxesSortedClone.push({ x: 0, y: maxy, width: maxx, height: 0 }) // virtual bottom box
   }
 
   const totalHeight = maxy - miny
-  const totalBoxHeight = bboxesSortedClone.map(b => b.height).reduce((h1, h2) => h1 + h2, 0)
+  const totalBoxHeight = bboxesSortedClone
+    .map((b) => b.height)
+    .reduce((h1, h2) => h1 + h2, 0)
   const space = (totalHeight - totalBoxHeight) / (bboxesSortedClone.length - 1)
   const _dy = []
 
   for (let i = 0; i < bboxesSortedClone.length; ++i) {
     _dy[i] = 0
 
-    if (i === 0) { continue }
+    if (i === 0) {
+      continue
+    }
 
     const orgY = bboxesSortedClone[i].y
-    bboxesSortedClone[i].y = bboxesSortedClone[i - 1].y + bboxesSortedClone[i - 1].height + space
+    bboxesSortedClone[i].y =
+      bboxesSortedClone[i - 1].y + bboxesSortedClone[i - 1].height + space
     _dy[i] = bboxesSortedClone[i].y - orgY
   }
 
   bboxesSortedClone.forEach((boxClone, idx) => {
-    const orgIdx = bboxes.findIndex(box => box === boxClone)
+    const orgIdx = bboxes.findIndex((box) => box === boxClone)
     if (orgIdx !== -1) {
       dy[orgIdx] = _dy[idx]
     }
@@ -535,7 +598,15 @@ const _getDistributeVerticalDistances = (relativeTo, selectedElements, bboxes, m
  * @returns {Array.Float[]} x and y distances array
  * @private
  */
-const _getNormalDistances = (type, selectedElements, bboxes, minx, maxx, miny, maxy) => {
+const _getNormalDistances = (
+  type,
+  selectedElements,
+  bboxes,
+  minx,
+  maxx,
+  miny,
+  maxy
+) => {
   const len = selectedElements.length
   const dx = new Array(len)
   const dy = new Array(len)
@@ -550,28 +621,28 @@ const _getNormalDistances = (type, selectedElements, bboxes, minx, maxx, miny, m
     dy[i] = 0
 
     switch (type) {
-      case 'l': // left (horizontal)
-      case 'left': // left (horizontal)
+      case "l": // left (horizontal)
+      case "left": // left (horizontal)
         dx[i] = minx - bbox.x
         break
-      case 'c': // center (horizontal)
-      case 'center': // center (horizontal)
+      case "c": // center (horizontal)
+      case "center": // center (horizontal)
         dx[i] = (minx + maxx) / 2 - (bbox.x + bbox.width / 2)
         break
-      case 'r': // right (horizontal)
-      case 'right': // right (horizontal)
+      case "r": // right (horizontal)
+      case "right": // right (horizontal)
         dx[i] = maxx - (bbox.x + bbox.width)
         break
-      case 't': // top (vertical)
-      case 'top': // top (vertical)
+      case "t": // top (vertical)
+      case "top": // top (vertical)
         dy[i] = miny - bbox.y
         break
-      case 'm': // middle (vertical)
-      case 'middle': // middle (vertical)
+      case "m": // middle (vertical)
+      case "middle": // middle (vertical)
         dy[i] = (miny + maxy) / 2 - (bbox.y + bbox.height / 2)
         break
-      case 'b': // bottom (vertical)
-      case 'bottom': // bottom (vertical)
+      case "b": // bottom (vertical)
+      case "bottom": // bottom (vertical)
         dy[i] = maxy - (bbox.y + bbox.height)
         break
     }
@@ -589,10 +660,10 @@ const _getNormalDistances = (type, selectedElements, bboxes, minx, maxx, miny, m
  */
 const deleteSelectedElements = () => {
   const selectedElements = svgCanvas.getSelectedElements()
-  const batchCmd = new BatchCommand('Delete Elements')
+  const batchCmd = new BatchCommand("Delete Elements")
   const selectedCopy = [] // selectedElements is being deleted
 
-  selectedElements.forEach(selected => {
+  selectedElements.forEach((selected) => {
     if (selected) {
       let parent = selected.parentNode
       let t = selected
@@ -601,7 +672,7 @@ const deleteSelectedElements = () => {
       // Remove the path if present.
       pathModule.removePath_(t.id)
       // Get the parent if it's a single-child anchor
-      if (parent.tagName === 'a' && parent.childNodes.length === 1) {
+      if (parent.tagName === "a" && parent.childNodes.length === 1) {
         t = parent
         parent = parent.parentNode
       }
@@ -609,7 +680,9 @@ const deleteSelectedElements = () => {
       t.remove()
       const elem = t
       selectedCopy.push(selected) // for the copy
-      batchCmd.addSubCommand(new RemoveElementCommand(elem, nextSibling, parent))
+      batchCmd.addSubCommand(
+        new RemoveElementCommand(elem, nextSibling, parent)
+      )
     }
   })
   svgCanvas.setEmptySelectedElements()
@@ -617,7 +690,7 @@ const deleteSelectedElements = () => {
   if (!batchCmd.isEmpty()) {
     svgCanvas.addCommandToHistory(batchCmd)
   }
-  svgCanvas.call('changed', selectedCopy)
+  svgCanvas.call("changed", selectedCopy)
   svgCanvas.clearSelection()
 }
 
@@ -629,15 +702,15 @@ const deleteSelectedElements = () => {
 const copySelectedElements = () => {
   const selectedElements = svgCanvas.getSelectedElements()
   const data = JSON.stringify(
-    selectedElements.map(x => svgCanvas.getJsonFromSvgElements(x))
+    selectedElements.map((x) => svgCanvas.getJsonFromSvgElements(x))
   )
   // Use sessionStorage for the clipboard data.
   sessionStorage.setItem(svgCanvas.getClipboardID(), data)
   svgCanvas.flashStorage()
 
   // Context menu might not exist (it is provided by editor.js).
-  const canvMenu = document.getElementById('se-cmenu_canvas')
-  canvMenu.setAttribute('enablemenuitems', '#paste,#paste_in_place')
+  const canvMenu = document.getElementById("se-cmenu_canvas")
+  canvMenu.setAttribute("enablemenuitems", "#paste,#paste_in_place")
 }
 
 /**
@@ -650,20 +723,20 @@ const copySelectedElements = () => {
 const groupSelectedElements = (type, urlArg) => {
   const selectedElements = svgCanvas.getSelectedElements()
   if (!type) {
-    type = 'g'
+    type = "g"
   }
-  let cmdStr = ''
+  let cmdStr = ""
   let url
 
   switch (type) {
-    case 'a': {
-      cmdStr = 'Make hyperlink'
-      url = urlArg || ''
+    case "a": {
+      cmdStr = "Make hyperlink"
+      url = urlArg || ""
       break
     }
     default: {
-      type = 'g'
-      cmdStr = 'Group Elements'
+      type = "g"
+      cmdStr = "Group Elements"
       break
     }
   }
@@ -674,10 +747,10 @@ const groupSelectedElements = (type, urlArg) => {
   const g = svgCanvas.addSVGElementsFromJson({
     element: type,
     attr: {
-      id: svgCanvas.getNextId()
-    }
+      id: svgCanvas.getNextId(),
+    },
   })
-  if (type === 'a') {
+  if (type === "a") {
     setHref(g, url)
   }
   batchCmd.addSubCommand(new InsertElementCommand(g))
@@ -691,7 +764,7 @@ const groupSelectedElements = (type, urlArg) => {
     }
 
     if (
-      elem.parentNode.tagName === 'a' &&
+      elem.parentNode.tagName === "a" &&
       elem.parentNode.childNodes.length === 1
     ) {
       elem = elem.parentNode
@@ -723,12 +796,12 @@ const groupSelectedElements = (type, urlArg) => {
 const pushGroupProperty = (g, undoable) => {
   const children = g.childNodes
   const len = children.length
-  const xform = g.getAttribute('transform')
+  const xform = g.getAttribute("transform")
 
   const glist = getTransformList(g)
   const m = transformListToTransform(glist).matrix
 
-  const batchCmd = new BatchCommand('Push group properties')
+  const batchCmd = new BatchCommand("Push group properties")
 
   // TODO: get all fill/stroke properties from the group that we are about to destroy
   // "fill", "fill-opacity", "fill-rule", "stroke", "stroke-dasharray", "stroke-dashoffset",
@@ -740,8 +813,8 @@ const pushGroupProperty = (g, undoable) => {
   const gangle = getRotationAngle(g)
 
   const gattrs = {
-    filter: g.getAttribute('filter'),
-    opacity: g.getAttribute('opacity')
+    filter: g.getAttribute("filter"),
+    opacity: g.getAttribute("opacity"),
   }
   let gfilter
   let gblur
@@ -758,9 +831,9 @@ const pushGroupProperty = (g, undoable) => {
     if (gattrs.opacity !== null && gattrs.opacity !== 1) {
       // const c_opac = elem.getAttribute('opacity') || 1;
       const newOpac =
-        Math.round((elem.getAttribute('opacity') || 1) * gattrs.opacity * 100) /
+        Math.round((elem.getAttribute("opacity") || 1) * gattrs.opacity * 100) /
         100
-      svgCanvas.changeSelectedAttribute('opacity', newOpac, [elem])
+      svgCanvas.changeSelectedAttribute("opacity", newOpac, [elem])
     }
 
     if (gattrs.filter) {
@@ -790,23 +863,23 @@ const pushGroupProperty = (g, undoable) => {
           const blurElem = getFeGaussianBlur(gfilter)
           // Change this in future for different filters
           const suffix =
-            blurElem?.tagName === 'feGaussianBlur' ? 'blur' : 'filter'
-          gfilter.id = elem.id + '_' + suffix
+            blurElem?.tagName === "feGaussianBlur" ? "blur" : "filter"
+          gfilter.id = elem.id + "_" + suffix
           svgCanvas.changeSelectedAttribute(
-            'filter',
-            'url(#' + gfilter.id + ')',
+            "filter",
+            "url(#" + gfilter.id + ")",
             [elem]
           )
         }
       } else {
-        gfilter = getRefElem(elem.getAttribute('filter'))
+        gfilter = getRefElem(elem.getAttribute("filter"))
       }
       // const filterElem = getRefElem(gfilter);
       const blurElem = getFeGaussianBlur(gfilter)
 
       // Update blur value
       if (cblur) {
-        svgCanvas.changeSelectedAttribute('stdDeviation', cblur, [blurElem])
+        svgCanvas.changeSelectedAttribute("stdDeviation", cblur, [blurElem])
         svgCanvas.setBlurOffsets(gfilter, cblur)
       }
     }
@@ -814,7 +887,7 @@ const pushGroupProperty = (g, undoable) => {
     let chtlist = getTransformList(elem)
 
     // Don't process gradient transforms
-    if (elem.tagName.includes('Gradient')) {
+    if (elem.tagName.includes("Gradient")) {
       chtlist = null
     }
 
@@ -824,7 +897,7 @@ const pushGroupProperty = (g, undoable) => {
     }
 
     // Apparently <defs> can get get a transformlist, but we don't want it to have one!
-    if (elem.tagName === 'defs') {
+    if (elem.tagName === "defs") {
       continue
     }
 
@@ -897,9 +970,9 @@ const pushGroupProperty = (g, undoable) => {
         // more complicated than just a rotate
         // transfer the group's transform down to each child and then
         // call recalculateDimensions()
-        const oldxform = elem.getAttribute('transform')
+        const oldxform = elem.getAttribute("transform")
         changes = {}
-        changes.transform = oldxform || ''
+        changes.transform = oldxform || ""
 
         const newxform = svgCanvas.getSvgRoot().createSVGTransform()
 
@@ -922,8 +995,8 @@ const pushGroupProperty = (g, undoable) => {
   if (xform) {
     changes = {}
     changes.transform = xform
-    g.setAttribute('transform', '')
-    g.removeAttribute('transform')
+    g.setAttribute("transform", "")
+    g.removeAttribute("transform")
     batchCmd.addSubCommand(new ChangeElementCommand(g, changes))
   }
 
@@ -940,7 +1013,7 @@ const pushGroupProperty = (g, undoable) => {
  * @fires module:selected-elem.SvgCanvas#event:selected
  * @returns {void}
  */
-const convertToGroup = elem => {
+const convertToGroup = (elem) => {
   const selectedElements = svgCanvas.getSelectedElements()
   if (!elem) {
     elem = selectedElements[0]
@@ -949,12 +1022,12 @@ const convertToGroup = elem => {
   const batchCmd = new BatchCommand()
   let ts
   const dataStorage = svgCanvas.getDataStorage()
-  if (dataStorage.has($elem, 'gsvg')) {
+  if (dataStorage.has($elem, "gsvg")) {
     // Use the gsvg as the new group
     const svg = elem.firstChild
     const pt = {
-      x: Number(svg.getAttribute('x')),
-      y: Number(svg.getAttribute('y'))
+      x: Number(svg.getAttribute("x")),
+      y: Number(svg.getAttribute("y")),
     }
 
     // $(elem.firstChild.firstChild).unwrap();
@@ -962,33 +1035,33 @@ const convertToGroup = elem => {
     if (firstChild) {
       firstChild.outerHTML = firstChild.innerHTML
     }
-    dataStorage.remove(elem, 'gsvg')
+    dataStorage.remove(elem, "gsvg")
 
     const tlist = getTransformList(elem)
     const xform = svgCanvas.getSvgRoot().createSVGTransform()
     xform.setTranslate(pt.x, pt.y)
     tlist.appendItem(xform)
     recalculateDimensions(elem)
-    svgCanvas.call('selected', [elem])
-  } else if (dataStorage.has($elem, 'symbol')) {
-    elem = dataStorage.get($elem, 'symbol')
+    svgCanvas.call("selected", [elem])
+  } else if (dataStorage.has($elem, "symbol")) {
+    elem = dataStorage.get($elem, "symbol")
 
-    ts = $elem.getAttribute('transform') || ''
+    ts = $elem.getAttribute("transform") || ""
     const pos = {
-      x: Number($elem.getAttribute('x')),
-      y: Number($elem.getAttribute('y'))
+      x: Number($elem.getAttribute("x")),
+      y: Number($elem.getAttribute("y")),
     }
 
-    const vb = elem.getAttribute('viewBox')
+    const vb = elem.getAttribute("viewBox")
 
     if (vb) {
-      const nums = vb.split(' ')
+      const nums = vb.split(" ")
       pos.x -= Number(nums[0])
       pos.y -= Number(nums[1])
     }
 
     // Not ideal, but works
-    ts += ' translate(' + (pos.x || 0) + ',' + (pos.y || 0) + ')'
+    ts += " translate(" + (pos.x || 0) + "," + (pos.y || 0) + ")"
 
     const prev = $elem.previousElementSibling
 
@@ -1006,9 +1079,9 @@ const convertToGroup = elem => {
     const svgContent = svgCanvas.getSvgContent()
     // const hasMore = svgContent.querySelectorAll('use:data(symbol)').length;
     // @todo review this logic
-    const hasMore = svgContent.querySelectorAll('use').length
+    const hasMore = svgContent.querySelectorAll("use").length
 
-    const g = svgCanvas.getDOMDocument().createElementNS(NS.SVG, 'g')
+    const g = svgCanvas.getDOMDocument().createElementNS(NS.SVG, "g")
     const childs = elem.childNodes
 
     let i
@@ -1020,7 +1093,7 @@ const convertToGroup = elem => {
     if (isGecko()) {
       const svgElement = findDefs()
       const gradients = svgElement.querySelectorAll(
-        'linearGradient,radialGradient,pattern'
+        "linearGradient,radialGradient,pattern"
       )
       for (let i = 0, im = gradients.length; im > i; i++) {
         g.appendChild(gradients[i].cloneNode(true))
@@ -1028,7 +1101,7 @@ const convertToGroup = elem => {
     }
 
     if (ts) {
-      g.setAttribute('transform', ts)
+      g.setAttribute("transform", ts)
     }
 
     const parent = elem.parentNode
@@ -1039,7 +1112,7 @@ const convertToGroup = elem => {
     if (isGecko()) {
       const svgElement = findDefs()
       const elements = g.querySelectorAll(
-        'linearGradient,radialGradient,pattern'
+        "linearGradient,radialGradient,pattern"
       )
       for (let i = 0, im = elements.length; im > i; i++) {
         svgElement.appendChild(elements[i])
@@ -1073,7 +1146,7 @@ const convertToGroup = elem => {
 
     // recalculate dimensions on the top-level children so that unnecessary transforms
     // are removed
-    walkTreePost(g, n => {
+    walkTreePost(g, (n) => {
       try {
         recalculateDimensions(n)
       } catch (e) {
@@ -1083,7 +1156,7 @@ const convertToGroup = elem => {
 
     // Give ID for any visible element missing one
     const visElems = g.querySelectorAll(svgCanvas.getVisElems())
-    Array.prototype.forEach.call(visElems, el => {
+    Array.prototype.forEach.call(visElems, (el) => {
       if (!el.id) {
         el.id = svgCanvas.getNextId()
       }
@@ -1098,7 +1171,7 @@ const convertToGroup = elem => {
 
     svgCanvas.addCommandToHistory(batchCmd)
   } else {
-    console.warn('Unexpected element to ungroup:', elem)
+    console.warn("Unexpected element to ungroup:", elem)
   }
 }
 
@@ -1115,27 +1188,27 @@ const ungroupSelectedElement = () => {
   if (!g) {
     return
   }
-  if (dataStorage.has(g, 'gsvg') || dataStorage.has(g, 'symbol')) {
+  if (dataStorage.has(g, "gsvg") || dataStorage.has(g, "symbol")) {
     // Is svg, so actually convert to group
     convertToGroup(g)
     return
   }
-  if (g.tagName === 'use') {
+  if (g.tagName === "use") {
     // Somehow doesn't have data set, so retrieve
     const symbol = getElement(getHref(g).substr(1))
-    dataStorage.put(g, 'symbol', symbol)
-    dataStorage.put(g, 'ref', symbol)
+    dataStorage.put(g, "symbol", symbol)
+    dataStorage.put(g, "ref", symbol)
     convertToGroup(g)
     return
   }
-  const parentsA = getParents(g.parentNode, 'a')
+  const parentsA = getParents(g.parentNode, "a")
   if (parentsA?.length) {
     g = parentsA[0]
   }
 
   // Look for parent "a"
-  if (g.tagName === 'g' || g.tagName === 'a') {
-    const batchCmd = new BatchCommand('Ungroup Elements')
+  if (g.tagName === "g" || g.tagName === "a") {
+    const batchCmd = new BatchCommand("Ungroup Elements")
     const cmd = pushGroupProperty(g, true)
     if (cmd) {
       batchCmd.addSubCommand(cmd)
@@ -1152,7 +1225,7 @@ const ungroupSelectedElement = () => {
       const oldParent = elem.parentNode
 
       // Remove child title elements
-      if (elem.tagName === 'title') {
+      if (elem.tagName === "title") {
         const { nextSibling } = elem
         batchCmd.addSubCommand(
           new RemoveElementCommand(elem, nextSibling, oldParent)
@@ -1192,12 +1265,12 @@ const ungroupSelectedElement = () => {
  * @returns {module:svgcanvas.CanvasInfo}
  */
 const updateCanvas = (w, h) => {
-  svgCanvas.getSvgRoot().setAttribute('width', w)
-  svgCanvas.getSvgRoot().setAttribute('height', h)
+  svgCanvas.getSvgRoot().setAttribute("width", w)
+  svgCanvas.getSvgRoot().setAttribute("height", h)
   const zoom = svgCanvas.getZoom()
-  const bg = document.getElementById('canvasBackground')
-  const oldX = Number(svgCanvas.getSvgContent().getAttribute('x'))
-  const oldY = Number(svgCanvas.getSvgContent().getAttribute('y'))
+  const bg = document.getElementById("canvasBackground")
+  const oldX = Number(svgCanvas.getSvgContent().getAttribute("x"))
+  const oldY = Number(svgCanvas.getSvgContent().getAttribute("y"))
   const x = (w - svgCanvas.contentW * zoom) / 2
   const y = (h - svgCanvas.contentH * zoom) / 2
 
@@ -1206,27 +1279,27 @@ const updateCanvas = (w, h) => {
     height: svgCanvas.contentH * zoom,
     x,
     y,
-    viewBox: '0 0 ' + svgCanvas.contentW + ' ' + svgCanvas.contentH
+    viewBox: "0 0 " + svgCanvas.contentW + " " + svgCanvas.contentH,
   })
 
   assignAttributes(bg, {
-    width: svgCanvas.getSvgContent().getAttribute('width'),
-    height: svgCanvas.getSvgContent().getAttribute('height'),
+    width: svgCanvas.getSvgContent().getAttribute("width"),
+    height: svgCanvas.getSvgContent().getAttribute("height"),
     x,
-    y
+    y,
   })
 
-  const bgImg = getElement('background_image')
+  const bgImg = getElement("background_image")
   if (bgImg) {
     assignAttributes(bgImg, {
-      width: '100%',
-      height: '100%'
+      width: "100%",
+      height: "100%",
     })
   }
 
   svgCanvas.selectorManager.selectorParentGroup.setAttribute(
-    'transform',
-    'translate(' + x + ',' + y + ')'
+    "transform",
+    "translate(" + x + "," + y + ")"
   )
 
   /**
@@ -1241,7 +1314,7 @@ const updateCanvas = (w, h) => {
    * @property {Integer} d_y
    */
   svgCanvas.runExtensions(
-    'canvasUpdated',
+    "canvasUpdated",
     /**
      * @type {module:svgcanvas.SvgCanvas#event:ext_canvasUpdated}
      */
@@ -1251,7 +1324,7 @@ const updateCanvas = (w, h) => {
       old_x: oldX,
       old_y: oldY,
       d_x: x - oldX,
-      d_y: y - oldY
+      d_y: y - oldY,
     }
   )
   return { x, y, old_x: oldX, old_y: oldY, d_x: x - oldX, d_y: y - oldY }
@@ -1263,7 +1336,7 @@ const updateCanvas = (w, h) => {
  * @fires module:svgcanvas.SvgCanvas#event:selected
  * @returns {void}
  */
-const cycleElement = next => {
+const cycleElement = (next) => {
   const selectedElements = svgCanvas.getSelectedElements()
   const currentGroup = svgCanvas.getCurrentGroup()
   let num
@@ -1294,5 +1367,5 @@ const cycleElement = next => {
     }
   }
   svgCanvas.selectOnly([elem], true)
-  svgCanvas.call('selected', selectedElements)
+  svgCanvas.call("selected", selectedElements)
 }

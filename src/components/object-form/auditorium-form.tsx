@@ -3,8 +3,10 @@ import { CommonFormItems } from "./common-form"
 export const AuditoriumForm = () => {
   return (
     <>
-      <CommonFormItems.Name />
+      <CommonFormItems.Id />
       <CommonFormItems.SvgId />
+      <CommonFormItems.Name />
+      <CommonFormItems.Floor />
     </>
   )
 }

@@ -26,7 +26,7 @@ import {
 import * as draw from "./draw.js"
 import * as pathModule from "./path.js"
 import * as hstry from "./history.js"
-// CHANGE1
+// CHANGE
 import { findPos } from "../common/util.js"
 
 const { InsertElementCommand } = hstry

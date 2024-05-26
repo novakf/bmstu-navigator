@@ -166,7 +166,7 @@ class TopPanel {
 
     this.editor.bottomPanel.updateToolButtonState()
 
-    // CHANGE1
+    // CHANGE
     this.onUpdate()
   }
 

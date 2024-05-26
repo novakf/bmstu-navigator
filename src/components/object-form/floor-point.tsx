@@ -3,9 +3,11 @@ import { CommonFormItems } from "./common-form"
 export const FloorPointForm = () => {
   return (
     <>
-      <CommonFormItems.Name />
+      <CommonFormItems.Id />
       <CommonFormItems.SvgId />
+      <CommonFormItems.Name />
       <CommonFormItems.PointCoords />
+      <CommonFormItems.Floor />
     </>
   )
 }

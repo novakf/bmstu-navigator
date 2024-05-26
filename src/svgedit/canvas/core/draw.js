@@ -100,7 +100,7 @@ export class Drawing {
      * The latest object number used in this drawing.
      * @type {Integer}
      */
-    this.obj_num = 0
+    this.obj_num = uid.rnd()
 
     /**
      * The prefix to prepend to each element id in the drawing.
@@ -205,12 +205,6 @@ export class Drawing {
    * @returns {string} The latest object Id.
    */
   getId() {
-    console.log(
-      "getid",
-      this.nonce_
-        ? this.idPrefix + this.nonce_ + "_" + this.obj_num
-        : this.idPrefix + this.obj_num
-    )
     return this.nonce_
       ? this.idPrefix + this.nonce_ + "_" + this.obj_num
       : this.idPrefix + this.obj_num

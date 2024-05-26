@@ -1,12 +1,12 @@
 import { CommonFormItems } from "./common-form"
 
-export const HallwayPointForm = () => {
+export const GuideForm = () => {
   return (
     <>
       <CommonFormItems.Id />
       <CommonFormItems.SvgId />
       <CommonFormItems.Name />
-      <CommonFormItems.PointCoords />
+      <CommonFormItems.Lines />
       <CommonFormItems.Floor />
     </>
   )

@@ -1,17 +1,37 @@
 import React from "react"
 import ReactDOM from "react-dom/client"
 import "./index.css"
-import App from "./App"
+import "./App.css"
 import reportWebVitals from "./reportWebVitals"
 import { Provider } from "react-redux"
 import { store } from "./state"
+import { RouterProvider, createBrowserRouter } from "react-router-dom"
+import { Editor } from "./pages/Editor"
+import { Viewer } from "./pages/Viewer"
+import { Auth } from "./pages/Auth"
+
+const router = createBrowserRouter([
+  {
+    path: "/",
+    element: <Viewer />,
+  },
+  {
+    path: "/auth",
+    element: <Auth />,
+  },
+  {
+    path: "/editor",
+    element: <Editor />,
+  },
+])
 
 const root = ReactDOM.createRoot(document.getElementById("root") as HTMLElement)
 
 root.render(
   <React.StrictMode>
     <Provider store={store}>
-      <App />
+      <RouterProvider router={router} />
+      {/* <App /> */}
     </Provider>
   </React.StrictMode>
 )
