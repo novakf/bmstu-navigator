@@ -2,6 +2,9 @@ import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit"
 import { useSelector } from "react-redux"
 import { RootState } from ".."
 import { Link, UniverObject } from "../../interfaces"
+import uoItemsMock from "../../mocks/uo-items.json"
+import uoHoldersMock from "../../mocks/uo-holders.json"
+import uoLinksMock from "../../mocks/uo-links.json"
 
 export type UoLinks = Record<string, Link[]>
 
@@ -148,9 +151,12 @@ export const useUoLinks = () => useSelector(selectUoLinks)
 export const useUoHolders = () => useSelector(selectUoHolders)
 
 export const initEditor = createAsyncThunk("initEditor", (_, { dispatch }) => {
-  const uoItems = JSON.parse(localStorage.getItem("uoItems") || "{}")
-  const uoLinks = JSON.parse(localStorage.getItem("uoLinks") || "{}")
-  const uoHolders = JSON.parse(localStorage.getItem("uoHolders") || "{}")
+  const uoItems =
+    JSON.parse(localStorage.getItem("uoItems") || "null") || uoItemsMock
+  const uoLinks =
+    JSON.parse(localStorage.getItem("uoLinks") || "null") || uoLinksMock
+  const uoHolders =
+    JSON.parse(localStorage.getItem("uoHolders") || "null") || uoHoldersMock
 
   dispatch(setUoItemsAction(uoItems))
   dispatch(setUoLinksAction(uoLinks))

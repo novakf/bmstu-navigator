@@ -1,0 +1,492 @@
+{
+  "5": {
+    "type": "auditorium-point",
+    "id": "5",
+    "svgId": "svg_5",
+    "name": "точка 905",
+    "xCoord": "243.5",
+    "yCoord": "251.78",
+    "floor": 9
+  },
+  "8": {
+    "type": "auditorium",
+    "id": "8",
+    "svgId": "svg_8",
+    "name": "907",
+    "floor": 9
+  },
+  "10": {
+    "type": "auditorium",
+    "id": "10",
+    "svgId": "svg_10",
+    "name": "905",
+    "floor": 9
+  },
+  "11": {
+    "type": "auditorium",
+    "id": "11",
+    "svgId": "svg_11",
+    "name": "903.3",
+    "floor": 9
+  },
+  "15": {
+    "type": "auditorium",
+    "id": "15",
+    "svgId": "svg_15",
+    "name": "901",
+    "floor": 9
+  },
+  "17": {
+    "type": "auditorium",
+    "id": "17",
+    "svgId": "svg_17",
+    "name": "906.2",
+    "floor": 9
+  },
+  "18": {
+    "type": "auditorium",
+    "id": "18",
+    "svgId": "svg_18",
+    "name": "906.3",
+    "floor": 9
+  },
+  "20": {
+    "type": "auditorium",
+    "id": "20",
+    "svgId": "svg_20",
+    "name": "906",
+    "floor": 9
+  },
+  "23": {
+    "type": "auditorium",
+    "id": "23",
+    "svgId": "svg_23",
+    "name": "902",
+    "floor": 9
+  },
+  "26": {
+    "type": "auditorium",
+    "id": "26",
+    "svgId": "svg_26",
+    "name": "904",
+    "floor": 9
+  },
+  "39": {
+    "type": "auditorium",
+    "id": "39",
+    "svgId": "svg_39",
+    "name": "906.1",
+    "floor": 9
+  },
+  "43": {
+    "type": "auditorium-point",
+    "id": "43",
+    "svgId": "svg_43",
+    "name": "точка 907",
+    "xCoord": "158.75",
+    "yCoord": "252.4",
+    "floor": 9
+  },
+  "44": {
+    "type": "auditorium-point",
+    "id": "44",
+    "svgId": "svg_44",
+    "name": "903.3 точка",
+    "xCoord": "332",
+    "yCoord": "252.53",
+    "floor": 9
+  },
+  "51": {
+    "type": "auditorium-point",
+    "id": "51",
+    "svgId": "svg_51",
+    "name": "902 точка",
+    "xCoord": "374.85",
+    "yCoord": "198.38",
+    "floor": 9
+  },
+  "55": {
+    "type": "auditorium-point",
+    "id": "55",
+    "svgId": "svg_55",
+    "name": "точка 906",
+    "xCoord": "265.9",
+    "yCoord": "199.93",
+    "floor": 9
+  },
+  "56": {
+    "type": "auditorium-point",
+    "id": "56",
+    "svgId": "svg_56",
+    "name": "точка 906.1",
+    "xCoord": "267.15",
+    "yCoord": "165.93",
+    "floor": 9
+  },
+  "57": {
+    "type": "auditorium-point",
+    "id": "57",
+    "svgId": "svg_57",
+    "name": "точка 906.3",
+    "xCoord": "265.15",
+    "yCoord": "143.43",
+    "floor": 9
+  },
+  "58": {
+    "type": "auditorium-point",
+    "id": "58",
+    "svgId": "svg_58",
+    "name": "точка 906.2",
+    "xCoord": "237.65",
+    "yCoord": "162.93",
+    "floor": 9
+  },
+  "59": {
+    "type": "auditorium-point",
+    "id": "59",
+    "svgId": "svg_59",
+    "name": "точка 900.2",
+    "xCoord": "214.15",
+    "yCoord": "194.93",
+    "floor": 9
+  },
+  "G4Vya0": {
+    "type": "ladder",
+    "id": "G4Vya0",
+    "svgId": "svg_G4Vya0",
+    "name": "Лестница слева",
+    "floor": 9
+  },
+  "6ljHr4": {
+    "type": "ladder",
+    "id": "6ljHr4",
+    "svgId": "svg_6ljHr4",
+    "name": "Лестница справа",
+    "floor": 9
+  },
+  "16FUZz": {
+    "type": "ladder-point",
+    "id": "16FUZz",
+    "svgId": "svg_16FUZz",
+    "name": "Точка лестницы слева",
+    "xCoord": "170.6",
+    "yCoord": "195.25",
+    "floor": 9
+  },
+  "X1WLCh": {
+    "type": "ladder-point",
+    "id": "X1WLCh",
+    "svgId": "svg_X1WLCh",
+    "name": "Точка лестницы справа",
+    "xCoord": "475.1",
+    "yCoord": "194.75",
+    "floor": 9
+  },
+  "2heYY3": {
+    "type": "guide",
+    "id": "2heYY3",
+    "svgId": "svg_2heYY3",
+    "name": "направляющая",
+    "lines": [{ "x1": 100.7, "y1": 225.7, "x2": 521.5, "y2": 225.5 }],
+    "floor": 9
+  },
+  "1vLaK8": {
+    "id": "1vLaK8",
+    "svgId": "svg_1vLaK8",
+    "type": "hallway-point",
+    "floor": 9,
+    "name": "gen_1vLaK8",
+    "xCoord": 170.61445664006442,
+    "yCoord": 225.66677069551326
+  },
+  "de93TE": {
+    "id": "de93TE",
+    "svgId": "svg_de93TE",
+    "type": "hallway-point",
+    "floor": 9,
+    "name": "gen_de93TE",
+    "xCoord": 158.7372967755387,
+    "yCoord": 225.6724157334717
+  },
+  "bjWkBq": {
+    "id": "bjWkBq",
+    "svgId": "svg_bjWkBq",
+    "type": "hallway-point",
+    "floor": 9,
+    "name": "gen_bjWkBq",
+    "xCoord": 243.48757230759708,
+    "yCoord": 225.63213518426446
+  },
+  "5HPZm2": {
+    "id": "5HPZm2",
+    "svgId": "svg_5HPZm2",
+    "type": "hallway-point",
+    "floor": 9,
+    "name": "gen_5HPZm2",
+    "xCoord": 237.67980270700144,
+    "yCoord": 225.63489553103278
+  },
+  "Um63FL": {
+    "id": "Um63FL",
+    "svgId": "svg_Um63FL",
+    "type": "hallway-point",
+    "floor": 9,
+    "name": "gen_Um63FL",
+    "xCoord": 214.16459889351648,
+    "yCoord": 225.6460719587008
+  },
+  "UFzSBn": {
+    "id": "UFzSBn",
+    "svgId": "svg_UFzSBn",
+    "type": "hallway-point",
+    "floor": 9,
+    "name": "gen_UFzSBn",
+    "xCoord": 265.91221077808274,
+    "yCoord": 225.62147708613207
+  },
+  "OS803d": {
+    "type": "auditorium",
+    "id": "OS803d",
+    "svgId": "svg_OS803d",
+    "name": "432",
+    "floor": 4
+  },
+  "Tdal2Q": {
+    "type": "auditorium",
+    "id": "Tdal2Q",
+    "svgId": "svg_Tdal2Q",
+    "name": "430",
+    "floor": 4
+  },
+  "w72v00": {
+    "type": "auditorium",
+    "id": "w72v00",
+    "svgId": "svg_w72v00",
+    "name": "428",
+    "floor": 4
+  },
+  "wFnCYu": {
+    "type": "auditorium",
+    "id": "wFnCYu",
+    "svgId": "svg_wFnCYu",
+    "name": "426",
+    "floor": 4
+  },
+  "YOAPj2": {
+    "type": "auditorium-point",
+    "id": "YOAPj2",
+    "svgId": "svg_YOAPj2",
+    "name": "точка 432",
+    "xCoord": "202.89",
+    "yCoord": "193.75",
+    "floor": 4
+  },
+  "XcXCOm": {
+    "type": "auditorium-point",
+    "id": "XcXCOm",
+    "svgId": "svg_XcXCOm",
+    "name": "точка 430",
+    "xCoord": "223.53",
+    "yCoord": "205.73",
+    "floor": 4
+  },
+  "iy8Kmx": {
+    "type": "auditorium-point",
+    "id": "iy8Kmx",
+    "svgId": "svg_iy8Kmx",
+    "name": "точка 428",
+    "xCoord": "240.57",
+    "yCoord": "220.67",
+    "floor": 4
+  },
+  "E1D4hF": {
+    "type": "auditorium-point",
+    "id": "E1D4hF",
+    "svgId": "svg_E1D4hF",
+    "name": "точка 426",
+    "xCoord": "255.46",
+    "yCoord": "240.01",
+    "floor": 4
+  },
+  "3pNJEw": {
+    "type": "ladder",
+    "id": "3pNJEw",
+    "svgId": "svg_3pNJEw",
+    "name": "Лестница слева",
+    "floor": 4
+  },
+  "ZIeiSe": {
+    "type": "ladder-point",
+    "id": "ZIeiSe",
+    "svgId": "svg_ZIeiSe",
+    "name": "Точка лестницы слева",
+    "xCoord": "151.40001358032225",
+    "yCoord": "183.67497563362122",
+    "floor": 4
+  },
+  "KqvYxT": {
+    "type": "guide",
+    "id": "KqvYxT",
+    "svgId": "svg_KqvYxT",
+    "name": "Направляющая слева",
+    "lines": [
+      { "x1": 118.6, "y1": 197.67, "x2": 185, "y2": 200 },
+      { "x1": 185, "y1": 200, "x2": 207, "y2": 210 },
+      { "x1": 207, "y1": 210, "x2": 224.67, "y2": 223.67 },
+      { "x1": 224.67, "y1": 223.67, "x2": 239.33, "y2": 240 },
+      { "x1": 239.33, "y1": 240, "x2": 249.33, "y2": 256.67 },
+      { "x1": 249.33, "y1": 256.67, "x2": 258.33, "y2": 276.67 },
+      { "x1": 258.33, "y1": 276.67, "x2": 263, "y2": 299 },
+      { "x1": 263, "y1": 299, "x2": 265.67, "y2": 323.67 },
+      { "x1": 265.67, "y1": 323.67, "x2": 265.67, "y2": 365.67 }
+    ],
+    "floor": 4
+  },
+  "IusiYK": {
+    "id": "IusiYK",
+    "svgId": "svg_IusiYK",
+    "type": "hallway-point",
+    "floor": 4,
+    "name": "gen_IusiYK",
+    "xCoord": 197.4721917808219,
+    "yCoord": 205.66917808219176
+  },
+  "EuUwtN": {
+    "id": "EuUwtN",
+    "svgId": "svg_EuUwtN",
+    "type": "hallway-point",
+    "floor": 4,
+    "name": "gen_EuUwtN",
+    "xCoord": 215.2743901375642,
+    "yCoord": 216.40129672781566
+  },
+  "itgo6W": {
+    "id": "itgo6W",
+    "svgId": "svg_itgo6W",
+    "type": "hallway-point",
+    "floor": 4,
+    "name": "gen_itgo6W",
+    "xCoord": 230.27434283080123,
+    "yCoord": 229.91276387632908
+  },
+  "HPx5pF": {
+    "id": "HPx5pF",
+    "svgId": "svg_HPx5pF",
+    "type": "hallway-point",
+    "floor": 4,
+    "name": "gen_HPx5pF",
+    "xCoord": 243.60286167971591,
+    "yCoord": 247.12286042008643
+  },
+  "fBt2d1": {
+    "id": "fBt2d1",
+    "svgId": "svg_fBt2d1",
+    "type": "hallway-point",
+    "floor": 4,
+    "name": "gen_fBt2d1",
+    "xCoord": 150.86918898453337,
+    "yCoord": 198.80233750502956
+  },
+  "Iswdoo": {
+    "id": "Iswdoo",
+    "svgId": "svg_Iswdoo",
+    "type": "hallway-point",
+    "floor": 9,
+    "name": "gen_Iswdoo",
+    "xCoord": 475.1146254972817,
+    "yCoord": 225.52204628065718
+  },
+  "imDQTm": {
+    "id": "imDQTm",
+    "svgId": "svg_imDQTm",
+    "type": "hallway-point",
+    "floor": 9,
+    "name": "gen_imDQTm",
+    "xCoord": 331.98719585200837,
+    "yCoord": 225.59007262554562
+  },
+  "pyvn4b": {
+    "id": "pyvn4b",
+    "svgId": "svg_pyvn4b",
+    "type": "hallway-point",
+    "floor": 9,
+    "name": "gen_pyvn4b",
+    "xCoord": 374.8629228585686,
+    "yCoord": 225.56969442829916
+  },
+  "VPsTL6": {
+    "type": "auditorium",
+    "id": "VPsTL6",
+    "svgId": "svg_VPsTL6",
+    "name": "424",
+    "floor": 4
+  },
+  "Kf9uOq": {
+    "type": "auditorium-point",
+    "id": "Kf9uOq",
+    "svgId": "svg_Kf9uOq",
+    "name": "424 дверь",
+    "xCoord": "268.14",
+    "yCoord": "264.65",
+    "floor": 4
+  },
+  "MZqk60": {
+    "type": "auditorium",
+    "id": "MZqk60",
+    "svgId": "svg_MZqk60",
+    "name": "422",
+    "floor": 4
+  },
+  "13X4dm": {
+    "type": "auditorium-point",
+    "id": "13X4dm",
+    "svgId": "svg_13X4dm",
+    "name": "422 дверь",
+    "xCoord": "275.82",
+    "yCoord": "290.7",
+    "floor": 4
+  },
+  "DD9EGM": {
+    "id": "DD9EGM",
+    "svgId": "svg_DD9EGM",
+    "type": "hallway-point",
+    "floor": 4,
+    "name": "gen_DD9EGM",
+    "xCoord": 255.48386694386693,
+    "yCoord": 270.34525987525984
+  },
+  "1u6uRX": {
+    "id": "1u6uRX",
+    "svgId": "svg_1u6uRX",
+    "type": "hallway-point",
+    "floor": 4,
+    "name": "gen_1u6uRX",
+    "xCoord": 261.87413436917916,
+    "yCoord": 293.61657825776683
+  },
+  "z89iWh": {
+    "type": "auditorium",
+    "id": "z89iWh",
+    "svgId": "svg_z89iWh",
+    "name": "420",
+    "floor": 4
+  },
+  "Hcp7T5": {
+    "type": "auditorium-point",
+    "id": "Hcp7T5",
+    "svgId": "svg_Hcp7T5",
+    "name": "420 дверь",
+    "xCoord": "278.61",
+    "yCoord": "316.51",
+    "floor": 4
+  },
+  "2CtpXU": {
+    "id": "2CtpXU",
+    "svgId": "svg_2CtpXU",
+    "type": "hallway-point",
+    "floor": 4,
+    "name": "gen_2CtpXU",
+    "xCoord": 265.0538719045672,
+    "yCoord": 317.97716100586973
+  }
+}

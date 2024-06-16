@@ -10,7 +10,6 @@ module.exports = {
         },
         { test: /\.svg$/, loader: "svg-inline-loader" }
       )
-      console.log(webpackConfig.module.rules[1])
 
       webpackConfig.resolve.alias = {
         "@svgedit/svgcanvas": path.resolve(__dirname, "src/svgedit/canvas"),
