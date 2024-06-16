@@ -1,0 +1,2 @@
+"use strict";(self.webpackChunkbmstu_navigator=self.webpackChunkbmstu_navigator||[]).push([[8363],{8363:(t,e,n)=>{n.r(e),n.d(e,{default:()=>o});const o={name:"Connector",langListTitle:"Connect two objects",langList:[{id:"mode_connect",title:"Connect two objects"}],buttons:[{title:"Connect two objects"}]}}}]);
+//# sourceMappingURL=8363.5b8b1536.chunk.js.map

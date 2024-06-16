@@ -1,0 +1,2 @@
+"use strict";(self.webpackChunkbmstu_navigator=self.webpackChunkbmstu_navigator||[]).push([[4477],{4477:(e,a,s)=>{s.r(a),s.d(a,{default:()=>n});const n={opensave:{new_doc:"Nouvelle image",open_image_doc:"Ouvrir le SVG",save_doc:"Enregistrer l'image",save_as_doc:"Enregistrer en tant qu'image"}}}}]);
+//# sourceMappingURL=4477.a25fe794.chunk.js.map

@@ -1,0 +1,2 @@
+"use strict";(self.webpackChunkbmstu_navigator=self.webpackChunkbmstu_navigator||[]).push([[8095],{8095:(e,n,o)=>{o.r(n),o.d(n,{default:()=>t});const t={name:"Bonjour le Monde",text:"Bonjour le Monde!\n\nVous avez cliqu\xe9 ici: {{x}}, {{y}}",buttons:[{title:"Dire 'Bonjour le Monde'"}]}}}]);
+//# sourceMappingURL=8095.77e3c172.chunk.js.map

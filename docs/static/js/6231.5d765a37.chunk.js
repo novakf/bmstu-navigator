@@ -1,0 +1,2 @@
+"use strict";(self.webpackChunkbmstu_navigator=self.webpackChunkbmstu_navigator||[]).push([[6231],{6231:(t,e,l)=>{l.r(e),l.d(e,{default:()=>n});const n={name:"stj\xe4rna",title:"Polygon/stj\xe4rnverktyg",buttons:[{title:"Stj\xe4rnverktyg"},{title:"Polygonverktyg"}],contextTools:[{title:"Antal sidor",label:"po\xe4ng"},{title:"Pointiness",label:"Pointiness"},{title:"Vrider stj\xe4rnan",label:"Radiell f\xf6rskjutning"},{title:"Antal sidor",label:"sidor"}]}}}]);
+//# sourceMappingURL=6231.5d765a37.chunk.js.map

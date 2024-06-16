@@ -1,0 +1,2 @@
+"use strict";(self.webpackChunkbmstu_navigator=self.webpackChunkbmstu_navigator||[]).push([[2515],{2515:(t,e,s)=>{s.r(e),s.d(e,{default:()=>a});const a={name:"pipett",buttons:[{title:"pipettverktyg",key:"I"}]}}}]);
+//# sourceMappingURL=2515.c87ace58.chunk.js.map

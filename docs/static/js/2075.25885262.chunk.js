@@ -1,0 +1,2 @@
+"use strict";(self.webpackChunkbmstu_navigator=self.webpackChunkbmstu_navigator||[]).push([[2075],{2075:(n,t,a)=>{a.r(t),a.d(t,{default:()=>s});const s={name:"Extension Panning",buttons:[{title:"Panning"}]}}}]);
+//# sourceMappingURL=2075.25885262.chunk.js.map

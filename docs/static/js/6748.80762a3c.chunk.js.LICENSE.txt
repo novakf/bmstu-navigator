@@ -1,0 +1,8 @@
+/**
+ * @file ext-helloworld.js
+ *
+ * @license MIT
+ *
+ * @copyright 2010 Alexis Deveria
+ *
+ */

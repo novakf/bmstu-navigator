@@ -1,0 +1,1 @@
+(self.webpackChunkbmstu_navigator=self.webpackChunkbmstu_navigator||[]).push([[2380],{2380:()=>{}}]);

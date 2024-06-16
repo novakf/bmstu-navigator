@@ -1,0 +1,2 @@
+"use strict";(self.webpackChunkbmstu_navigator=self.webpackChunkbmstu_navigator||[]).push([[1979],{1924:(t,e,n)=>{n.r(e),n.d(e,{default:()=>s});const s={name:"\u8fde\u63a5\u5668",langListTitle:"\u8fde\u63a5\u4e24\u4e2a\u5bf9\u8c61",langList:[{id:"mode_connect",title:"\u8fde\u63a5\u4e24\u4e2a\u5bf9\u8c61"}],buttons:[{title:"\u8fde\u63a5\u4e24\u4e2a\u5bf9\u8c61"}]}}}]);
+//# sourceMappingURL=1979.38d87318.chunk.js.map

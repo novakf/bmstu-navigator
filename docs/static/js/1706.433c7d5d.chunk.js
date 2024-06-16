@@ -1,0 +1,2 @@
+"use strict";(self.webpackChunkbmstu_navigator=self.webpackChunkbmstu_navigator||[]).push([[1706],{1706:(a,s,l)=>{l.r(s),l.d(s,{default:()=>e});const e={loading:"Loading...",categories:{basic:"Basic",object:"Objects",symbol:"Symbols",arrow:"Arrows",flowchart:"Flowchart",animal:"Animals",game:"Cards & Chess",dialog_balloon:"Dialog balloons",electronics:"Electronics",math:"Mathematical",music:"Music",misc:"Miscellaneous",raphael_1:"raphaeljs.com set 1",raphael_2:"raphaeljs.com set 2"},buttons:[{title:"Shape library"}]}}}]);
+//# sourceMappingURL=1706.433c7d5d.chunk.js.map

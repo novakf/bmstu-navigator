@@ -1,0 +1,2 @@
+"use strict";(self.webpackChunkbmstu_navigator=self.webpackChunkbmstu_navigator||[]).push([[6431],{6431:(t,l,e)=>{e.r(l),e.d(l,{default:()=>o});const o={name:"Hello World",text:"Hello World!\n\n \u8bf7\u70b9\u51fb: {{x}}, {{y}}",buttons:[{title:"\u8f93\u51fa 'Hello World'"}]}}}]);
+//# sourceMappingURL=6431.9ba2e68f.chunk.js.map

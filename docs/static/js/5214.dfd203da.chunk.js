@@ -1,0 +1,2 @@
+"use strict";(self.webpackChunkbmstu_navigator=self.webpackChunkbmstu_navigator||[]).push([[5214],{5214:(t,a,e)=>{e.r(a),e.d(a,{default:()=>s});const s={name:"Izgaray\u0131 G\xf6r\xfcnt\xfcle",buttons:[{title:"Izgara G\xf6ster/Gizle"}]}}}]);
+//# sourceMappingURL=5214.dfd203da.chunk.js.map

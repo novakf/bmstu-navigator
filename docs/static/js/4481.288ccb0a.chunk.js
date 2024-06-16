@@ -1,0 +1,2 @@
+"use strict";(self.webpackChunkbmstu_navigator=self.webpackChunkbmstu_navigator||[]).push([[4481],{4481:(e,t,s)=>{s.r(t),s.d(t,{default:()=>a});const a={name:"eyedropper",buttons:[{title:"Eye Dropper Tool",key:"I"}]}}}]);
+//# sourceMappingURL=4481.288ccb0a.chunk.js.map

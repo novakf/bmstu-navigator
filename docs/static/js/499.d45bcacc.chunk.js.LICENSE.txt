@@ -1,0 +1,20 @@
+/**
+ * @file ext-storage.js
+ *
+ * This extension allows automatic saving of the SVG canvas contents upon
+ *  page unload (which can later be automatically retrieved upon future
+ *  editor loads).
+ *
+ *  The functionality was originally part of the SVG Editor, but moved to a
+ *  separate extension to make the setting behavior optional, and adapted
+ *  to inform the user of its setting of local data.
+ *
+ * @license MIT
+ *
+ * @copyright 2010 Brett Zamir
+ * @todo Revisit on whether to use `svgEditor.pref` over directly setting
+ * `curConfig` in all extensions for a more public API (not only for `extPath`
+ * and `imagePath`, but other currently used config in the extensions)
+ * @todo We might provide control of storage settings through the UI besides the
+ *   initial (or URL-forced) dialog. *
+ */

@@ -1,0 +1,2 @@
+"use strict";(self.webpackChunkbmstu_navigator=self.webpackChunkbmstu_navigator||[]).push([[8442],{8442:(t,a,n)=>{n.r(a),n.d(a,{default:()=>e});const e={name:"Panorering av till\xe4gg",buttons:[{title:"Panorering"}]}}}]);
+//# sourceMappingURL=8442.27ae7264.chunk.js.map

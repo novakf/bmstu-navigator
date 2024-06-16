@@ -1,0 +1,8 @@
+/**
+ * @file ext-panning.js
+ *
+ * @license MIT
+ *
+ * @copyright 2013 Luis Aguirre
+ *
+ */

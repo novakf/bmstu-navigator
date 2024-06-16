@@ -1,0 +1,2 @@
+"use strict";(self.webpackChunkbmstu_navigator=self.webpackChunkbmstu_navigator||[]).push([[1809],{1809:(t,e,l)=>{l.r(e),l.d(e,{default:()=>i});const i={name:"etoile",title:"Outil Polygone/Etoile",buttons:[{title:"Outil Etoile"},{title:"Outil Polygone"}],contextTools:[{title:"Nombre de c\xf4t\xe9s",label:"points"},{title:"Pr\xe9cision",label:"Pr\xe9cision"},{title:"Torsion Etoile",label:"D\xe9calage Radial"},{title:"Nombre de c\xf4t\xe9s",label:"c\xf4t\xe9s"}]}}}]);
+//# sourceMappingURL=1809.55813fe4.chunk.js.map

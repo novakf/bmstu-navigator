@@ -1,0 +1,2 @@
+"use strict";(self.webpackChunkbmstu_navigator=self.webpackChunkbmstu_navigator||[]).push([[3426],{3426:(e,t,o)=>{o.r(t);Boolean(document.createElementNS&&document.createElementNS("http://www.w3.org/2000/svg","svg").createSVGRect)||(window.location="./browser-not-supported.html")}}]);
+//# sourceMappingURL=3426.2b5df08d.chunk.js.map

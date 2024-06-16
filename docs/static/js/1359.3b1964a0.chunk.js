@@ -1,0 +1,2 @@
+"use strict";(self.webpackChunkbmstu_navigator=self.webpackChunkbmstu_navigator||[]).push([[1359],{1359:(e,a,s)=>{s.r(a),s.d(a,{default:()=>o});const o={opensave:{new_doc:"\u041d\u043e\u0432\u0435 \u0417\u043e\u0431\u0440\u0430\u0436\u0435\u043d\u043d\u044f",open_image_doc:"\u0412\u0456\u0434\u043a\u0440\u0438\u0442\u0438 SVG",save_doc:"\u0417\u0431\u0435\u0440\u0435\u0433\u0442\u0438 SVG",save_as_doc:"\u0417\u0431\u0435\u0440\u0435\u0433\u0442\u0438 SVG \u044f\u043a"}}}}]);
+//# sourceMappingURL=1359.3b1964a0.chunk.js.map

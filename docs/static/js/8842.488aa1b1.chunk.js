@@ -1,0 +1,2 @@
+"use strict";(self.webpackChunkbmstu_navigator=self.webpackChunkbmstu_navigator||[]).push([[8842],{8842:(t,s,a)=>{a.r(s),a.d(s,{default:()=>e});const e={name:"\u79fb\u52a8",buttons:[{title:"\u79fb\u52a8"}]}}}]);
+//# sourceMappingURL=8842.488aa1b1.chunk.js.map

@@ -1,0 +1,2 @@
+"use strict";(self.webpackChunkbmstu_navigator=self.webpackChunkbmstu_navigator||[]).push([[7567],{7567:(t,e,n)=>{n.r(e),n.d(e,{default:()=>s});const s={name:"\u041f\u0440\u0438\u0432\u0456\u0442 \u0421\u0432\u0456\u0442",text:"\u041f\u0440\u0438\u0432\u0456\u0442 \u0421\u0432\u0456\u0442!\n\n\u0412\u0438 \u043a\u043b\u0430\u0446\u043d\u0443\u043b\u0438 \u0442\u0443\u0442: {{x}}, {{y}}",buttons:[{title:"\u0421\u043a\u0430\u0437\u0430\u0442\u0438 '\u041f\u0440\u0438\u0432\u0456\u0442 \u0421\u0432\u0456\u0442'"}]}}}]);
+//# sourceMappingURL=7567.37da45a0.chunk.js.map

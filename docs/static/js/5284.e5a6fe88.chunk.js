@@ -1,0 +1,2 @@
+"use strict";(self.webpackChunkbmstu_navigator=self.webpackChunkbmstu_navigator||[]).push([[5284],{5284:(e,a,s)=>{s.r(a),s.d(a,{default:()=>o});const o={opensave:{new_doc:"\u65b0\u56fe\u7247",open_image_doc:"\u6253\u5f00 SVG",save_doc:"\u4fdd\u5b58\u56fe\u50cf",save_as_doc:"\u53e6\u5b58\u4e3a\u56fe\u50cf"}}}}]);
+//# sourceMappingURL=5284.e5a6fe88.chunk.js.map

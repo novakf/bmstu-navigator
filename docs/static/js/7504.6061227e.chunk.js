@@ -1,0 +1,2 @@
+"use strict";(self.webpackChunkbmstu_navigator=self.webpackChunkbmstu_navigator||[]).push([[7504],{7504:(t,e,s)=>{s.r(e),s.d(e,{default:()=>a});const a={name:"View Grid",buttons:[{title:"Show/Hide Grid"}]}}}]);
+//# sourceMappingURL=7504.6061227e.chunk.js.map
