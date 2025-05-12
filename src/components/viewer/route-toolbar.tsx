@@ -42,8 +42,8 @@ export const RouteToolbar: FC = () => {
   const buildRoute = () => {
     if (!routeFrom || !routeTo) return
 
-    const firstFromPoint = uoHolders[routeFrom][0]
-    const firstToPoint = uoHolders[routeTo][0]
+    const firstFromPoint = uoHolders[routeFrom]?.[0]
+    const firstToPoint = uoHolders[routeTo]?.[0]
 
     const graph = new WeightedGraph()
     const clonedUoLinks = structuredClone(uoLinks)

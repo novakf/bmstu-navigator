@@ -386,9 +386,6 @@ hr {
   stroke: none;
 }
 
-#workarea.wireframe #canvasBackground>rect {
-  fill: #FFF !important;
-}
 
 #cur_context_panel {
   grid-area: rulerX;
