@@ -10,10 +10,7 @@ import './ColorButton.less';
 
 const ColorButton = ({ onChange, value, title }) => {
   const [display, setDisplay] = React.useState(false);
-  const handleClick = () => {
-    console.log('click');
-    setDisplay(!display);
-  };
+  const handleClick = () => setDisplay(!display);
   const onChangeComplete = (color) => {
     onChange(color?.hex);
     setDisplay(false);
@@ -21,7 +18,7 @@ const ColorButton = ({ onChange, value, title }) => {
 
   const rgb = colorString.get.rgb(value) || [255, 255, 255]; // or white
   return (
-    <div className='color-button' style={{ height: 24 }}>
+    <div className="color-button">
       {display && rgb && (
         <SketchPicker
           className="OIe-tools-color-panel"
@@ -29,12 +26,19 @@ const ColorButton = ({ onChange, value, title }) => {
           onChangeComplete={onChangeComplete}
         />
       )}
-      <Icon
-        name={title}
-        className="OIe-tools-color-title"
-        onClick={handleClick}
-        style={{ backgroundColor: colorString.to.hex(rgb) }}
-      />
+      {title === 'Fill' ? (
+        <div
+          className="OIe-tools-color-fill"
+          onClick={handleClick}
+          style={{ backgroundColor: colorString.to.hex(rgb) }}
+        />
+      ) : (
+        <div
+          className="OIe-tools-color-stroke"
+          onClick={handleClick}
+          style={{ borderColor: colorString.to.hex(rgb) }}
+        />
+      )}
     </div>
   );
 };

@@ -24,6 +24,10 @@ const router = createBrowserRouter([
     path: '/editor',
     element: <EditorNew />,
   },
+  {
+    path: '/editor2',
+    element: <Editor />,
+  },
 ]);
 
 const root = ReactDOM.createRoot(
@@ -31,12 +35,12 @@ const root = ReactDOM.createRoot(
 );
 
 root.render(
-  <React.StrictMode>
-    <Provider store={store}>
-      <RouterProvider router={router} />
-      {/* <App /> */}
-    </Provider>
-  </React.StrictMode>
+  //<React.StrictMode>
+  <Provider store={store}>
+    <RouterProvider router={router} />
+    {/* <App /> */}
+  </Provider>
+  //</React.StrictMode>
 );
 
 // If you want to start measuring performance in your app, pass a function

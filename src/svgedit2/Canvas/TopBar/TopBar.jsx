@@ -16,6 +16,7 @@ import { canvasContext } from '../Context/canvasContext.jsx';
 import './TopBar.less';
 import IconButton from '../IconButton/IconButton.jsx';
 import Icon from '../Icon/Icon.jsx';
+import { InputNumber, Select } from 'antd';
 
 const TopBar = ({ svgUpdate, onClose }) => {
   const [canvasState] = React.useContext(canvasContext);
@@ -128,6 +129,11 @@ const TopBar = ({ svgUpdate, onClose }) => {
         />
       );
   }
+
+  const handlePlaceChange = (value) => {
+    console.log(`selected ${value}`);
+  };
+
   return (
     <div className="top-bar">
       <div className="top-bar-container">
@@ -157,19 +163,67 @@ const TopBar = ({ svgUpdate, onClose }) => {
         </div>
         <div
           style={{
-            height: 34,
-            width: '0px',
-            border: '1px solid #00000026',
-            marginLeft: 4,
-            marginRight: 4,
+            marginLeft: 6,
+            marginRight: 6,
+            fontSize: 24,
+            color: '#d9d9d9',
+            width: 1,
+            height: '85%',
+            borderRight: '1px solid',
           }}
-        ></div>
+        >
+          {''}
+        </div>
         <IconButton icon="Exit" onClick={onClickClose} />
         <IconButton
           icon="Save"
           className={updated ? 'enabled' : 'disabled'}
           onClick={() => {
             svgUpdate(canvas.getSvgString());
+          }}
+        />
+      </div>
+      <div className="top-bar-container">
+        <Select
+          defaultValue="Главное здание"
+          style={{ width: 180, fontSize: 18 }}
+          onChange={handlePlaceChange}
+          options={[
+            { value: 'guk', label: 'Главное здание' },
+            { value: 'ulk', label: 'УЛК' },
+            { value: 'b7', label: 'Корпус B7' },
+          ]}
+        />
+        <div
+          style={{
+            marginLeft: 8,
+            marginRight: 16,
+            fontSize: 24,
+            color: '#d9d9d9',
+            width: 1,
+            height: '85%',
+            borderRight: '1px solid',
+          }}
+        >
+          {''}
+        </div>
+        <div
+          style={{
+            marginLeft: 4,
+            marginRight: 4,
+            fontSize: 18,
+            color: '',
+          }}
+        >
+          Этаж:
+        </div>
+        <InputNumber
+          style={{ width: 50, fontSize: 18, paddingTop: 4 }}
+          min={1}
+          max={10}
+          defaultValue={3}
+          onChange={(value) => {
+            console.log('changed', value);
           }}
         />
       </div>

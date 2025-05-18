@@ -6,13 +6,13 @@ import { Tooltip } from 'antd';
 import Icon from '../Icon/Icon.jsx';
 import './IconButton.less';
 
-const IconButton = ({ onClick, className, icon }) => {
-  const text = <span>{icon}</span>;
+const IconButton = ({ tooltipPlace, onClick, className, icon, children }) => {
+  const text = icon ? <span>{icon}</span> : undefined;
 
   return (
     <button type="button" className={className} onClick={onClick}>
-      <Tooltip placement="right" title={text}>
-        <Icon name={icon} className="OIe-tools-icon" />
+      <Tooltip placement={tooltipPlace || 'right'} title={text}>
+        {children ? children : <Icon name={icon} className="OIe-tools-icon" />}
       </Tooltip>
     </button>
   );

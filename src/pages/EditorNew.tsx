@@ -8,15 +8,22 @@ import { initEditor } from '../state/editor/slice';
 import { useCurrentUser } from '../state/user';
 import { Navigate } from 'react-router-dom';
 import Editor from '../svgedit2/editor.class';
+import { SeCMenuDialog } from '../svgedit/editor/dialogs/cmenuDialog.js';
+import { useTranslation } from 'react-i18next';
+
+let svgEditor: Editor;
 
 const EditorNew: FC = () => {
   const dispatch = useDispatch<AppDispatch>();
   const user = useCurrentUser();
+  const { t, i18n } = useTranslation();
+
+  console.log('new');
 
   useEffect(() => {
     const container = document.getElementById('editcontainer') as HTMLElement;
-    
-    const svgEditor = new Editor(container);
+
+    svgEditor = new Editor(container);
 
     // save svg
     function logSvg(content: any) {
@@ -25,14 +32,16 @@ const EditorNew: FC = () => {
 
     svgEditor.configure('saveHandler', logSvg as any);
 
-    const svgroot = document.getElementById('svgroot')
-
-    const svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+    const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
     svg.setAttribute('width', '640');
     svg.setAttribute('height', '480');
-    svg.setAttributeNS("http://www.w3.org/2000/xmlns/", "xmlns", "http://www.w3.org/2000/svg");
+    svg.setAttributeNS(
+      'http://www.w3.org/2000/xmlns/',
+      'xmlns',
+      'http://www.w3.org/2000/svg'
+    );
 
-    console.log(svgroot?.offsetHeight, svgroot?.offsetWidth)
+    window.editorNew = svgEditor;
 
     const svgContent = fetch('./arbelos.svg')
       .then((response) => response.text())

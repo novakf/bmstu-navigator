@@ -15,7 +15,6 @@ const EditorComp: FC = () => {
 
   useEffect(() => {
     if (window.svgEditor) return
-    if (!user) return
 
     dispatch(initEditor())
 
@@ -49,7 +48,6 @@ const EditorComp: FC = () => {
     })
   }, [])
 
-  if (!user) return <Navigate to={"/auth"} />
 
   return <div id={"container"}></div>
 }

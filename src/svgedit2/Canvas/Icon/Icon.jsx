@@ -36,6 +36,10 @@ const zoom = './images/zoom.svg';
 const close = './images/close.svg';
 const exit = './images/exit.svg';
 const palette = './images/palette.svg';
+const plus = './images/plus.svg';
+const minus = './images/minus.svg';
+const downArrow = './images/down_arrow.svg';
+const image = './images/image.svg';
 
 const logo = './images/logo-bmstu.png';
 const avatar = './images/avatar.png';
@@ -110,8 +114,31 @@ const Icon = ({ name, ...otherProps }) => {
       return <img src={exit} alt="exit" {...otherProps} />;
     case 'Palette':
       return <img src={palette} alt="palette" {...otherProps} />;
+    case 'Plus':
+      return <img src={plus} alt="plus" {...otherProps} />;
+    case 'Minus':
+      return <img src={minus} alt="minus" {...otherProps} />;
+    case 'Image':
+      return <img src={image} alt="image" {...otherProps} />;
+    case 'DownArrow':
+      return (
+        <img
+          src={downArrow}
+          alt="arrow"
+          {...otherProps}
+          style={{ width: 18 }}
+        />
+      );
     case 'Logo':
-      return <img src={logo} alt="logo" {...otherProps} width={28} />;
+      return (
+        <img
+          src={logo}
+          alt="logo"
+          {...otherProps}
+          width={28}
+          style={{ margin: '0 4px 0 4px' }}
+        />
+      );
     case 'Avatar':
       return <img src={avatar} alt="avatar" {...otherProps} width={40} />;
     default:

@@ -6,6 +6,7 @@ import ColorButton from '../ColorButton/ColorButton.jsx';
 import Icon from '../Icon/Icon.jsx';
 
 import { canvasContext } from '../Context/canvasContext.jsx';
+import IconButton from '../IconButton/IconButton';
 
 const zoomOptions = [10, 20, 30, 40, 50, 60, 70, 80, 90, 100, 150, 200];
 
@@ -24,8 +25,8 @@ const BottomBar = () => {
   const selectedFillColor = selectedElement?.getAttribute('fill');
   const selectedStrokeColor = selectedElement?.getAttribute('stroke');
 
-  const handleZoom = (newZoom) => {
-    canvasStateDispatcher({ type: 'zoom', zoom: Number(newZoom) });
+  const handleZoom = (newZoom, event) => {
+    canvasStateDispatcher({ type: 'zoom', zoom: Number(newZoom), event });
   };
 
   const svgroot = document.getElementById('svgroot');
@@ -34,17 +35,23 @@ const BottomBar = () => {
     return;
   }
 
+  const element = svgroot;
+
+  const workarea = document.getElementsByClassName('workarea')[0];
+
   svgroot.onwheel = (e) => {
     if (e.ctrlKey) {
+      e.preventDefault();
+
       if (e.deltaY < 0) {
-        if (zoom < 300) {
+        if (zoom < 500) {
           const newZoom = zoom + 5;
-          handleZoom(newZoom);
+          handleZoom(newZoom, e);
         }
       } else {
-        if (zoom > 30) {
+        if (zoom > 10) {
           const newZoom = zoom - 5;
-          handleZoom(newZoom);
+          handleZoom(newZoom, e);
         }
       }
     }
@@ -61,7 +68,10 @@ const BottomBar = () => {
 
   return (
     <div className="bottom-bar">
-      <div className="bottom-bar-container">
+      <div
+        className="bottom-bar-container"
+        style={{ opacity: selectedFillColor || selectedStrokeColor ? 1 : 0 }}
+      >
         <ColorButton
           onChange={onChangeFillColor}
           value={selectedFillColor}
@@ -74,7 +84,17 @@ const BottomBar = () => {
         />
       </div>
       <div className="bottom-bar-container">
-        <Icon name="Zoom" className="OIe-zoom" />
+        <IconButton
+          tooltipPlace={'top'}
+          icon="Minus"
+          onClick={() => handleZoom(zoom - 10)}
+        />
+        <IconButton>{zoom}%</IconButton>
+        <IconButton
+          tooltipPlace={'top'}
+          icon="Plus"
+          onClick={() => handleZoom(zoom + 10)}
+        />
       </div>
     </div>
   );

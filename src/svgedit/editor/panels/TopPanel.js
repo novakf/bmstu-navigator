@@ -861,6 +861,7 @@ class TopPanel {
     if (!url) {
       url = editor.defaultImageURL
     }
+
     editor.svgCanvas.setImageURL(url)
     $id("image_url").value = url
 

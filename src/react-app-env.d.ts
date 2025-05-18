@@ -1,10 +1,12 @@
-import Editor from "./svgedit/editor/Editor"
+import Editor from './svgedit/editor/Editor';
+import EditorNew from './svgedit2/editor.class';
 
 declare global {
-  declare module "*.svg"
+  declare module '*.svg';
 
   interface Window {
-    svgEditor: Editor
-    editor: Editor
+    svgEditor: EditorNew;
+    editor: Editor;
+    editorNew: EditorNew;
   }
 }
