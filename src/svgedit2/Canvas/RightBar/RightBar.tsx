@@ -6,6 +6,7 @@ import './RightBar.less';
 import { canvasContext } from '../Context/canvasContext.jsx';
 import { styled } from 'styled-components';
 import { Button, Input, Select } from 'antd';
+import { GenericUniverObjectForm } from '../../../components/generic-object-form';
 
 export enum UniverObjectType {
   'Auditorium' = 'auditorium',
@@ -63,6 +64,10 @@ const RightBar = () => {
     },
   ];
 
+  const onSubmit = () => {};
+
+  const onCancel = () => {};
+
   return (
     <StyledRightBar $open={open}>
       <div className="right-bar-container">
@@ -72,15 +77,7 @@ const RightBar = () => {
             {selectedId}
           </span>
         </Title>
-        <Select
-          style={{ width: 180, fontSize: 18 }}
-          onChange={handleTypeChange}
-          options={univerObjectSelectOptions}
-        />
-        <Input />
-        <Input />
-        <Input />
-        <Button type="primary">Нажми на меня</Button>
+        <GenericUniverObjectForm onSubmit={onSubmit} onCancel={onCancel} />
         <TopButtonsGroup>
           <StyledIconButton
             $hide={hide}

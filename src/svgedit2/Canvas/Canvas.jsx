@@ -15,10 +15,19 @@ import {
   canvasContext,
   CanvasContextProvider,
 } from './Context/canvasContext.jsx';
-import RightBar from './RighBar/RightBar';
+import RightBar from './RightBar/RightBar';
+import { Provider, useDispatch } from 'react-redux';
+import { store } from '../../state';
+import {
+  selectUoItems,
+  setSelectedElementAction,
+} from '../../state/editor/slice';
+import { find } from 'lodash';
 
 const Canvas = ({ svgContent, locale, svgUpdate, onClose, log }) => {
   const { t, i18n } = useTranslation();
+
+  const dispatch = useDispatch();
 
   const textRef = React.useRef(null);
   const imageRef = React.useRef;
@@ -48,6 +57,16 @@ const Canvas = ({ svgContent, locale, svgUpdate, onClose, log }) => {
     log('selectedHandler', elems);
     const selectedElement = elems.length === 1 || !elems[1] ? elems[0] : null;
     const multiselected = elems.length >= 2 && !!elems[1];
+
+    if (selectedElement) {
+      const state = store.getState();
+      const uoItems = selectUoItems(state);
+      const se = selectedElement;
+      const uo = find(uoItems, { svgId: se.id }) ?? null;
+      console.log(se);
+      dispatch(setSelectedElementAction({ svgId: se.id, uo }));
+    }
+    
     dispatchCanvasState({
       type: 'selectedElement',
       selectedElement,
@@ -256,8 +275,10 @@ Canvas.defaultProps = {
 };
 
 const CanvasWithContext = (props) => (
-  <CanvasContextProvider>
-    <Canvas {...props} />
-  </CanvasContextProvider>
+  <Provider store={store}>
+    <CanvasContextProvider>
+      <Canvas {...props} />
+    </CanvasContextProvider>
+  </Provider>
 );
 export default CanvasWithContext;

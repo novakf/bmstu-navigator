@@ -11,8 +11,6 @@ import Editor from '../svgedit2/editor.class';
 import { SeCMenuDialog } from '../svgedit/editor/dialogs/cmenuDialog.js';
 import { useTranslation } from 'react-i18next';
 
-let svgEditor: Editor;
-
 const EditorNew: FC = () => {
   const dispatch = useDispatch<AppDispatch>();
   const user = useCurrentUser();
@@ -23,7 +21,7 @@ const EditorNew: FC = () => {
   useEffect(() => {
     const container = document.getElementById('editcontainer') as HTMLElement;
 
-    svgEditor = new Editor(container);
+    const svgEditor = new Editor(container);
 
     // save svg
     function logSvg(content: any) {

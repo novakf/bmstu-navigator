@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useRef, useState } from 'react';
 import PropTypes from 'prop-types';
 
 import RectTools from './RectTools/RectTools.jsx';
@@ -16,12 +16,26 @@ import { canvasContext } from '../Context/canvasContext.jsx';
 import './TopBar.less';
 import IconButton from '../IconButton/IconButton.jsx';
 import Icon from '../Icon/Icon.jsx';
-import { InputNumber, Select } from 'antd';
+import {
+  Button,
+  Divider,
+  Input,
+  InputNumber,
+  Modal,
+  Select,
+  Space,
+} from 'antd';
+import { PlusOutlined } from '@ant-design/icons';
+import { styled } from 'styled-components';
+
+let index = 0;
 
 const TopBar = ({ svgUpdate, onClose }) => {
   const [canvasState] = React.useContext(canvasContext);
   const { canvas, selectedElement, mode, updated } = canvasState;
   console.info(mode, selectedElement?.tagName);
+
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   const onClickClose = () => {
     if (updated) {
@@ -134,6 +148,34 @@ const TopBar = ({ svgUpdate, onClose }) => {
     console.log(`selected ${value}`);
   };
 
+  const showModal = () => {
+    setIsModalOpen(true);
+  };
+
+  const handleOk = () => {
+    setIsModalOpen(false);
+  };
+
+  const handleCancel = () => {
+    setIsModalOpen(false);
+  };
+
+  const [items, setItems] = useState(['Главное здание', 'Корпус B7']);
+  const [name, setName] = useState('');
+  const inputRef = useRef(null);
+  const onNameChange = (event) => {
+    setName(event.target.value);
+  };
+  const addItem = (e) => {
+    e.preventDefault();
+    setItems([...items, name || `New item ${index++}`]);
+    setName('');
+    setTimeout(() => {
+      var _a;
+      (_a = inputRef.current) === null || _a === void 0 ? void 0 : _a.focus();
+    }, 0);
+  };
+
   return (
     <div className="top-bar">
       <div className="top-bar-container">
@@ -183,53 +225,115 @@ const TopBar = ({ svgUpdate, onClose }) => {
           }}
         />
       </div>
-      <div className="top-bar-container">
-        <Select
-          defaultValue="Главное здание"
-          style={{ width: 180, fontSize: 18 }}
-          onChange={handlePlaceChange}
-          options={[
-            { value: 'guk', label: 'Главное здание' },
-            { value: 'ulk', label: 'УЛК' },
-            { value: 'b7', label: 'Корпус B7' },
-          ]}
-        />
-        <div
-          style={{
-            marginLeft: 8,
-            marginRight: 16,
-            fontSize: 24,
-            color: '#d9d9d9',
-            width: 1,
-            height: '85%',
-            borderRight: '1px solid',
-          }}
-        >
-          {''}
+      <div style={{ display: 'flex', gap: 4 }}>
+        <div className="top-bar-container">
+          <Select
+            defaultValue="Главное здание"
+            style={{ width: 180, fontSize: 18 }}
+            onChange={handlePlaceChange}
+            options={[
+              { value: 'guk', label: 'Главное здание' },
+              { value: 'ulk', label: 'УЛК' },
+              { value: 'b7', label: 'Корпус B7' },
+            ]}
+          />
+          <div
+            style={{
+              marginLeft: 8,
+              marginRight: 16,
+              fontSize: 24,
+              color: '#d9d9d9',
+              width: 1,
+              height: '85%',
+              borderRight: '1px solid',
+            }}
+          >
+            {''}
+          </div>
+          <div
+            style={{
+              marginLeft: 4,
+              marginRight: 4,
+              fontSize: 18,
+              color: '',
+            }}
+          >
+            Этаж:
+          </div>
+          <Select
+            style={{ width: 50, fontSize: 18, paddingTop: 4 }}
+            defaultValue={3}
+            onChange={(value) => {
+              console.log('changed', value);
+            }}
+            options={[
+              { value: 'first', label: '1' },
+              { value: 'second', label: '2' },
+              { value: 'third', label: '3' },
+            ]}
+          />
         </div>
         <div
+          className="top-bar-container"
           style={{
-            marginLeft: 4,
-            marginRight: 4,
-            fontSize: 18,
-            color: '',
+            height: 38,
+            width: 38,
+            padding: 4,
+            justifyContent: 'center',
           }}
         >
-          Этаж:
+          <IconButton icon="Plus" onClick={() => showModal()} />
         </div>
-        <InputNumber
-          style={{ width: 50, fontSize: 18, paddingTop: 4 }}
-          min={1}
-          max={10}
-          defaultValue={3}
-          onChange={(value) => {
-            console.log('changed', value);
-          }}
-        />
       </div>
       <div className="top-bar-container">
         <IconButton icon="Avatar" />
       </div>
+      <StyledModal
+        title="Добавить новый этаж"
+        closable={{ 'aria-label': 'Custom Close Button' }}
+        open={isModalOpen}
+        onOk={handleOk}
+        onCancel={handleCancel}
+        footer={[
+          <Button key="back" onClick={handleCancel}>
+            Отменить
+          </Button>,
+          <Button key="submit" type="primary" onClick={handleOk}>
+            Создать
+          </Button>,
+        ]}
+      >
+        <div style={{ marginBottom: 4 }}>Название корпуса:</div>
+        <Select
+          style={{ width: 300 }}
+          placeholder="Название корпуса"
+          dropdownRender={(menu) => (
+            <>
+              {menu}
+              <Divider style={{ margin: '8px 0' }} />
+              <Space style={{ padding: '0 8px 4px' }}>
+                <Input
+                  placeholder="Новый корпус"
+                  ref={inputRef}
+                  value={name}
+                  onChange={onNameChange}
+                  onKeyDown={(e) => e.stopPropagation()}
+                />
+                <Button type="text" icon={<PlusOutlined />} onClick={addItem}>
+                  Добавить
+                </Button>
+              </Space>
+            </>
+          )}
+          options={items.map((item) => ({ label: item, value: item }))}
+        />
+        <div style={{ marginTop: 10, marginBottom: 4 }}>Выберите этаж:</div>
+        <InputNumber
+          onChange={(value) => {
+            console.log('changed', value);
+          }}
+        />
+      </StyledModal>
     </div>
   );
 };
@@ -238,6 +342,12 @@ TopBar.propTypes = {
   svgUpdate: PropTypes.func.isRequired,
   onClose: PropTypes.func.isRequired,
 };
+
+const StyledModal = styled(Modal)`
+  .ant-modal-body {
+    overflow-y: auto !important;
+  }
+`;
 
 export default TopBar;
 
