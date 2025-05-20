@@ -63,7 +63,6 @@ const Canvas = ({ svgContent, locale, svgUpdate, onClose, log }) => {
       const uoItems = selectUoItems(state);
       const se = selectedElement;
       const uo = find(uoItems, { svgId: se.id }) ?? null;
-      console.log(se);
       dispatch(setSelectedElementAction({ svgId: se.id, uo }));
     }
     
@@ -85,7 +84,6 @@ const Canvas = ({ svgContent, locale, svgUpdate, onClose, log }) => {
 
   const svgUpdateHandler = (svgString) => {
     svgUpdate(svg.restoreOIAttr(svgString, oiAttributes.current));
-    console.log(canvasState);
     dispatchCanvasState({ type: 'updated', updated: false });
   };
 
@@ -98,6 +96,7 @@ const Canvas = ({ svgContent, locale, svgUpdate, onClose, log }) => {
       (event.key === 'Backspace' || event.keyCode === 46) &&
       event.target.tagName !== 'INPUT'
     ) {
+      event.stopPropagation()
       event.preventDefault();
       dispatchCanvasState({ type: 'deleteSelectedElements' });
     }
@@ -164,7 +163,6 @@ const Canvas = ({ svgContent, locale, svgUpdate, onClose, log }) => {
     const editorDom = svgcanvasRef.current;
     const canvas = new SvgCanvas(editorDom, config);
     updateCanvas(canvas, true);
-    console.log(canvas);
     canvas.textActions.setInputElem(textRef.current);
     Object.entries(eventList).forEach(([eventName, eventHandler]) => {
       canvas.bind(eventName, eventHandler);
@@ -187,15 +185,8 @@ const Canvas = ({ svgContent, locale, svgUpdate, onClose, log }) => {
   React.useLayoutEffect(() => {
     log('new svgContent', svgContent.length);
     if (!canvasState.canvas) return;
-    svgcanvasRef.current.parentNode.addEventListener('scroll', (e) => {
-      console.log(
-        svgcanvasRef.current.parentNode.scrollLeft,
-        svgcanvasRef.current.parentNode.scrollTop
-      );
-    });
     oiAttributes.current = svg.saveOIAttr(svgContent);
     canvasState.canvas.clear();
-    console.log(svgContent);
     const success = canvasState.canvas.setSvgString(
       svgContent.replace(/'/g, "\\'"),
       true

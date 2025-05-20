@@ -7,7 +7,12 @@ import { canvasContext } from '../Context/canvasContext.jsx';
 import { styled } from 'styled-components';
 import { Button, Input, Select } from 'antd';
 import { GenericUniverObjectForm } from '../../../components/generic-object-form';
-import { useSelectedElement } from '../../../state/editor/slice';
+import {
+  setSelectedElementAction,
+  useSelectedElement,
+  useUoItems,
+} from '../../../state/editor/slice';
+import { useDispatch } from 'react-redux';
 
 export enum UniverObjectType {
   'Auditorium' = 'auditorium',
@@ -26,6 +31,10 @@ const RightBar = () => {
   const [open, setOpen] = useState(Boolean(selectedElement));
   const [hide, setHide] = useState(false);
 
+  const dispatch = useDispatch();
+
+  const uoItems = useUoItems();
+
   const selectedId = selectedElement?.getAttribute('id');
 
   useEffect(() => {
@@ -36,9 +45,15 @@ const RightBar = () => {
     console.log(`selected ${value}`);
   };
 
-  const onSubmit = () => {};
+  const onSubmit = () => {
+    dispatch(setSelectedElementAction(null));
+    setOpen(false);
+  };
 
-  const onCancel = () => {};
+  const onCancel = () => {
+    dispatch(setSelectedElementAction(null));
+    setOpen(false);
+  };
 
   return (
     <StyledRightBar $open={open}>
@@ -49,16 +64,17 @@ const RightBar = () => {
             {selectedId}
           </span>
         </Title>
-        <GenericUniverObjectForm onSubmit={onSubmit} onCancel={onCancel} />
+        {selectedElement && (
+          <GenericUniverObjectForm onSubmit={onSubmit} onCancel={onCancel} />
+        )}
         <TopButtonsGroup>
-          <StyledIconButton
+          {/* <StyledIconButton
             $hide={hide}
             icon="DownArrow"
             onClick={() => {
-              console.log(hide);
               setHide(!hide);
             }}
-          />
+          /> */}
           <StyledIconButton
             onClick={() => {
               setOpen(false);

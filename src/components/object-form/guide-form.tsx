@@ -1,3 +1,4 @@
+import { UniverObject } from "../../interfaces"
 import { CommonFormItems } from "./common-form"
 
 export const GuideForm = () => {
@@ -8,6 +9,7 @@ export const GuideForm = () => {
       <CommonFormItems.Name />
       <CommonFormItems.Lines />
       <CommonFormItems.Floor />
+      <CommonFormItems.Corpus />
     </>
   )
 }

@@ -1,9 +1,9 @@
-import { Button, Form, Select, Space } from 'antd';
+import { Button, Form, Select, Space, message } from 'antd';
 import { UniverObjectType } from '../interfaces';
 import { AuditoriumForm } from './object-form/auditorium-form';
 import { AuditoriumPointForm } from './object-form/auditorium-point-form';
 import { HallwayPointForm } from './object-form/hallway-point';
-import { FC, useState } from 'react';
+import { FC, useContext, useEffect, useState } from 'react';
 import {
   setUoItemsAction,
   useSelectedElement,
@@ -15,6 +15,7 @@ import { HallwayForm } from './object-form/hallway-form';
 import { GuideForm } from './object-form/guide-form';
 import { useDispatch } from 'react-redux';
 import { LadderForm } from './object-form/ladder-form';
+import { canvasContext } from '../svgedit2/Canvas/Context/canvasContext';
 
 const univerObjectFormMap = {
   [UniverObjectType.Auditorium]: AuditoriumForm,
@@ -36,9 +37,25 @@ export const GenericUniverObjectForm: FC<Props> = ({ onSubmit, onCancel }) => {
   const dispatch = useDispatch();
   const uoItems = useUoItems();
   const selectedElement = useSelectedElement();
+  const [form] = Form.useForm();
+
   const [currentUOForm, setCurrentUOForm] = useState<UniverObjectType | null>(
     null
   );
+
+  const [canvasState, canvasStateDispatcher] = useContext(canvasContext);
+
+  useEffect(() => {
+    form.resetFields();
+
+    let seType: null | UniverObjectType = null;
+
+    if (selectedElement?.element) {
+      seType = uoItems[selectedElement?.element?.id.replace('svg_', '')]?.type;
+    }
+
+    setCurrentUOForm(seType);
+  }, [selectedElement?.element]);
 
   if (!selectedElement) return null;
 
@@ -47,6 +64,8 @@ export const GenericUniverObjectForm: FC<Props> = ({ onSubmit, onCancel }) => {
   const selectForm = (value: UniverObjectType) => {
     setCurrentUOForm(value);
   };
+
+  console.log('currr', currentUOForm);
 
   const CurrentUOForm = currentUOForm
     ? univerObjectFormMap[currentUOForm]
@@ -80,6 +99,16 @@ export const GenericUniverObjectForm: FC<Props> = ({ onSubmit, onCancel }) => {
   ];
 
   const onFinish = (values: any) => {
+    if (!values.corpus || !values.floor) {
+      message.error('Выберите этаж');
+      return;
+    }
+
+    if (!values.id || !values.name) {
+      message.error('Заполните данные');
+      return;
+    }
+
     dispatch(
       setUoItemsAction({
         ...uoItems,
@@ -87,18 +116,60 @@ export const GenericUniverObjectForm: FC<Props> = ({ onSubmit, onCancel }) => {
       })
     );
 
+    if (values.type === UniverObjectType.Auditorium) {
+      canvasStateDispatcher({
+        type: 'color',
+        colorType: 'fill',
+        color: '#bcb9b2',
+      });
+    }
+
+    if (values.type === UniverObjectType.Hallway) {
+      canvasStateDispatcher({
+        type: 'color',
+        colorType: 'fill',
+        color: '#00ffff00',
+      });
+    }
+
+    if (values.type === UniverObjectType.Ladder) {
+      canvasStateDispatcher({
+        type: 'color',
+        colorType: 'fill',
+        color: '#ed9337',
+      });
+    }
+
+    if (values.type === UniverObjectType.HallwayPoint) {
+      canvasStateDispatcher({
+        type: 'color',
+        colorType: 'fill',
+        color: 'green',
+      });
+    }
+
     onSubmit();
+
+    message.success(`Объект ${values.id} сохранен`);
   };
 
   const cancel = () => {
     onCancel();
   };
 
+  console.log(uoItems[element?.id.replace('svg_', '')]?.type);
+
   return (
-    <Form onFinish={onFinish}>
-      <Form.Item name={'type'} label={'Тип объекта'}>
+    <Form form={form} onFinish={onFinish}>
+      <Form.Item
+        name={'type'}
+        label={'Тип объекта'}
+        initialValue={uoItems[element?.id.replace('svg_', '')]?.type}
+      >
         <Select
           options={univerObjectSelectOptions}
+          defaultValue={uoItems[element?.id.replace('svg_', '')]?.type}
+          value={uoItems[element?.id.replace('svg_', '')]?.type}
           onChange={selectForm}
           size={'small'}
         />

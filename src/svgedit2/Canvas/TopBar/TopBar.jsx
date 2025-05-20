@@ -33,7 +33,7 @@ import {
   setCampusAction,
   setFloorAction,
   setNewSchemeAction,
-  useCampus,
+  useCorpus,
   useCurrFloorSvg,
   useFloor,
   useSchemes,
@@ -48,17 +48,17 @@ const TopBar = ({ svgUpdate, onClose }) => {
 
   const dispatch = useDispatch();
   const schemes = useSchemes();
-  const currentCampus = useCampus();
+  const currentCampus = useCorpus();
   const currentFloor = useFloor();
 
   let campuses = [];
   schemes.map((scheme) => {
-    if (!campuses.includes(scheme.campus)) {
-      campuses.push(scheme.campus);
+    if (!campuses.includes(scheme.corpus)) {
+      campuses.push(scheme.corpus);
     }
   });
-  const schemeValues = campuses.map((campus) => {
-    return { value: campus, label: campus };
+  const schemeValues = campuses.map((corpus) => {
+    return { value: corpus, label: corpus };
   });
 
   const currFloorSvg = useCurrFloorSvg();
@@ -66,7 +66,7 @@ const TopBar = ({ svgUpdate, onClose }) => {
   let floors = [];
 
   schemes.map((scheme) => {
-    if (scheme.campus === currentCampus) {
+    if (scheme.corpus === currentCampus) {
       floors.push(scheme.floor);
     }
   });
@@ -77,7 +77,7 @@ const TopBar = ({ svgUpdate, onClose }) => {
 
   const [floorValues, setFloorValues] = useState(newFloorValues);
 
-  const campusArray = schemes.map((scheme, i) => scheme.campus);
+  const campusArray = schemes.map((scheme, i) => scheme.corpus);
 
   const [isModalOpen, setIsModalOpen] = useState(false);
 
@@ -208,7 +208,7 @@ const TopBar = ({ svgUpdate, onClose }) => {
   const addItem = (e) => {
     e.preventDefault();
 
-    //dispatch(setNewSchemeAction({ campus: name, floors: [newFloor] }));
+    //dispatch(setNewSchemeAction({ corpus: name, floors: [newFloor] }));
 
     setItems([...items, name || `New item ${index++}`]);
 
@@ -221,6 +221,9 @@ const TopBar = ({ svgUpdate, onClose }) => {
   const handleOk = () => {
     let svgStr = schemeSvgStr;
     if (!schemeSvgFile) {
+      // const svg = document.getElementById('svgcontent');
+      // svgStr = svg.outerHTML;
+
       const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
       svg.setAttribute('width', '640');
       svg.setAttribute('height', '480');
@@ -233,7 +236,7 @@ const TopBar = ({ svgUpdate, onClose }) => {
     }
     dispatch(
       setNewSchemeAction({
-        campus: name,
+        corpus: name,
         floor: newFloor,
         svgFile: svgStr,
       })
@@ -255,7 +258,7 @@ const TopBar = ({ svgUpdate, onClose }) => {
     let floors = [];
 
     schemes.map((scheme) => {
-      if (scheme.campus === currentCampus) {
+      if (scheme.corpus === currentCampus) {
         floors.push(scheme.floor);
       }
     });

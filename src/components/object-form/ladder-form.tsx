@@ -1,3 +1,4 @@
+import { UniverObject } from "../../interfaces"
 import { CommonFormItems } from "./common-form"
 
 export const LadderForm = () => {
@@ -7,6 +8,7 @@ export const LadderForm = () => {
       <CommonFormItems.SvgId />
       <CommonFormItems.Name />
       <CommonFormItems.Floor />
+      <CommonFormItems.Corpus />
     </>
   )
 }

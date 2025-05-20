@@ -1,3 +1,4 @@
+import { UniverObject } from "../../interfaces"
 import { CommonFormItems } from "./common-form"
 
 export const HallwayPointForm = () => {
@@ -8,6 +9,7 @@ export const HallwayPointForm = () => {
       <CommonFormItems.Name />
       <CommonFormItems.PointCoords />
       <CommonFormItems.Floor />
+      <CommonFormItems.Corpus />
     </>
   )
 }

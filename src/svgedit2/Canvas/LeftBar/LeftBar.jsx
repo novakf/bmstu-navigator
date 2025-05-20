@@ -29,8 +29,6 @@ const LeftBar = () => {
       const mouseX = mousePosition.x;
       const mouseY = mousePosition.y;
 
-      console.log(mouseX, mouseY);
-
       canvas.cloneSelectedElements(mouseX, mouseY);
     }
   };
@@ -139,8 +137,8 @@ const LeftBar = () => {
         />
         <IconButton
           icon="Ellipse"
-          className={mode === 'ellipse' ? 'selected' : ''}
-          onClick={() => setMode('ellipse')}
+          className={mode === 'circle' ? 'selected' : ''}
+          onClick={() => setMode('circle')}
         />
         <IconButton
           icon="Rect"

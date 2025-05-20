@@ -64,8 +64,6 @@ const updateCanvas = (svgCanvas, center, event, newCtr = {}) => {
     // Позиция курсора относительно элемента
     mouseX = event.clientX;
     mouseY = event.clientY;
-
-    console.log(mouseX, mouseY);
   }
 
   if (center) {

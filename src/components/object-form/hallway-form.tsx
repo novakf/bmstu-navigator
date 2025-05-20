@@ -7,6 +7,7 @@ export const HallwayForm = () => {
       <CommonFormItems.SvgId />
       <CommonFormItems.Name />
       <CommonFormItems.Floor />
+      <CommonFormItems.Corpus />
     </>
   )
 }

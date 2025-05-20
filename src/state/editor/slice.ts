@@ -10,7 +10,7 @@ import { floor } from 'lodash';
 export type UoLinks = Record<string, Link[]>;
 
 type SchemeType = {
-  campus: string;
+  corpus: string;
   floor: number;
   svgFile: string;
 };
@@ -28,9 +28,10 @@ type State = {
   // вспомогательные холдеры, просто родитель - ребенок
   uoHolders: Record<string, string[]>;
   floor: number | null;
-  campus: string | null;
+  corpus: string | null;
   schemes: SchemeType[];
   currScheme: string;
+  objectModalOpen: boolean;
 };
 
 export type EditorState = State;
@@ -39,12 +40,13 @@ const initialState = {
   selectedElement: null,
   scale: 0.0175,
   floor: null,
-  campus: null,
+  corpus: null,
   schemes: [],
   uoItems: {},
   uoLinks: {},
   uoHolders: {},
   currScheme: '',
+  objectModalOpen: false,
 } as State;
 
 const editorSlice = createSlice({
@@ -64,7 +66,7 @@ const editorSlice = createSlice({
       state.floor = payload;
     },
     setCampus(state, { payload }: PayloadAction<string>) {
-      state.campus = payload;
+      state.corpus = payload;
     },
     setSchemes(state, { payload }: PayloadAction<SchemeType[]>) {
       state.schemes = payload;
@@ -73,11 +75,11 @@ const editorSlice = createSlice({
       state,
       {
         payload,
-      }: PayloadAction<{ campus: string; floor: number; svgFile: string }>
+      }: PayloadAction<{ corpus: string; floor: number; svgFile: string }>
     ) {
       let flag = false;
       state.schemes.map((scheme) => {
-        if (scheme.campus === payload.campus) {
+        if (scheme.corpus === payload.corpus) {
           if (scheme.floor === payload.floor) {
             scheme.svgFile = payload.svgFile;
             flag = true;
@@ -89,7 +91,7 @@ const editorSlice = createSlice({
       if (flag === false) {
         state.schemes.push({
           svgFile: payload.svgFile,
-          campus: payload.campus,
+          corpus: payload.corpus,
           floor: payload.floor,
         });
       }
@@ -168,7 +170,7 @@ export const selectScale = (state: RootState) => state.editor.scale;
 
 export const selectFloor = (state: RootState) => state.editor.floor;
 
-export const selectCampus = (state: RootState) => state.editor.campus;
+export const selectCampus = (state: RootState) => state.editor.corpus;
 
 export const selectSchemes = (state: RootState) => state.editor.schemes;
 
@@ -181,7 +183,7 @@ export const selectUoHolders = (state: RootState) => state.editor.uoHolders;
 export const selectCurrScheme = (state: RootState) => {
   const found = state.editor.schemes.find(
     (scheme) =>
-      scheme.campus === state.editor.campus &&
+      scheme.corpus === state.editor.corpus &&
       scheme.floor === state.editor.floor
   );
 
@@ -204,7 +206,7 @@ export const useScale = () => useSelector(selectScale);
 
 export const useFloor = () => useSelector(selectFloor);
 
-export const useCampus = () => useSelector(selectCampus);
+export const useCorpus = () => useSelector(selectCampus);
 
 export const useSchemes = () => useSelector(selectSchemes);
 

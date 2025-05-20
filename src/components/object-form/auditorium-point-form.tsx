@@ -1,4 +1,5 @@
-import { CommonFormItems } from "./common-form"
+import { UniverObject } from '../../interfaces';
+import { CommonFormItems } from './common-form';
 
 export const AuditoriumPointForm = () => {
   return (
@@ -8,6 +9,7 @@ export const AuditoriumPointForm = () => {
       <CommonFormItems.Name />
       <CommonFormItems.PointCoords />
       <CommonFormItems.Floor />
+      <CommonFormItems.Corpus />
     </>
-  )
-}
+  );
+};
