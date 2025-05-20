@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import PropTypes from 'prop-types';
 
 import RectTools from './RectTools/RectTools.jsx';
@@ -24,16 +24,60 @@ import {
   Modal,
   Select,
   Space,
+  Upload,
+  message,
 } from 'antd';
-import { PlusOutlined } from '@ant-design/icons';
+import { PlusOutlined, UploadOutlined } from '@ant-design/icons';
 import { styled } from 'styled-components';
+import {
+  setCampusAction,
+  setFloorAction,
+  setNewSchemeAction,
+  useCampus,
+  useCurrFloorSvg,
+  useFloor,
+  useSchemes,
+} from '../../../state/editor/slice.ts';
+import { useDispatch } from 'react-redux';
 
 let index = 0;
 
 const TopBar = ({ svgUpdate, onClose }) => {
   const [canvasState] = React.useContext(canvasContext);
   const { canvas, selectedElement, mode, updated } = canvasState;
-  console.info(mode, selectedElement?.tagName);
+
+  const dispatch = useDispatch();
+  const schemes = useSchemes();
+  const currentCampus = useCampus();
+  const currentFloor = useFloor();
+
+  let campuses = [];
+  schemes.map((scheme) => {
+    if (!campuses.includes(scheme.campus)) {
+      campuses.push(scheme.campus);
+    }
+  });
+  const schemeValues = campuses.map((campus) => {
+    return { value: campus, label: campus };
+  });
+
+  const currFloorSvg = useCurrFloorSvg();
+
+  let floors = [];
+
+  schemes.map((scheme) => {
+    if (scheme.campus === currentCampus) {
+      floors.push(scheme.floor);
+    }
+  });
+
+  const newFloorValues = floors.map((floor) => {
+    return { value: floor, label: floor };
+  });
+
+  const [floorValues, setFloorValues] = useState(newFloorValues);
+
+  const campusArray = schemes.map((scheme, i) => scheme.campus);
 
   const [isModalOpen, setIsModalOpen] = useState(false);
 
@@ -145,14 +189,61 @@ const TopBar = ({ svgUpdate, onClose }) => {
   }
 
   const handlePlaceChange = (value) => {
-    console.log(`selected ${value}`);
+    dispatch(setCampusAction(value));
   };
 
   const showModal = () => {
     setIsModalOpen(true);
   };
 
+  const [items, setItems] = useState(campusArray);
+  const [name, setName] = useState('');
+  const [newFloor, setNewFloor] = useState(null);
+  const [schemeSvgFile, setSchemeSvgFile] = useState(null);
+  const [schemeSvgStr, setSchemeSvgStr] = useState('');
+  const inputRef = useRef(null);
+  const onNameChange = (event) => {
+    setName(event.target.value);
+  };
+  const addItem = (e) => {
+    e.preventDefault();
+
+    //dispatch(setNewSchemeAction({ campus: name, floors: [newFloor] }));
+
+    setItems([...items, name || `New item ${index++}`]);
+
+    setTimeout(() => {
+      var _a;
+      (_a = inputRef.current) === null || _a === void 0 ? void 0 : _a.focus();
+    }, 0);
+  };
+
   const handleOk = () => {
+    let svgStr = schemeSvgStr;
+    if (!schemeSvgFile) {
+      const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+      svg.setAttribute('width', '640');
+      svg.setAttribute('height', '480');
+      svg.setAttributeNS(
+        'http://www.w3.org/2000/xmlns/',
+        'xmlns',
+        'http://www.w3.org/2000/svg'
+      );
+      svgStr = svg.outerHTML;
+    }
+    dispatch(
+      setNewSchemeAction({
+        campus: name,
+        floor: newFloor,
+        svgFile: svgStr,
+      })
+    );
+    dispatch(setFloorAction(newFloor));
+    dispatch(setCampusAction(name));
+
+    setNewFloor('');
+    setSchemeSvgFile(null);
+    setSchemeSvgStr('');
     setIsModalOpen(false);
   };
 
@@ -160,26 +251,31 @@ const TopBar = ({ svgUpdate, onClose }) => {
     setIsModalOpen(false);
   };
 
-  const [items, setItems] = useState(['Главное здание', 'Корпус B7']);
-  const [name, setName] = useState('');
-  const inputRef = useRef(null);
-  const onNameChange = (event) => {
-    setName(event.target.value);
-  };
-  const addItem = (e) => {
-    e.preventDefault();
-    setItems([...items, name || `New item ${index++}`]);
-    setName('');
-    setTimeout(() => {
-      var _a;
-      (_a = inputRef.current) === null || _a === void 0 ? void 0 : _a.focus();
-    }, 0);
-  };
+  useEffect(() => {
+    let floors = [];
+
+    schemes.map((scheme) => {
+      if (scheme.campus === currentCampus) {
+        floors.push(scheme.floor);
+      }
+    });
+
+    const newFloorValues = floors.map((floor) => {
+      return { value: floor, label: floor };
+    });
+
+    setFloorValues(newFloorValues);
+  }, [schemes]);
+
+  useEffect(() => {
+    window.editorNew.load(currFloorSvg);
+  }, [currentCampus, currentFloor]);
 
   return (
     <div className="top-bar">
-      <div className="top-bar-container">
-        {/* <GenericTools
+      <div style={{ flex: 1 }}>
+        <div className="top-bar-container" style={{ flex: 1 }}>
+          {/* <GenericTools
           canvas={canvas}
           canvasUpdated={updated}
           selectedElement={selectedElement}
@@ -193,49 +289,48 @@ const TopBar = ({ svgUpdate, onClose }) => {
           selectedElement={selectedElement}
         />
         {ElementTools && ElementTools} */}
-        <Icon name={'Logo'} />
-        <div
-          style={{
-            fontSize: 24,
-            marginLeft: 6,
-            marginRight: 4,
-          }}
-        >
-          BMSTU
+          <Icon name={'Logo'} />
+          <div
+            style={{
+              fontSize: 24,
+              marginLeft: 6,
+              marginRight: 4,
+            }}
+          >
+            BMSTU
+          </div>
+
+          <div
+            style={{
+              marginLeft: 6,
+              marginRight: 6,
+              fontSize: 24,
+              color: '#d9d9d9',
+              width: 1,
+              height: '85%',
+              borderRight: '1px solid',
+            }}
+          >
+            {''}
+          </div>
+          <IconButton icon="Exit" onClick={onClickClose} />
+          <IconButton
+            icon="Save"
+            className={updated ? 'enabled' : 'disabled'}
+            onClick={() => {
+              svgUpdate(canvas.getSvgString());
+            }}
+          />
         </div>
-        <div
-          style={{
-            marginLeft: 6,
-            marginRight: 6,
-            fontSize: 24,
-            color: '#d9d9d9',
-            width: 1,
-            height: '85%',
-            borderRight: '1px solid',
-          }}
-        >
-          {''}
-        </div>
-        <IconButton icon="Exit" onClick={onClickClose} />
-        <IconButton
-          icon="Save"
-          className={updated ? 'enabled' : 'disabled'}
-          onClick={() => {
-            svgUpdate(canvas.getSvgString());
-          }}
-        />
       </div>
       <div style={{ display: 'flex', gap: 4 }}>
         <div className="top-bar-container">
           <Select
-            defaultValue="Главное здание"
+            placeholder="Корпус"
+            value={currentCampus}
             style={{ width: 180, fontSize: 18 }}
             onChange={handlePlaceChange}
-            options={[
-              { value: 'guk', label: 'Главное здание' },
-              { value: 'ulk', label: 'УЛК' },
-              { value: 'b7', label: 'Корпус B7' },
-            ]}
+            options={schemeValues}
           />
           <div
             style={{
@@ -261,16 +356,13 @@ const TopBar = ({ svgUpdate, onClose }) => {
             Этаж:
           </div>
           <Select
-            style={{ width: 50, fontSize: 18, paddingTop: 4 }}
-            defaultValue={3}
+            style={{ width: 56, fontSize: 18, paddingTop: 2 }}
+            value={currentFloor}
             onChange={(value) => {
-              console.log('changed', value);
+              dispatch(setFloorAction(value));
             }}
-            options={[
-              { value: 'first', label: '1' },
-              { value: 'second', label: '2' },
-              { value: 'third', label: '3' },
-            ]}
+            disabled={floorValues.length === 0}
+            options={floorValues}
           />
         </div>
         <div
@@ -285,8 +377,10 @@ const TopBar = ({ svgUpdate, onClose }) => {
           <IconButton icon="Plus" onClick={() => showModal()} />
         </div>
       </div>
-      <div className="top-bar-container">
-        <IconButton icon="Avatar" />
+      <div style={{ flex: 1 }}>
+        <div className="top-bar-container" style={{ marginLeft: 'auto' }}>
+          <IconButton icon="Avatar" />
+        </div>
       </div>
       <StyledModal
         title="Добавить новый этаж"
@@ -329,10 +423,32 @@ const TopBar = ({ svgUpdate, onClose }) => {
         />
         <div style={{ marginTop: 10, marginBottom: 4 }}>Выберите этаж:</div>
         <InputNumber
+          value={newFloor}
           onChange={(value) => {
-            console.log('changed', value);
+            setNewFloor(value);
           }}
         />
+        <div style={{ marginTop: 10, marginBottom: 4 }}>
+          Загрузите файл (если есть):
+        </div>
+        <Upload
+          action={''}
+          onRemove={() => {
+            setSchemeSvgFile(null);
+          }}
+          beforeUpload={(file) => {
+            setSchemeSvgFile(file);
+
+            file.text().then((svgText) => {
+              setSchemeSvgStr(svgText);
+            });
+
+            return false;
+          }}
+          fileList={schemeSvgFile ? [schemeSvgFile] : []}
+        >
+          <Button icon={<UploadOutlined />}>Загрузить SVG</Button>
+        </Upload>
       </StyledModal>
     </div>
   );
@@ -345,7 +461,7 @@ TopBar.propTypes = {
 
 const StyledModal = styled(Modal)`
   .ant-modal-body {
-    overflow-y: auto !important;
+    overflow-y: hidden !important;
   }
 `;
 

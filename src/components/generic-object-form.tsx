@@ -40,11 +40,9 @@ export const GenericUniverObjectForm: FC<Props> = ({ onSubmit, onCancel }) => {
     null
   );
 
-  console.log(selectedElement);
-
   if (!selectedElement) return null;
 
-  const element = selectedElement.element;
+  const element = selectedElement?.element;
 
   const selectForm = (value: UniverObjectType) => {
     setCurrentUOForm(value);
@@ -59,7 +57,7 @@ export const GenericUniverObjectForm: FC<Props> = ({ onSubmit, onCancel }) => {
     {
       value: UniverObjectType.AuditoriumPoint,
       label: 'Точка аудитории (дверь)',
-      disabled: element.tagName !== 'circle',
+      disabled: element?.tagName !== 'circle',
     },
     { value: UniverObjectType.Guide, label: 'Направляющая' },
     { value: UniverObjectType.Hallway, label: 'Коридор' },
@@ -67,17 +65,17 @@ export const GenericUniverObjectForm: FC<Props> = ({ onSubmit, onCancel }) => {
     {
       value: UniverObjectType.HallwayPoint,
       label: 'Точка коридора',
-      disabled: element.tagName !== 'circle',
+      disabled: element?.tagName !== 'circle',
     },
     {
       value: UniverObjectType.LadderPoint,
       label: 'Точка лестницы',
-      disabled: element.tagName !== 'circle',
+      disabled: element?.tagName !== 'circle',
     },
     {
       value: UniverObjectType.FloorPoint,
       label: 'Точка этажа',
-      disabled: element.tagName !== 'circle',
+      disabled: element?.tagName !== 'circle',
     },
   ];
 

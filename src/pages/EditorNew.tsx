@@ -4,7 +4,7 @@ import '../svgedit/editor/svgedit.css';
 import { TopPanelGlobal } from '../TopPanelGlobal';
 import { Provider, useDispatch } from 'react-redux';
 import { AppDispatch, store } from '../state';
-import { initEditor } from '../state/editor/slice';
+import { initEditor, setSchemesAction } from '../state/editor/slice';
 import { useCurrentUser } from '../state/user';
 import { Navigate } from 'react-router-dom';
 import Editor from '../svgedit2/editor.class';
@@ -15,8 +15,6 @@ const EditorNew: FC = () => {
   const dispatch = useDispatch<AppDispatch>();
   const user = useCurrentUser();
   const { t, i18n } = useTranslation();
-
-  console.log('new');
 
   useEffect(() => {
     const container = document.getElementById('editcontainer') as HTMLElement;

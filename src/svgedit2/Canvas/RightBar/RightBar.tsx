@@ -7,6 +7,7 @@ import { canvasContext } from '../Context/canvasContext.jsx';
 import { styled } from 'styled-components';
 import { Button, Input, Select } from 'antd';
 import { GenericUniverObjectForm } from '../../../components/generic-object-form';
+import { useSelectedElement } from '../../../state/editor/slice';
 
 export enum UniverObjectType {
   'Auditorium' = 'auditorium',
@@ -34,35 +35,6 @@ const RightBar = () => {
   const handleTypeChange = (value: string) => {
     console.log(`selected ${value}`);
   };
-
-  const element = selectedElement?.element;
-
-  const univerObjectSelectOptions = [
-    { value: UniverObjectType.Auditorium, label: 'Аудитория' },
-    {
-      value: UniverObjectType.AuditoriumPoint,
-      label: 'Точка аудитории (дверь)',
-      disabled: element?.tagName !== 'circle',
-    },
-    { value: UniverObjectType.Guide, label: 'Направляющая' },
-    { value: UniverObjectType.Hallway, label: 'Коридор' },
-    { value: UniverObjectType.Ladder, label: 'Лестница' },
-    {
-      value: UniverObjectType.HallwayPoint,
-      label: 'Точка коридора',
-      disabled: element?.tagName !== 'circle',
-    },
-    {
-      value: UniverObjectType.LadderPoint,
-      label: 'Точка лестницы',
-      disabled: element?.tagName !== 'circle',
-    },
-    {
-      value: UniverObjectType.FloorPoint,
-      label: 'Точка этажа',
-      disabled: element?.tagName !== 'circle',
-    },
-  ];
 
   const onSubmit = () => {};
 
@@ -110,6 +82,11 @@ const StyledRightBar = styled.div<{ $open?: boolean }>`
   flex-direction: column;
   gap: 6px;
   z-index: 1;
+  pointer-events: none;
+
+  & > div {
+    pointer-events: all;
+  }
 
   transition: right 0.3s;
   right: ${(p) => (p.$open ? '20px' : '-500px')};
