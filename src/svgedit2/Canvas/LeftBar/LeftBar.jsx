@@ -132,42 +132,50 @@ const LeftBar = () => {
       <div className="left-bar-container">
         <IconButton
           icon="Select"
+          text="Выбор"
           className={mode === 'select' ? 'selected' : ''}
           onClick={() => setMode('select')}
         />
         <IconButton
           icon="Circle"
+          text="Круг"
           className={mode === 'circle' ? 'selected' : ''}
           onClick={() => setMode('circle')}
         />
         <IconButton
           icon="Rect"
+          text="Прямоугольник"
           className={mode === 'rect' ? 'selected' : ''}
           onClick={() => setMode('rect')}
         />
         <IconButton
           icon="Path"
+          text="Ломаная"
           className={mode === 'path' ? 'selected' : ''}
           onClick={() => setMode('path')}
         />
         <IconButton
           icon="Line"
+          text="Прямая"
           className={mode === 'line' ? 'selected' : ''}
           onClick={() => setMode('line')}
         />
         <IconButton
           icon="Text"
+          text="Текст"
           className={mode === 'text' ? 'selected' : ''}
           onClick={() => setMode('text')}
         />
         <IconButton
           icon="Group"
+          text="Группировка"
           onClick={() => {
             canvas.groupSelectedElements();
           }}
         />
         <IconButton
           icon="Image"
+          text="Картинка"
           onClick={(e) => {
             e.preventDefault();
             e.stopPropagation();
@@ -179,11 +187,13 @@ const LeftBar = () => {
       <div className="left-bar-container">
         <IconButton
           icon="Undo"
+          text="Отменить действие"
           className={mode === 'undo' ? 'selected' : ''}
           onClick={onClickUndo}
         />
         <IconButton
           icon="Redo"
+          text="Повторить действие"
           className={mode === 'redo' ? 'selected' : ''}
           onClick={onClickRedo}
         />

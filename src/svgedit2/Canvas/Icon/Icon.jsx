@@ -44,6 +44,7 @@ const publish = './images/publish.svg';
 const draft = './images/draft.svg';
 const background = './images/background.svg';
 const foreground = './images/foreground.svg';
+const link = './images/link.svg'
 
 const logo = './images/logo-bmstu.png';
 const avatar = './images/avatar.png';
@@ -78,6 +79,8 @@ const Icon = ({ name, ...otherProps }) => {
       return <img src={undo} alt="undo" {...otherProps} />;
     case 'Redo':
       return <img src={redo} alt="redo" {...otherProps} />;
+    case 'Link':
+      return <img src={link} alt="link" {...otherProps} />;
     case 'Group':
       return <img src={group} alt="group" {...otherProps} />;
     case 'Ungroup':

@@ -80,6 +80,7 @@ const RightBar = () => {
               setOpen(false);
             }}
             icon="Exit"
+            text="Закрыть"
           />
         </TopButtonsGroup>
       </div>

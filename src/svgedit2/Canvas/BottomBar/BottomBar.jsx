@@ -105,6 +105,7 @@ const BottomBar = () => {
         <IconButton
           tooltipPlace={'top'}
           icon="Foreground"
+          text="На передний план"
           onClick={() => {
             canvas.moveToTopSelectedElement();
           }}
@@ -112,6 +113,7 @@ const BottomBar = () => {
         <IconButton
           tooltipPlace={'top'}
           icon="Background"
+          text="На задний план"
           onClick={() => {
             canvas.moveToBottomSelectedElement();
           }}
@@ -121,12 +123,14 @@ const BottomBar = () => {
         <IconButton
           tooltipPlace={'top'}
           icon="Minus"
+          text="Уменьшить"
           onClick={() => handleZoom(zoom - 10)}
         />
-        <IconButton>{zoom}%</IconButton>
+        <IconButton onClick={() => handleZoom(100)}>{zoom}%</IconButton>
         <IconButton
           tooltipPlace={'top'}
           icon="Plus"
+          text="Увеличить"
           onClick={() => handleZoom(zoom + 10)}
         />
       </div>

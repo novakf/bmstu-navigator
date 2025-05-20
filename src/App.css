@@ -169,6 +169,7 @@
   align-items: center;
   padding-left: 6px;
   width: fit-content;
+  transition: 0.3s;
 }
 
 .top-bar .canvas-mode {

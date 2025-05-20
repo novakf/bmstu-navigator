@@ -1,16 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import PropTypes from 'prop-types';
 
-import RectTools from './RectTools/RectTools.jsx';
-import EllipseTools from './EllipseTools/EllipseTools.jsx';
-import CircleTools from './CircleTools/CircleTools.jsx';
-import PathTools from './PathTools/PathTools.jsx';
-import TextTools from './TextTools/TextTools.jsx';
-import GenericTools from './GenericTools/GenericTools.jsx';
-import DelDupTools from './DelDupTools/DelDupTools.jsx';
-import GroupTools from './GroupTools/GroupTools.jsx';
-import AttributesTools from './AttributesTools/AttributesTools.jsx';
-
 import { canvasContext } from '../Context/canvasContext.jsx';
 
 import './TopBar.less';
@@ -45,6 +35,7 @@ import {
   useUpdated,
 } from '../../../state/editor/slice.ts';
 import { useDispatch } from 'react-redux';
+import { UOLinkToolbar } from '../../../components/uo-link/uo-link-toolbar';
 
 let index = 0;
 
@@ -286,6 +277,8 @@ const TopBar = ({ svgUpdate, onClose }) => {
 
   const [isStatusModalOpen, setIsStatusModalOpen] = useState(false);
 
+  const [linkMode, setLinkMode] = useState(false);
+
   return (
     <div className="top-bar">
       <div style={{ flex: 1 }}>
@@ -328,11 +321,13 @@ const TopBar = ({ svgUpdate, onClose }) => {
           </div>
           <IconButton
             icon="Exit"
+            text="Выйти"
             onClick={onClickClose}
             tooltipPlace={'bottom'}
           />
           <IconButton
             icon="Download"
+            text="Скачать"
             tooltipPlace={'bottom'}
             onClick={() => {
               download(
@@ -356,12 +351,14 @@ const TopBar = ({ svgUpdate, onClose }) => {
           {currStatus !== 'Public' ? (
             <IconButton
               icon="Publish"
+              text="Опубликовать"
               onClick={() => setIsStatusModalOpen(true)}
               tooltipPlace={'bottom'}
             />
           ) : (
             <IconButton
               icon="Draft"
+              text="В черновик"
               onClick={() => changeSchemeStatus('Draft')}
               tooltipPlace={'bottom'}
             />
@@ -420,6 +417,7 @@ const TopBar = ({ svgUpdate, onClose }) => {
         >
           <IconButton
             icon="Plus"
+            text="Добавить этаж"
             onClick={() => showModal()}
             tooltipPlace={'bottom'}
           />
@@ -435,6 +433,7 @@ const TopBar = ({ svgUpdate, onClose }) => {
         >
           <IconButton
             icon="Save"
+            text="Сохранить"
             onClick={() => saveSvgString()}
             tooltipPlace={'bottom'}
           />
@@ -450,14 +449,34 @@ const TopBar = ({ svgUpdate, onClose }) => {
         >
           <IconButton
             icon="Delete"
+            text="Удалить этаж"
             onClick={() => deleteFloor()}
             tooltipPlace={'bottom'}
+          />
+        </div>
+        <div
+          className="top-bar-container"
+          style={{
+            height: 38,
+            width: 38,
+            padding: 4,
+            justifyContent: 'center',
+            background: linkMode ? '#a3d4ff' : 'white',
+            borderColor: linkMode ? '#a3d4ff' : '#e9eaef',
+          }}
+        >
+          <IconButton
+            icon="Link"
+            text="Создать связь"
+            tooltipPlace={'bottom'}
+            $active={linkMode}
+            onClick={() => setLinkMode(!linkMode)}
           />
         </div>
       </div>
       <div style={{ flex: 1 }}>
         <div className="top-bar-container" style={{ marginLeft: 'auto' }}>
-          <IconButton icon="Avatar" />
+          <IconButton icon="Avatar" text={'Профиль'} />
         </div>
       </div>
       <StyledModal
@@ -554,9 +573,10 @@ const TopBar = ({ svgUpdate, onClose }) => {
           Схема этажа станет доступна всем пользователям
         </div>
       </StyledModal>
-      {currStatus !== 'Public' && (
-        <SchemeStatus $public={false}>Черновик</SchemeStatus>
-      )}
+      <SchemeStatus $show={currStatus !== 'Public'}>Черновик</SchemeStatus>
+      <StyledUOLinkToolbar $active={linkMode}>
+        <UOLinkToolbar modeActive={linkMode} setModeActive={setLinkMode} />
+      </StyledUOLinkToolbar>
     </div>
   );
 };
@@ -566,19 +586,51 @@ TopBar.propTypes = {
   onClose: PropTypes.func.isRequired,
 };
 
+const StyledUOLinkToolbar = styled.div`
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 10px;
+  margin-inline: auto;
+  width: fit-content;
+  transition: 0.3s;
+  background-color: #fff;
+  box-shadow: 0 2px 4px 0px #22242814;
+  border: 0.5px solid #e9eaef;
+  border-radius: 8px;
+  padding: 8px;
+  align-items: center;
+  width: -moz-fit-content;
+  opacity: 0;
+
+  ${(p) =>
+    p.$active &&
+    `
+    top: 66px;
+    opacity: 1;
+  `}
+`;
+
 const SchemeStatus = styled.div`
   position: absolute;
   left: 0;
   right: 0;
-  bottom: 20px;
+  bottom: -50px;
   margin-inline: auto;
   width: fit-content;
   background: #00000012;
   padding: 6px 10px;
   border: 1px solid #bbb;
   border-radius: 10px;
+  color: #5b5b5b;
 
-  color: ${(p) => (!p.$public ? '#5b5b5b;' : '#1a8900')};
+  transition: 0.3s;
+
+  ${(p) =>
+    p.$show &&
+    `
+    bottom: 20px;
+  `}
 `;
 
 const StyledModal = styled(Modal)`
