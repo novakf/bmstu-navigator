@@ -26,7 +26,7 @@ const GenericTools = ({ canvas, canvasUpdated, svgUpdate, onClose }) => {
         onClick={onClickClose}
       />
       <IconButton
-        icon="Save"
+        icon="Download"
         className={canvasUpdated ? 'enabled' : 'disabled'}
         onClick={() => {
           svgUpdate(canvas.getSvgString())

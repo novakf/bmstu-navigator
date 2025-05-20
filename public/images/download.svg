@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" viewBox="0 0 24 24" fill="none"
+  class="c-hdkwsG c-hdkwsG-dvzWZT-size-medium c-hdkwsG-OzWqL-weight-normal">
+  <path stroke="currentColor" stroke-linecap="square" stroke-width="var(--svg-stroke-width)"
+    d="M3 15v4c0 1.1046.8954 2 2 2h14c1.1046 0 2-.8954 2-2v-4"></path>
+  <path stroke="currentColor" stroke-linejoin="round" stroke-width="var(--svg-stroke-width)" d="M12.0002 16v-11"></path>
+  <path stroke="currentColor" stroke-linejoin="bevel" stroke-width="var(--svg-stroke-width)" d="m8 8 4-4 4 4"></path>
+</svg>

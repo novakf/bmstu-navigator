@@ -12,7 +12,7 @@ const circle = './images/circle.svg';
 const ellipse = './images/ellipse.svg';
 const square = './images/square.svg';
 const rect = './images/rect.svg';
-const save = './images/save.svg';
+const download = './images/download.svg';
 const text = './images/text.svg';
 const del = './images/delete.svg';
 const clone = './images/clone.svg';
@@ -40,6 +40,9 @@ const plus = './images/plus.svg';
 const minus = './images/minus.svg';
 const downArrow = './images/down_arrow.svg';
 const image = './images/image.svg';
+const save = './images/save.svg';
+const publish = './images/publish.svg';
+const draft = './images/draft.svg';
 
 const logo = './images/logo-bmstu.png';
 const avatar = './images/avatar.png';
@@ -70,6 +73,8 @@ const Icon = ({ name, ...otherProps }) => {
       return <img src={close} alt="close" {...otherProps} />;
     case 'Save':
       return <img src={save} alt="save" {...otherProps} />;
+    case 'Download':
+      return <img src={download} alt="download" {...otherProps} />;
     case 'Undo':
       return <img src={undo} alt="undo" {...otherProps} />;
     case 'Redo':
@@ -120,6 +125,10 @@ const Icon = ({ name, ...otherProps }) => {
       return <img src={minus} alt="minus" {...otherProps} />;
     case 'Image':
       return <img src={image} alt="image" {...otherProps} />;
+    case 'Publish':
+      return <img src={publish} alt="publish" {...otherProps} />;
+    case 'Draft':
+      return <img src={draft} alt="draft" {...otherProps} />;
     case 'DownArrow':
       return (
         <img

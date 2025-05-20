@@ -13,6 +13,7 @@ type SchemeType = {
   corpus: string;
   floor: number;
   svgFile: string;
+  status?: 'Draft' | 'Public';
 };
 
 type State = {
@@ -32,6 +33,8 @@ type State = {
   schemes: SchemeType[];
   currScheme: string;
   objectModalOpen: boolean;
+  updated: boolean;
+  saved: boolean;
 };
 
 export type EditorState = State;
@@ -47,6 +50,8 @@ const initialState = {
   uoHolders: {},
   currScheme: '',
   objectModalOpen: false,
+  updated: false,
+  saved: false,
 } as State;
 
 const editorSlice = createSlice({
@@ -70,6 +75,12 @@ const editorSlice = createSlice({
     },
     setSchemes(state, { payload }: PayloadAction<SchemeType[]>) {
       state.schemes = payload;
+    },
+    setUpdated(state, { payload }: PayloadAction<boolean>) {
+      state.updated = payload;
+    },
+    setSaved(state, { payload }: PayloadAction<boolean>) {
+      state.saved = payload;
     },
     setNewScheme(
       state,
@@ -160,6 +171,50 @@ const editorSlice = createSlice({
 
       localStorage.setItem('uoHolders', JSON.stringify(state.uoHolders));
     },
+    removeFloor(
+      state,
+      { payload }: PayloadAction<{ corpus: string; floor: number }>
+    ) {
+      const newSchemes = state.schemes.filter((obj) => {
+        return obj.corpus === payload.corpus && obj.floor !== payload.floor;
+      });
+
+      state.schemes = newSchemes;
+    },
+    setCurrSchemeStatus(
+      state,
+      {
+        payload,
+      }: PayloadAction<{
+        corpus: string;
+        floor: number;
+        status: 'Draft' | 'Public';
+      }>
+    ) {
+      const newSchemes: SchemeType[] = [];
+
+      const found = state.schemes.find(
+        (scheme) =>
+          scheme.corpus === state.corpus && scheme.floor === state.floor
+      );
+
+      if (!found) {
+        return;
+      }
+
+      found.status = payload.status;
+
+      state.schemes.map((scheme) => {
+        if (scheme.corpus === state.corpus && scheme.floor === state.floor) {
+          return;
+        }
+        newSchemes.push(scheme);
+      });
+
+      newSchemes.push(found);
+
+      state.schemes = newSchemes;
+    },
   },
 });
 
@@ -180,6 +235,10 @@ export const selectUoLinks = (state: RootState) => state.editor.uoLinks;
 
 export const selectUoHolders = (state: RootState) => state.editor.uoHolders;
 
+export const selectUpdated = (state: RootState) => state.editor.updated;
+
+export const selectSaved = (state: RootState) => state.editor.saved;
+
 export const selectCurrScheme = (state: RootState) => {
   const found = state.editor.schemes.find(
     (scheme) =>
@@ -188,6 +247,16 @@ export const selectCurrScheme = (state: RootState) => {
   );
 
   return found?.svgFile;
+};
+
+export const selectCurrSchemeStatus = (state: RootState) => {
+  const found = state.editor.schemes.find(
+    (scheme) =>
+      scheme.corpus === state.editor.corpus &&
+      scheme.floor === state.editor.floor
+  );
+
+  return found?.status;
 };
 
 export const useSelectedElement = () => {
@@ -218,6 +287,12 @@ export const useUoHolders = () => useSelector(selectUoHolders);
 
 export const useCurrFloorSvg = () => useSelector(selectCurrScheme);
 
+export const useCurrSchemeStatus = () => useSelector(selectCurrScheme);
+
+export const useUpdated = () => useSelector(selectUpdated);
+
+export const useSaved = () => useSelector(selectSaved);
+
 export const initEditor = createAsyncThunk('initEditor', (_, { dispatch }) => {
   const uoItems =
     JSON.parse(localStorage.getItem('uoItems') || 'null') || uoItemsMock;
@@ -247,6 +322,10 @@ export const {
   removeObjectFromUoItems: removeObjectFromUoItemsAction,
   removeObjectFromUoLinks: removeObjectFromUoLinksAction,
   removeObjectFromUoHolders: removeObjectFromUoHoldersAction,
+  removeFloor: removeFloorAction,
+  setCurrSchemeStatus: setCurrSchemeStatusAction,
+  setUpdated: setUpdatedAction,
+  setSaved: setSavedAction,
 } = editorSlice.actions;
 
 export default editorSlice.reducer;

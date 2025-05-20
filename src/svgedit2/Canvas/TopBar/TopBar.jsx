@@ -30,13 +30,19 @@ import {
 import { PlusOutlined, UploadOutlined } from '@ant-design/icons';
 import { styled } from 'styled-components';
 import {
+  removeFloorAction,
   setCampusAction,
+  setCurrSchemeStatusAction,
   setFloorAction,
   setNewSchemeAction,
+  setSavedAction,
   useCorpus,
   useCurrFloorSvg,
+  useCurrSchemeStatus,
   useFloor,
+  useSaved,
   useSchemes,
+  useUpdated,
 } from '../../../state/editor/slice.ts';
 import { useDispatch } from 'react-redux';
 
@@ -63,6 +69,19 @@ const TopBar = ({ svgUpdate, onClose }) => {
 
   const currFloorSvg = useCurrFloorSvg();
 
+  //const updated = useUpdated();
+
+  const saved = useSaved();
+
+  const currSchemeStatus = useCurrSchemeStatus();
+
+  const [currStatus, setCurrStatus] = useState(currSchemeStatus);
+
+  useEffect(() => {
+    console.log('currSVG', currFloorSvg);
+    window.editorNew.load(currFloorSvg);
+  }, [currFloorSvg, currentCampus, currentFloor]);
+
   let floors = [];
 
   schemes.map((scheme) => {
@@ -81,11 +100,18 @@ const TopBar = ({ svgUpdate, onClose }) => {
 
   const [isModalOpen, setIsModalOpen] = useState(false);
 
+  useEffect(() => {
+    dispatch(setSavedAction(false));
+  }, [updated]);
+
   const onClickClose = () => {
-    if (updated) {
+    console.log('UPD', updated, saved);
+    if (updated && !saved) {
       // eslint-disable-next-line no-alert
       if (
-        !window.confirm('A change was not saved, do you really want to exit?')
+        !window.confirm(
+          'Схема была изменена, уверены, что хотите выйти? Несохраненные данные будут потеряны'
+        )
       )
         return;
     }
@@ -220,7 +246,7 @@ const TopBar = ({ svgUpdate, onClose }) => {
 
   const handleOk = () => {
     let svgStr = schemeSvgStr;
-    if (!schemeSvgFile) {
+    if (!schemeSvgStr) {
       // const svg = document.getElementById('svgcontent');
       // svgStr = svg.outerHTML;
 
@@ -234,6 +260,7 @@ const TopBar = ({ svgUpdate, onClose }) => {
       );
       svgStr = svg.outerHTML;
     }
+
     dispatch(
       setNewSchemeAction({
         corpus: name,
@@ -257,6 +284,8 @@ const TopBar = ({ svgUpdate, onClose }) => {
   useEffect(() => {
     let floors = [];
 
+    console.log('schems', schemes);
+
     schemes.map((scheme) => {
       if (scheme.corpus === currentCampus) {
         floors.push(scheme.floor);
@@ -270,9 +299,86 @@ const TopBar = ({ svgUpdate, onClose }) => {
     setFloorValues(newFloorValues);
   }, [schemes]);
 
-  useEffect(() => {
-    window.editorNew.load(currFloorSvg);
-  }, [currentCampus, currentFloor]);
+  const saveSvgString = () => {
+    const svgStr = canvas.getSvgString();
+
+    if (!currentCampus || !currentFloor) {
+      message.error('Выберите этаж');
+      return;
+    }
+
+    dispatch(
+      setNewSchemeAction({
+        corpus: currentCampus,
+        floor: currentFloor,
+        svgFile: svgStr,
+      })
+    );
+
+    dispatch(setSavedAction(true));
+
+    message.success('Схема сохранена', 1);
+  };
+
+  const deleteFloor = () => {
+    const newFloors = floorValues.filter((floor) => {
+      return floor.value !== currentFloor;
+    });
+
+    console.log('new', newFloors);
+
+    if (newFloors.length > 0) {
+      dispatch(setFloorAction(newFloors[0].value));
+    } else {
+      dispatch(setFloorAction(null));
+      dispatch(setCampusAction(null));
+    }
+
+    dispatch(
+      removeFloorAction({
+        corpus: currentCampus,
+        floor: currentFloor,
+      })
+    );
+
+    message.success('Схема удалена', 1);
+  };
+
+  const download = (filename, text) => {
+    var element = document.createElement('a');
+    element.setAttribute(
+      'href',
+      'data:text/plain;charset=utf-8,' + encodeURIComponent(text)
+    );
+    element.setAttribute('download', filename);
+
+    element.style.display = 'none';
+    document.body.appendChild(element);
+
+    element.click();
+
+    document.body.removeChild(element);
+  };
+
+  const changeSchemeStatus = (status) => {
+    dispatch(
+      setCurrSchemeStatusAction({
+        corpus: currentCampus,
+        floor: currentFloor,
+        status,
+      })
+    );
+
+    setCurrStatus(status);
+
+    if (status === 'Public') {
+      message.success('Схема опубликована');
+    } else {
+      message.success('Схема снята с публикации');
+    }
+  };
+
+  const [isStatusModalOpen, setIsStatusModalOpen] = useState(false);
 
   return (
     <div className="top-bar">
@@ -318,15 +424,40 @@ const TopBar = ({ svgUpdate, onClose }) => {
           </div>
           <IconButton icon="Exit" onClick={onClickClose} />
           <IconButton
-            icon="Save"
+            icon="Download"
             className={updated ? 'enabled' : 'disabled'}
             onClick={() => {
-              svgUpdate(canvas.getSvgString());
+              download(
+                `${currentCampus}_${currentFloor}`,
+                canvas.getSvgString()
+              );
             }}
           />
         </div>
       </div>
       <div style={{ display: 'flex', gap: 4 }}>
+        <div
+          className="top-bar-container"
+          style={{
+            height: 38,
+            width: 38,
+            padding: 4,
+            justifyContent: 'center',
+          }}
+        >
+          {currStatus !== 'Public' ? (
+            <IconButton
+              icon="Publish"
+              onClick={() => setIsStatusModalOpen(true)}
+            />
+          ) : (
+            <IconButton
+              icon="Draft"
+              onClick={() => changeSchemeStatus('Draft')}
+            />
+          )}
+        </div>
+
         <div className="top-bar-container">
           <Select
             placeholder="Корпус"
@@ -364,7 +495,7 @@ const TopBar = ({ svgUpdate, onClose }) => {
             onChange={(value) => {
               dispatch(setFloorAction(value));
             }}
-            disabled={floorValues.length === 0}
+            //disabled={floorValues.length === 0}
             options={floorValues}
           />
         </div>
@@ -378,6 +509,28 @@ const TopBar = ({ svgUpdate, onClose }) => {
           }}
         >
           <IconButton icon="Plus" onClick={() => showModal()} />
+        </div>
+        <div
+          className="top-bar-container"
+          style={{
+            height: 38,
+            width: 38,
+            padding: 4,
+            justifyContent: 'center',
+          }}
+        >
+          <IconButton icon="Save" onClick={() => saveSvgString()} />
+        </div>
+        <div
+          className="top-bar-container"
+          style={{
+            height: 38,
+            width: 38,
+            padding: 4,
+            justifyContent: 'center',
+          }}
+        >
+          <IconButton icon="Delete" onClick={() => deleteFloor()} />
         </div>
       </div>
       <div style={{ flex: 1 }}>
@@ -453,6 +606,35 @@ const TopBar = ({ svgUpdate, onClose }) => {
           <Button icon={<UploadOutlined />}>Загрузить SVG</Button>
         </Upload>
       </StyledModal>
+      <StyledModal
+        title="Опубликовать схему"
+        closable={{ 'aria-label': 'Custom Close Button' }}
+        open={isStatusModalOpen}
+        onOk={() => changeSchemeStatus('Public')}
+        onCancel={() => setIsStatusModalOpen(false)}
+        footer={[
+          <Button key="back" onClick={() => setIsStatusModalOpen(false)}>
+            Отменить
+          </Button>,
+          <Button
+            key="submit"
+            type="primary"
+            onClick={() => {
+              changeSchemeStatus('Public');
+              setIsStatusModalOpen(false);
+            }}
+          >
+            Опубликовать
+          </Button>,
+        ]}
+      >
+        <div style={{ fontSize: 14, color: '#4f4f4f' }}>
+          Схема этажа станет доступна всем пользователям
+        </div>
+      </StyledModal>
+      {currStatus !== 'Public' && (
+        <SchemeStatus $public={false}>Черновик</SchemeStatus>
+      )}
     </div>
   );
 };
@@ -461,6 +643,21 @@ TopBar.propTypes = {
   svgUpdate: PropTypes.func.isRequired,
   onClose: PropTypes.func.isRequired,
 };
+
+const SchemeStatus = styled.div`
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 20px;
+  margin-inline: auto;
+  width: fit-content;
+  background: #00000012;
+  padding: 6px 10px;
+  border: 1px solid #bbb;
+  border-radius: 10px;
+
+  color: ${(p) => (!p.$public ? '#5b5b5b;' : '#1a8900')};
+`;
 
 const StyledModal = styled(Modal)`
   .ant-modal-body {

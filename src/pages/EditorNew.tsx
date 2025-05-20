@@ -11,6 +11,7 @@ import Editor from '../svgedit2/editor.class';
 import { SeCMenuDialog } from '../svgedit/editor/dialogs/cmenuDialog.js';
 import { useTranslation } from 'react-i18next';
 
+
 const EditorNew: FC = () => {
   const dispatch = useDispatch<AppDispatch>();
   const user = useCurrentUser();

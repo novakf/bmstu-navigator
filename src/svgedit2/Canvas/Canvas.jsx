@@ -23,6 +23,7 @@ import {
   setSelectedElementAction,
 } from '../../state/editor/slice';
 import { find } from 'lodash';
+import { useNavigate } from 'react-router-dom';
 
 const Canvas = ({ svgContent, locale, svgUpdate, onClose, log }) => {
   const { t, i18n } = useTranslation();
@@ -65,7 +66,7 @@ const Canvas = ({ svgContent, locale, svgUpdate, onClose, log }) => {
       const uo = find(uoItems, { svgId: se.id }) ?? null;
       dispatch(setSelectedElementAction({ svgId: se.id, uo }));
     }
-    
+
     dispatchCanvasState({
       type: 'selectedElement',
       selectedElement,
@@ -96,7 +97,7 @@ const Canvas = ({ svgContent, locale, svgUpdate, onClose, log }) => {
       (event.key === 'Backspace' || event.keyCode === 46) &&
       event.target.tagName !== 'INPUT'
     ) {
-      event.stopPropagation()
+      event.stopPropagation();
       event.preventDefault();
       dispatchCanvasState({ type: 'deleteSelectedElements' });
     }
@@ -219,9 +220,14 @@ const Canvas = ({ svgContent, locale, svgUpdate, onClose, log }) => {
     }
   };
 
+  const exitEditor = () => {
+    onClose();
+    window.location.href = '/';
+  };
+
   return (
     <>
-      <TopBar svgUpdate={svgUpdateHandler} onClose={onClose} />
+      <TopBar svgUpdate={svgUpdateHandler} onClose={exitEditor} />
       <LeftBar />
       <RightBar />
       <BottomBar />
