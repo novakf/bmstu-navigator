@@ -9,7 +9,6 @@ const redo = './images/redo.svg';
 const select = './images/select.svg';
 const line = './images/line.svg';
 const circle = './images/circle.svg';
-const ellipse = './images/ellipse.svg';
 const square = './images/square.svg';
 const rect = './images/rect.svg';
 const download = './images/download.svg';
@@ -43,6 +42,8 @@ const image = './images/image.svg';
 const save = './images/save.svg';
 const publish = './images/publish.svg';
 const draft = './images/draft.svg';
+const background = './images/background.svg';
+const foreground = './images/foreground.svg';
 
 const logo = './images/logo-bmstu.png';
 const avatar = './images/avatar.png';
@@ -55,8 +56,6 @@ const Icon = ({ name, ...otherProps }) => {
       return <img src={line} alt="line" {...otherProps} />;
     case 'Circle':
       return <img src={circle} alt="circle" {...otherProps} />;
-    case 'Ellipse':
-      return <img src={ellipse} alt="ellipse" {...otherProps} />;
     case 'Text':
       return <img src={text} alt="text" {...otherProps} />;
     case 'Delete':
@@ -129,6 +128,10 @@ const Icon = ({ name, ...otherProps }) => {
       return <img src={publish} alt="publish" {...otherProps} />;
     case 'Draft':
       return <img src={draft} alt="draft" {...otherProps} />;
+    case 'Background':
+      return <img src={background} alt="background" {...otherProps} />;
+    case 'Foreground':
+      return <img src={foreground} alt="foreground" {...otherProps} />;
     case 'DownArrow':
       return (
         <img

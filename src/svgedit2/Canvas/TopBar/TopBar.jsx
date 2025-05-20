@@ -57,6 +57,8 @@ const TopBar = ({ svgUpdate, onClose }) => {
   const currentCampus = useCorpus();
   const currentFloor = useFloor();
 
+  console.log(currentFloor);
+
   let campuses = [];
   schemes.map((scheme) => {
     if (!campuses.includes(scheme.corpus)) {
@@ -117,102 +119,6 @@ const TopBar = ({ svgUpdate, onClose }) => {
     }
     onClose();
   };
-
-  const handleChange = (type, newVal) => {
-    const elem = selectedElement;
-    switch (type) {
-      case 'font-family':
-        canvasState.canvas.setFontFamily(newVal);
-        break;
-      case 'font-size':
-        canvasState.canvas.setFontSize(newVal);
-        break;
-      case 'id':
-        // if the user is changing the id, then de-select the element first
-        // change the ID, then re-select it with the new ID
-        canvasState.canvas.clearSelection();
-        elem.id = newVal;
-        canvasState.canvas.addToSelection([elem], true);
-        break;
-      default:
-        console.error(`type (${type}) not supported`);
-    }
-  };
-
-  let ElementTools;
-  switch (canvasState.selectedElement?.tagName) {
-    case 'rect':
-      ElementTools = (
-        <RectTools
-          canvas={canvas}
-          canvasUpdated={updated}
-          selectedElement={selectedElement}
-          svgUpdate={svgUpdate}
-          onClose={onClose}
-        />
-      );
-      break;
-
-    case 'circle':
-      ElementTools = (
-        <CircleTools
-          canvas={canvas}
-          canvasUpdated={updated}
-          selectedElement={selectedElement}
-          svgUpdate={svgUpdate}
-          onClose={onClose}
-        />
-      );
-      break;
-
-    case 'ellipse':
-      ElementTools = (
-        <EllipseTools
-          canvas={canvas}
-          canvasUpdated={updated}
-          selectedElement={selectedElement}
-          svgUpdate={svgUpdate}
-          onClose={onClose}
-        />
-      );
-      break;
-
-    case 'text':
-      ElementTools = (
-        <TextTools
-          selectedElement={selectedElement}
-          handleChange={handleChange}
-        />
-      );
-      break;
-
-    case 'path':
-      ElementTools = (
-        <PathTools
-          canvas={canvas}
-          canvasUpdated={updated}
-          selectedElement={selectedElement}
-          svgUpdate={svgUpdate}
-          onClose={onClose}
-        />
-      );
-      break;
-
-    case 'g':
-    case 'image':
-    case 'line':
-    case 'polygon':
-    case 'polyline':
-    case 'textPath':
-    default:
-      ElementTools = selectedElement && (
-        <AttributesTools
-          selectedElement={selectedElement}
-          handleChange={handleChange}
-          attributes={{}}
-        />
-      );
-  }
 
   const handlePlaceChange = (value) => {
     dispatch(setCampusAction(value));
@@ -403,11 +309,9 @@ const TopBar = ({ svgUpdate, onClose }) => {
             style={{
               fontSize: 24,
               marginLeft: 6,
-              marginRight: 4,
+              marginRight: -6,
             }}
-          >
-            BMSTU
-          </div>
+          ></div>
 
           <div
             style={{
@@ -422,13 +326,17 @@ const TopBar = ({ svgUpdate, onClose }) => {
           >
             {''}
           </div>
-          <IconButton icon="Exit" onClick={onClickClose} />
+          <IconButton
+            icon="Exit"
+            onClick={onClickClose}
+            tooltipPlace={'bottom'}
+          />
           <IconButton
             icon="Download"
-            className={updated ? 'enabled' : 'disabled'}
+            tooltipPlace={'bottom'}
             onClick={() => {
               download(
-                `${currentCampus}_${currentFloor}`,
+                `${currentCampus}_${currentFloor}.svg`,
                 canvas.getSvgString()
               );
             }}
@@ -449,11 +357,13 @@ const TopBar = ({ svgUpdate, onClose }) => {
             <IconButton
               icon="Publish"
               onClick={() => setIsStatusModalOpen(true)}
+              tooltipPlace={'bottom'}
             />
           ) : (
             <IconButton
               icon="Draft"
               onClick={() => changeSchemeStatus('Draft')}
+              tooltipPlace={'bottom'}
             />
           )}
         </div>
@@ -508,7 +418,11 @@ const TopBar = ({ svgUpdate, onClose }) => {
             justifyContent: 'center',
           }}
         >
-          <IconButton icon="Plus" onClick={() => showModal()} />
+          <IconButton
+            icon="Plus"
+            onClick={() => showModal()}
+            tooltipPlace={'bottom'}
+          />
         </div>
         <div
           className="top-bar-container"
@@ -519,7 +433,11 @@ const TopBar = ({ svgUpdate, onClose }) => {
             justifyContent: 'center',
           }}
         >
-          <IconButton icon="Save" onClick={() => saveSvgString()} />
+          <IconButton
+            icon="Save"
+            onClick={() => saveSvgString()}
+            tooltipPlace={'bottom'}
+          />
         </div>
         <div
           className="top-bar-container"
@@ -530,7 +448,11 @@ const TopBar = ({ svgUpdate, onClose }) => {
             justifyContent: 'center',
           }}
         >
-          <IconButton icon="Delete" onClick={() => deleteFloor()} />
+          <IconButton
+            icon="Delete"
+            onClick={() => deleteFloor()}
+            tooltipPlace={'bottom'}
+          />
         </div>
       </div>
       <div style={{ flex: 1 }}>

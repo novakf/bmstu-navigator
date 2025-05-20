@@ -240,7 +240,7 @@ export const selectUpdated = (state: RootState) => state.editor.updated;
 export const selectSaved = (state: RootState) => state.editor.saved;
 
 export const selectCurrScheme = (state: RootState) => {
-  const found = state.editor.schemes.find(
+  const found = state.editor.schemes?.find(
     (scheme) =>
       scheme.corpus === state.editor.corpus &&
       scheme.floor === state.editor.floor
@@ -250,7 +250,7 @@ export const selectCurrScheme = (state: RootState) => {
 };
 
 export const selectCurrSchemeStatus = (state: RootState) => {
-  const found = state.editor.schemes.find(
+  const found = state.editor.schemes?.find(
     (scheme) =>
       scheme.corpus === state.editor.corpus &&
       scheme.floor === state.editor.floor
@@ -300,12 +300,10 @@ export const initEditor = createAsyncThunk('initEditor', (_, { dispatch }) => {
     JSON.parse(localStorage.getItem('uoLinks') || 'null') || uoLinksMock;
   const uoHolders =
     JSON.parse(localStorage.getItem('uoHolders') || 'null') || uoHoldersMock;
-  const schemes = JSON.parse(localStorage.getItem('schemes') || 'null');
 
   dispatch(setUoItemsAction(uoItems));
   dispatch(setUoLinksAction(uoLinks));
   dispatch(setUoHoldersAction(uoHolders));
-  dispatch(setSchemesAction(schemes));
 });
 
 export const {

@@ -4,12 +4,13 @@ import './index.css';
 import './App.css';
 import reportWebVitals from './reportWebVitals';
 import { Provider } from 'react-redux';
-import { store } from './state';
+import { store, persistor } from './state';
 import { RouterProvider, createBrowserRouter } from 'react-router-dom';
 import EditorNew from './pages/EditorNew';
 import { Viewer } from './pages/Viewer';
 import { Auth } from './pages/Auth';
 import { Editor } from './pages/Editor';
+import { PersistGate } from 'redux-persist/integration/react';
 
 const router = createBrowserRouter([
   {
@@ -34,10 +35,17 @@ const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement
 );
 
+// persistor.pause();
+// persistor.flush().then(() => {
+//   return persistor.purge();
+// });
+
 root.render(
   //<React.StrictMode>
   <Provider store={store}>
-    <RouterProvider router={router} />
+    <PersistGate loading={null} persistor={persistor}>
+      <RouterProvider router={router} />
+    </PersistGate>
     {/* <App /> */}
   </Provider>
   //</React.StrictMode>

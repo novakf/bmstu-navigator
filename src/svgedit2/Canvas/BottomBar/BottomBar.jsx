@@ -12,7 +12,7 @@ const zoomOptions = [10, 20, 30, 40, 50, 60, 70, 80, 90, 100, 150, 200];
 
 const BottomBar = () => {
   const [canvasState, canvasStateDispatcher] = React.useContext(canvasContext);
-  const { layerName, mode, zoom, selectedElement } = canvasState;
+  const { layerName, mode, zoom, selectedElement, canvas } = canvasState;
 
   const onChangeFillColor = (color) => {
     canvasStateDispatcher({ type: 'color', colorType: 'fill', color });
@@ -91,6 +91,30 @@ const BottomBar = () => {
           onChange={onChangeStrokeColor}
           value={selectedStrokeColor}
           title="Stroke"
+        />
+      </div>
+      <div
+        className="bottom-bar-container"
+        style={{
+          opacity: selectedElement ? 1 : 0,
+          marginRight: 'auto',
+          marginLeft: 4,
+          zIndex: 0,
+        }}
+      >
+        <IconButton
+          tooltipPlace={'top'}
+          icon="Foreground"
+          onClick={() => {
+            canvas.moveToTopSelectedElement();
+          }}
+        />
+        <IconButton
+          tooltipPlace={'top'}
+          icon="Background"
+          onClick={() => {
+            canvas.moveToBottomSelectedElement();
+          }}
         />
       </div>
       <div className="bottom-bar-container">

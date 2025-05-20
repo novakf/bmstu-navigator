@@ -30,7 +30,7 @@ export const Auth: FC = () => {
 
     setError(false)
     dispatch(setUserAction({ id: "user", login }))
-    navigate("/editor")
+    window.location.pathname = '/editor'
   }
 
   return (

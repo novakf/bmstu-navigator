@@ -6,16 +6,17 @@ import { Provider, useDispatch } from 'react-redux';
 import { AppDispatch, store } from '../state';
 import { initEditor, setSchemesAction } from '../state/editor/slice';
 import { useCurrentUser } from '../state/user';
-import { Navigate } from 'react-router-dom';
+import { Navigate, useNavigate } from 'react-router-dom';
 import Editor from '../svgedit2/editor.class';
 import { SeCMenuDialog } from '../svgedit/editor/dialogs/cmenuDialog.js';
 import { useTranslation } from 'react-i18next';
-
 
 const EditorNew: FC = () => {
   const dispatch = useDispatch<AppDispatch>();
   const user = useCurrentUser();
   const { t, i18n } = useTranslation();
+
+  const navigate = useNavigate();
 
   useEffect(() => {
     const container = document.getElementById('editcontainer') as HTMLElement;
@@ -39,6 +40,7 @@ const EditorNew: FC = () => {
     );
 
     window.editorNew = svgEditor;
+    window.navigate = navigate;
 
     const svgContent = fetch('./arbelos.svg')
       .then((response) => response.text())

@@ -7,9 +7,8 @@ import { initEditor } from '../state/editor/slice';
 import { AppDispatch } from '../state';
 import { RouteToolbar } from '../components/viewer/route-toolbar';
 import { RouteStepper } from '../components/viewer/route-stepper';
-import IconButton from '../svgedit2/Canvas/IconButton/IconButton';
 import { Button, Tooltip } from 'antd';
-import { EditOutlined, SearchOutlined } from '@ant-design/icons';
+import { EditOutlined } from '@ant-design/icons';
 import { useNavigate } from 'react-router-dom';
 
 export const Viewer: FC = () => {

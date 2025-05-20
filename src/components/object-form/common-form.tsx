@@ -51,7 +51,7 @@ export const CommonFormItems = {
     if (!se?.element) return null;
 
     return (
-      <Form.Item name={'svgId'} initialValue={se.element.id}>
+      <Form.Item name={'svgId'} hidden initialValue={se.element.id}>
         <Input />
       </Form.Item>
     );

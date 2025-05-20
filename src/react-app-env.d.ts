@@ -8,5 +8,6 @@ declare global {
     svgEditor: EditorNew;
     editor: Editor;
     editorNew: EditorNew;
+    navigate: any;
   }
 }

@@ -136,7 +136,7 @@ const LeftBar = () => {
           onClick={() => setMode('select')}
         />
         <IconButton
-          icon="Ellipse"
+          icon="Circle"
           className={mode === 'circle' ? 'selected' : ''}
           onClick={() => setMode('circle')}
         />

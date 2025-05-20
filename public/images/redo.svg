@@ -1,1 +1,9 @@
-<svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" viewBox="0 0 24 24" fill="none" class="c-hdkwsG c-hdkwsG-dvzWZT-size-medium c-hdkwsG-OzWqL-weight-normal c-hdkwsG-iPJLV-css"><path stroke="currentColor" stroke-linejoin="bevel" stroke-width="var(--svg-stroke-width)" d="M13 15h8v-8"></path><path fill="currentColor" d="m20 14 .8944-.4472a1.0024 1.0024 0 0 0-.0972-.1566l-.7972.6038Zm-8-6c-3.075 0-5.562 1.7019-7.2146 3.2759-.8374.7974-1.4925 1.5919-1.9385 2.1866a15.6907 15.6907 0 0 0-.5146.7264 10.4537 10.4537 0 0 0-.1738.2703l-.0107.0175-.0033.0055-.0012.0019-.0004.0008c-.0002.0003-.0004.0006.8571.5151.8575.5145.8573.5148.8572.515l-.0002.0003a.0018.0018 0 0 1-.0002.0003l.0006-.001.005-.0083.0254-.0406a8.5173 8.5173 0 0 1 .1104-.1702c.0997-.15.2504-.3687.4487-.633.3977-.5303.98-1.2358 1.7178-1.9384 1.4973-1.426 3.5103-2.7241 5.8353-2.7241v-2Zm8.7972 5.3962c-1.27-1.6766-4.2494-5.3962-8.7972-5.3962v2c3.4533 0 5.8872 2.8668 7.2028 4.6038l1.5944-1.2076Zm-1.6916 1.051.5 1 1.7888-.8944-.5-1-1.7888.8944Z"></path></svg>
+<svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
+  <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
+  <g id="SVGRepo_iconCarrier">
+    <path
+      d="M20 9V15M20 15H14M20 15C17.6726 12.9114 15.5171 10.5468 12.2547 10.0878C10.3223 9.81593 8.35395 10.1794 6.64613 11.1234C4.93832 12.0675 3.58359 13.5409 2.78607 15.3218"
+      stroke="#000000" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
+  </g>
+</svg>

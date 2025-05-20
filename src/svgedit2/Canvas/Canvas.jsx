@@ -222,7 +222,7 @@ const Canvas = ({ svgContent, locale, svgUpdate, onClose, log }) => {
 
   const exitEditor = () => {
     onClose();
-    window.location.href = '/';
+    window.navigate('/');
   };
 
   return (
