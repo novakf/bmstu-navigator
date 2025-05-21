@@ -131,8 +131,18 @@ export const GenericUniverObjectForm: FC<Props> = ({ onSubmit, onCancel }) => {
       const textX = elX + elWidth / 2 - 15;
       const textY = elY + elHeight / 2 + 10;
 
+      const currText = document.querySelectorAll(`text.${values.id}`)[0];
+
+      console.log(currText);
+
+      if (currText) {
+        console.log('remove');
+        currText.remove();
+      }
+
       const textEl = document.createElement('text');
       textEl.setAttribute('font-size', '24');
+      textEl.setAttribute('class', values.id);
       textEl.setAttribute('id', canvasState.canvas.getNextId());
       textEl.setAttribute('x', textX.toString());
       textEl.setAttribute('y', textY.toString());

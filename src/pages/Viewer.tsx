@@ -17,6 +17,8 @@ export const Viewer: FC = () => {
   const dispatch = useDispatch<AppDispatch>();
   const [isInit, setIsInit] = useState(false);
 
+  const [zoom, setZoom] = useState(1);
+
   useEffect(() => {
     dispatch(initEditor());
     setIsInit(true);
@@ -27,8 +29,8 @@ export const Viewer: FC = () => {
   return (
     <Container>
       <TopBar svgUpdate={() => {}} onClose={() => {}} />
-      <Scheme />
-      <ZoomBar />
+      <Scheme zoom={zoom} setZoom={setZoom} />
+      <ZoomBar zoom={zoom} setZoom={setZoom} />
       <RouteStepper />
     </Container>
   );

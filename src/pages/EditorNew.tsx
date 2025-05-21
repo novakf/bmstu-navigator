@@ -18,6 +18,12 @@ const EditorNew: FC = () => {
 
   const navigate = useNavigate();
 
+  const oldCont = document.querySelector('.transform-container');
+
+  if (oldCont) {
+    oldCont.remove();
+  }
+
   useEffect(() => {
     const container = document.getElementById('editcontainer') as HTMLElement;
 

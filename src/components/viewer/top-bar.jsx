@@ -93,7 +93,7 @@ const TopBar = () => {
   }, [schemes]);
 
   return (
-    <div className="top-bar" style={{ marginLeft: 7 }}>
+    <div className="top-bar" style={{ marginLeft: 7, position: 'relative' }}>
       <div style={{ flex: 1 }}>
         <div className="top-bar-container" style={{ flex: 1 }}>
           <Icon name={'Logo'} />
@@ -191,7 +191,12 @@ const TopBar = () => {
       </div>
       <div style={{ flex: 1 }}>
         <div className="top-bar-container" style={{ marginLeft: 'auto' }}>
-          <IconButton icon="Avatar" text={'Профиль'} tooltipPlace={'bottom'} />
+          <IconButton
+            icon="Avatar"
+            text={'Профиль'}
+            tooltipPlace={'bottom'}
+            onClick={() => {}}
+          />
         </div>
       </div>
       <StyledRouteBar $active={showRouteBar}>
@@ -216,6 +221,7 @@ const StyledRouteBar = styled.div`
   align-items: center;
   opacity: 0;
   width: fit-content;
+  z-index: 2;
 
   ${(p) =>
     p.$active &&

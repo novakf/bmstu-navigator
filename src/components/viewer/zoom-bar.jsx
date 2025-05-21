@@ -6,21 +6,40 @@ import { styled } from 'styled-components';
 
 const zoomOptions = [10, 20, 30, 40, 50, 60, 70, 80, 90, 100, 150, 200];
 
-const ZoomBar = () => {
+const ZoomBar = ({ zoom, setZoom }) => {
   return (
     <Container>
       <IconButton
         tooltipPlace={'top'}
         icon="Minus"
         text="Уменьшить"
-        onClick={() => {}}
+        onClick={() => {
+          if (zoom > 0.5) setZoom(zoom - 0.1);
+        }}
       />
-      <IconButton onClick={() => {}}>%</IconButton>
+      <IconButton
+        icon={''}
+        onClick={() => {
+          setZoom(1);
+          const transformContainer = document.querySelector(
+            '.transform-container'
+          );
+
+          if (!transformContainer) return;
+
+          transformContainer.style.left = 0;
+          transformContainer.style.top = 0;
+        }}
+      >
+        {Math.round(zoom * 100)}%
+      </IconButton>
       <IconButton
         tooltipPlace={'top'}
         icon="Plus"
         text="Увеличить"
-        onClick={() => {}}
+        onClick={() => {
+          if (zoom < 3) setZoom(zoom + 0.1);
+        }}
       />
     </Container>
   );
@@ -34,7 +53,7 @@ const Container = styled.div`
   display: flex;
   flex-direction: row;
   align-self: center;
-  z-index: 1;
+  z-index: 2;
   background-color: #fff;
   box-shadow: 0 2px 4px 0px #22242814;
   border: 0.5px solid #e9eaef;

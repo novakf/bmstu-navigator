@@ -19,7 +19,10 @@ const floorSchemeMap: Record<string, string> = {
   '4': level4n,
 };
 
-export const Scheme: FC = () => {
+export const Scheme: FC<{
+  zoom: number;
+  setZoom: (v: number) => void;
+}> = ({ zoom, setZoom }) => {
   const dispatch = useDispatch();
   const uoItems = useUoItems();
 
@@ -32,7 +35,18 @@ export const Scheme: FC = () => {
   const [transformLeft, setTransformLeft] = useState<number>(0);
   const [transformTop, setTransformTop] = useState<number>(0);
 
-  const [zoom, setZoom] = useState(1);
+  useEffect(() => {
+    const canvas = document.querySelector<HTMLElement>('.canvas');
+
+    if (!canvas) return;
+
+    const rect = canvas.getBoundingClientRect();
+
+    canvas.style.transformOrigin = `${rect.width / 2 / zoom}px ${
+      rect.height / 2 / zoom
+    }px`;
+    canvas.style.transform = `scale(${zoom})`;
+  }, [zoom]);
 
   useEffect(() => {
     const transformContainer = document.querySelector<HTMLElement>(
@@ -44,19 +58,14 @@ export const Scheme: FC = () => {
 
     const wheelListener = (e: WheelEvent) => {
       if (e.deltaY > 0) {
+        if (zoom < 0.5) return;
         setZoom(zoom - 0.02);
       } else {
+        if (zoom > 3) return;
         setZoom(zoom + 0.02);
       }
 
-      if (zoom < 0.5) return;
-      if (zoom > 4) return;
-
       const rect = canvas.getBoundingClientRect();
-
-      console.log(
-        `scale(${zoom}) translate(${transformLeft}px, ${transformTop}px);`
-      );
 
       canvas.style.transformOrigin = `${rect.width / 2 / zoom}px ${
         rect.height / 2 / zoom
@@ -69,7 +78,6 @@ export const Scheme: FC = () => {
       transformContainer.style.top = e.pageY - shiftY + 'px';
       setTransformLeft(e.pageX - shiftX);
       setTransformTop(e.pageY - shiftY);
-      console.log(e.pageX - shiftX, e.pageY - shiftY);
     };
 
     const getCoords = (elem: HTMLElement) => {
@@ -122,8 +130,6 @@ export const Scheme: FC = () => {
 
     const tooltip = toolTipRef.current;
 
-    if (!tooltip) return;
-
     schemeContainer.innerHTML = currFloorSvg;
 
     const gLayer = schemeContainer.querySelector('svg');
@@ -148,6 +154,8 @@ export const Scheme: FC = () => {
         return;
       }
 
+      if (!tooltip) return;
+
       let toolTipText = text;
 
       if (el) tooltip.innerHTML = text;
@@ -161,6 +169,7 @@ export const Scheme: FC = () => {
     };
 
     const hideTooltip = () => {
+      if (!tooltip) return;
       tooltip.style.opacity = '0';
     };
 
@@ -171,9 +180,11 @@ export const Scheme: FC = () => {
 
       el.classList.add('interactive');
       el.addEventListener('click', (e) => {
+        console.log(interObject.id);
         dispatch(setRouteEdgeAction(interObject.id));
       });
       el.addEventListener('mouseenter', (e) => {
+        console.log(interObject);
         showTooltip({ text: interObject.description, el: el });
       });
       el.addEventListener('mouseleave', (e) => {
@@ -188,6 +199,25 @@ export const Scheme: FC = () => {
 
       el.style.display = 'none';
     }
+
+    return () => {
+      for (const interObject of interObjects) {
+        const el = document.querySelector<HTMLElement>(`#${interObject.svgId}`);
+
+        if (!el) continue;
+
+        el.removeEventListener('click', (e) => {
+          e.stopPropagation();
+          dispatch(setRouteEdgeAction(interObject.id));
+        });
+        el.removeEventListener('mouseenter', (e) => {
+          showTooltip({ text: interObject.description, el: el });
+        });
+        el.removeEventListener('mouseleave', (e) => {
+          hideTooltip();
+        });
+      }
+    };
   }, [currFloorSvg, toolTipRef, transformLeft, transformTop]);
 
   return (
@@ -202,7 +232,6 @@ export const Scheme: FC = () => {
 
 const Tooltip = styled.div`
   position: absolute;
-  pointer-events: none;
   background: #fff;
   border-radius: 8px;
   border-top-left-radius: 0;
@@ -210,6 +239,7 @@ const Tooltip = styled.div`
   opacity: 0;
   transition: 0.3s;
   box-shadow: 0px 5px 16px 0px rgba(34, 60, 80, 0.28);
+  pointer-events: none;
 `;
 
 const Container = styled.div`
@@ -218,6 +248,7 @@ const Container = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
+  z-index: 1 !important;
 `;
 
 const Canvas = styled.div`

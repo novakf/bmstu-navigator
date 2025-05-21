@@ -99,6 +99,7 @@ const Canvas = ({ svgContent, locale, svgUpdate, onClose, log }) => {
     ) {
       event.stopPropagation();
       event.preventDefault();
+      
       dispatchCanvasState({ type: 'deleteSelectedElements' });
     }
   };
