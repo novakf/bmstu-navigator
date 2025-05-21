@@ -122,6 +122,27 @@ export const GenericUniverObjectForm: FC<Props> = ({ onSubmit, onCancel }) => {
         colorType: 'fill',
         color: '#bcb9b2',
       });
+
+      const elX = Number(selectedElement.element.getAttribute('x'));
+      const elY = Number(selectedElement.element.getAttribute('y'));
+      const elWidth = Number(selectedElement.element.getAttribute('width'));
+      const elHeight = Number(selectedElement.element.getAttribute('height'));
+
+      const textX = elX + elWidth / 2 - 15;
+      const textY = elY + elHeight / 2 + 10;
+
+      const textEl = document.createElement('text');
+      textEl.setAttribute('font-size', '24');
+      textEl.setAttribute('id', canvasState.canvas.getNextId());
+      textEl.setAttribute('x', textX.toString());
+      textEl.setAttribute('y', textY.toString());
+      textEl.innerText = values.name;
+
+      const svgContent = canvasState.canvas.getSvgContent();
+      const elements = svgContent.querySelector('g');
+      elements.insertAdjacentHTML('beforeend', textEl.outerHTML);
+
+      canvasState.canvas.changeSvgContent();
     }
 
     if (values.type === UniverObjectType.Hallway) {

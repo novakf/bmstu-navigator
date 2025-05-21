@@ -42,9 +42,7 @@ const EditorNew: FC = () => {
     window.editorNew = svgEditor;
     window.navigate = navigate;
 
-    const svgContent = fetch('./arbelos.svg')
-      .then((response) => response.text())
-      .then((svgContent) => svgEditor.load(svg.outerHTML));
+    svgEditor.load(svg.outerHTML);
   }, []);
 
   return <div id="editcontainer"></div>;

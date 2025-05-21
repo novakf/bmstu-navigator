@@ -112,7 +112,19 @@ const TopBar = ({ svgUpdate, onClose }) => {
   };
 
   const handlePlaceChange = (value) => {
+    const newFloors = [];
+    schemes.map((scheme) => {
+      if (scheme.corpus === value) {
+        newFloors.push(scheme.floor);
+      }
+    });
+    const newFloorValues = newFloors.map((floor) => {
+      return { value: floor, label: floor };
+    });
+
+    dispatch(setFloorAction(newFloors[0]));
     dispatch(setCampusAction(value));
+    setFloorValues(newFloorValues);
   };
 
   const showModal = () => {
@@ -122,11 +134,15 @@ const TopBar = ({ svgUpdate, onClose }) => {
   const [items, setItems] = useState(campusArray);
   const [name, setName] = useState('');
   const [newFloor, setNewFloor] = useState(null);
+  const [newCampus, setNewCampus] = useState(null);
   const [schemeSvgFile, setSchemeSvgFile] = useState(null);
   const [schemeSvgStr, setSchemeSvgStr] = useState('');
   const inputRef = useRef(null);
   const onNameChange = (event) => {
     setName(event.target.value);
+  };
+  const onNewCampusChange = (value) => {
+    setNewCampus(value);
   };
   const addItem = (e) => {
     e.preventDefault();
@@ -160,18 +176,20 @@ const TopBar = ({ svgUpdate, onClose }) => {
 
     dispatch(
       setNewSchemeAction({
-        corpus: name,
+        corpus: newCampus,
         floor: newFloor,
         svgFile: svgStr,
       })
     );
     dispatch(setFloorAction(newFloor));
-    dispatch(setCampusAction(name));
+    dispatch(setCampusAction(newCampus));
 
     setNewFloor('');
     setSchemeSvgFile(null);
     setSchemeSvgStr('');
     setIsModalOpen(false);
+    setName('');
+    setItems(campusArray);
   };
 
   const handleCancel = () => {
@@ -222,13 +240,27 @@ const TopBar = ({ svgUpdate, onClose }) => {
       return floor.value !== currentFloor;
     });
 
-    console.log('new', newFloors);
+    const newCorpuses = campusArray.filter((campus) => {
+      return campus !== currentCampus;
+    });
 
     if (newFloors.length > 0) {
       dispatch(setFloorAction(newFloors[0].value));
     } else {
-      dispatch(setFloorAction(null));
-      dispatch(setCampusAction(null));
+      if (newCorpuses.length > 0) {
+        const newFloors = [];
+        schemes.map((scheme) => {
+          if (scheme.corpus === newCorpuses[0]) {
+            newFloors.push(scheme.floor);
+          }
+        });
+
+        dispatch(setCampusAction(newCorpuses[0]));
+        dispatch(setFloorAction(newFloors[0]));
+      } else {
+        dispatch(setFloorAction(null));
+        dispatch(setCampusAction(null));
+      }
     }
 
     dispatch(
@@ -517,6 +549,7 @@ const TopBar = ({ svgUpdate, onClose }) => {
             </>
           )}
           options={items.map((item) => ({ label: item, value: item }))}
+          onChange={onNewCampusChange}
         />
         <div style={{ marginTop: 10, marginBottom: 4 }}>Выберите этаж:</div>
         <InputNumber

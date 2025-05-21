@@ -176,7 +176,13 @@ const editorSlice = createSlice({
       { payload }: PayloadAction<{ corpus: string; floor: number }>
     ) {
       const newSchemes = state.schemes.filter((obj) => {
-        return obj.corpus === payload.corpus && obj.floor !== payload.floor;
+        if (obj.corpus === payload.corpus) {
+          return obj.floor !== payload.floor;
+        }
+
+        if (obj.corpus !== payload.corpus) {
+          return true;
+        }
       });
 
       state.schemes = newSchemes;
