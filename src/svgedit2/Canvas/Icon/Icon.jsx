@@ -44,13 +44,23 @@ const publish = './images/publish.svg';
 const draft = './images/draft.svg';
 const background = './images/background.svg';
 const foreground = './images/foreground.svg';
-const link = './images/link.svg'
+const link = './images/link.svg';
+const edit = './images/edit.svg';
+const route = './images/route.svg';
+const ok = './images/ok.svg';
+const clear = './images/clear.svg';
 
-const logo = './images/logo-bmstu.png';
+const logo = './images/logo.svg';
 const avatar = './images/avatar.png';
 
 const Icon = ({ name, ...otherProps }) => {
   switch (name) {
+    case 'Ok':
+      return <img src={ok} alt="ok" {...otherProps} />;
+    case 'Clear':
+      return <img src={clear} alt="clear" {...otherProps} />;
+    case 'Edit':
+      return <img src={edit} alt="edit" {...otherProps} />;
     case 'Select':
       return <img src={select} alt="select" {...otherProps} />;
     case 'Line':
@@ -79,6 +89,8 @@ const Icon = ({ name, ...otherProps }) => {
       return <img src={undo} alt="undo" {...otherProps} />;
     case 'Redo':
       return <img src={redo} alt="redo" {...otherProps} />;
+    case 'Route':
+      return <img src={route} alt="route" {...otherProps} />;
     case 'Link':
       return <img src={link} alt="link" {...otherProps} />;
     case 'Group':
@@ -145,15 +157,7 @@ const Icon = ({ name, ...otherProps }) => {
         />
       );
     case 'Logo':
-      return (
-        <img
-          src={logo}
-          alt="logo"
-          {...otherProps}
-          width={28}
-          style={{ margin: '0 4px 0 4px' }}
-        />
-      );
+      return <img src={logo} alt="logo" {...otherProps} width={40} />;
     case 'Avatar':
       return <img src={avatar} alt="avatar" {...otherProps} width={40} />;
     default:

@@ -7,6 +7,7 @@ export const AuditoriumForm = () => {
       <CommonFormItems.Id />
       <CommonFormItems.SvgId />
       <CommonFormItems.Name />
+      <CommonFormItems.Description />
       <CommonFormItems.Floor />
       <CommonFormItems.Corpus />
     </>

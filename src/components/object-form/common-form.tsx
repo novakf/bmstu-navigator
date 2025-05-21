@@ -27,6 +27,23 @@ export const CommonFormItems = {
       </Form.Item>
     );
   },
+  Description: () => {
+    const se = useSelectedElement();
+    const ref = useRef<InputRef | null>(null);
+    const uoItems = useUoItems();
+
+    let value = undefined;
+
+    if (se?.element) {
+      value = uoItems[se.element?.id.replace('svg_', '')]?.description;
+    }
+
+    return (
+      <Form.Item name={'description'} label={'Описание'} initialValue={value}>
+        <Input ref={ref} value={'sdf'} />
+      </Form.Item>
+    );
+  },
   Id: () => {
     const se = useSelectedElement();
     const ref = useRef<InputRef | null>(null);

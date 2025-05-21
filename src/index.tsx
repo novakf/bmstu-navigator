@@ -14,25 +14,9 @@ import { PersistGate } from 'redux-persist/integration/react';
 import '@fontsource/inter'; // Defaults to weight 400
 import '@fontsource/inter/400.css'; // Specify weight
 import '@fontsource/inter/400-italic.css'; // Specify weight and style
-
-const router = createBrowserRouter([
-  {
-    path: '/',
-    element: <Viewer />,
-  },
-  {
-    path: '/auth',
-    element: <Auth />,
-  },
-  {
-    path: '/editor',
-    element: <EditorNew />,
-  },
-  {
-    path: '/editor2',
-    element: <Editor />,
-  },
-]);
+import TopBar from './components/viewer/top-bar';
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import App from './App';
 
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement
@@ -47,7 +31,7 @@ root.render(
   //<React.StrictMode>
   <Provider store={store}>
     <PersistGate loading={null} persistor={persistor}>
-      <RouterProvider router={router} />
+      <App />
     </PersistGate>
     {/* <App /> */}
   </Provider>

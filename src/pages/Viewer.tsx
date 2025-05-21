@@ -10,6 +10,8 @@ import { RouteStepper } from '../components/viewer/route-stepper';
 import { Button, Tooltip } from 'antd';
 import { EditOutlined } from '@ant-design/icons';
 import { useNavigate } from 'react-router-dom';
+import TopBar from '../components/viewer/top-bar';
+import ZoomBar from '../components/viewer/zoom-bar';
 
 export const Viewer: FC = () => {
   const dispatch = useDispatch<AppDispatch>();
@@ -20,25 +22,14 @@ export const Viewer: FC = () => {
     setIsInit(true);
   }, []);
 
-  const navigate = useNavigate();
-
   if (!isInit) return null;
 
   return (
     <Container>
-      <RouteToolbar />
+      <TopBar svgUpdate={() => {}} onClose={() => {}} />
       <Scheme />
-      <FloorChoose />
+      <ZoomBar />
       <RouteStepper />
-      <Tooltip title="Редактор">
-        <Button
-          size="large"
-          type="primary"
-          icon={<EditOutlined />}
-          style={{ position: 'absolute', right: 10, bottom: 10 }}
-          onClick={() => navigate('/editor')}
-        />
-      </Tooltip>
     </Container>
   );
 };

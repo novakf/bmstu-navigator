@@ -16,11 +16,11 @@ export const getUOById = (id: string): UniverObject | null => {
 }
 
 export const isPoint = (uo: UniverObject): uo is UniverPointObject => {
-  return uo.type.endsWith("point")
+  return uo?.type.endsWith("point")
 }
 
 export const isGuide = (uo: UniverObject): uo is UniverGuideObject => {
-  return uo.type === "guide"
+  return uo?.type === "guide"
 }
 
 export const isConnector = (uo: UniverObject) => {

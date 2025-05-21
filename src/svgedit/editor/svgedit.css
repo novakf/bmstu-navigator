@@ -62,7 +62,6 @@
 #workarea {
   grid-area: workarea;
   background-color: #A0A0A0;
-  border: 1px solid var(--border-color);
   overflow: auto;
   text-align: center;
 }

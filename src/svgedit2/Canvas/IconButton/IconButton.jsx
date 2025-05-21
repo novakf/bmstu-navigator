@@ -13,11 +13,17 @@ const IconButton = ({
   icon,
   children,
   text,
+  disabled,
 }) => {
   const title = text ? <span>{text}</span> : undefined;
 
   return (
-    <button type="button" className={className} onClick={onClick}>
+    <button
+      type="button"
+      className={className}
+      onClick={onClick}
+      disabled={disabled}
+    >
       <Tooltip placement={tooltipPlace || 'right'} title={title}>
         {children ? children : <Icon name={icon} className="OIe-tools-icon" />}
       </Tooltip>

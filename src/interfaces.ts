@@ -32,6 +32,7 @@ export type UniverObject = {
   name: string;
   type: UniverObjectType;
   floor: number;
+  description?: string;
   // for points
   xCoord?: number;
   yCoord?: number;

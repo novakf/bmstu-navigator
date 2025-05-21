@@ -508,7 +508,7 @@ const TopBar = ({ svgUpdate, onClose }) => {
       </div>
       <div style={{ flex: 1 }}>
         <div className="top-bar-container" style={{ marginLeft: 'auto' }}>
-          <IconButton icon="Avatar" text={'Профиль'} />
+          <IconButton icon="Avatar" text={'Профиль'} tooltipPlace={'bottom'} />
         </div>
       </div>
       <StyledModal
