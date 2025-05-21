@@ -58,6 +58,9 @@ export const Scheme: FC = () => {
         `scale(${zoom}) translate(${transformLeft}px, ${transformTop}px);`
       );
 
+      canvas.style.transformOrigin = `${rect.width / 2 / zoom}px ${
+        rect.height / 2 / zoom
+      }px`;
       canvas.style.transform = `scale(${zoom})`;
     };
 
@@ -66,6 +69,7 @@ export const Scheme: FC = () => {
       transformContainer.style.top = e.pageY - shiftY + 'px';
       setTransformLeft(e.pageX - shiftX);
       setTransformTop(e.pageY - shiftY);
+      console.log(e.pageX - shiftX, e.pageY - shiftY);
     };
 
     const getCoords = (elem: HTMLElement) => {
