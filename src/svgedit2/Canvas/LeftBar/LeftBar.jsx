@@ -5,12 +5,24 @@ import './LeftBar.less';
 
 import { canvasContext } from '../Context/canvasContext.jsx';
 import updateCanvas from '../editor/updateCanvas.js';
+import config from '../editor/config.js';
 
 const LeftBar = () => {
   const [canvasState, canvasStateDispatcher] = React.useContext(canvasContext);
-  const { canvas, mode } = canvasState;
+  const { canvas, mode, selectedElement, multiselected } = canvasState;
 
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
+
+  const moveSelected = (dx, dy) => {
+    if (selectedElement || multiselected) {
+      // Use grid snap value regardless of zoom level
+      const multi = canvas.getZoom() * config.snappingStep;
+      dx *= multi;
+      dy *= multi;
+
+      canvas.moveSelectedElements(dx, dy);
+    }
+  };
 
   const setMode = (newMode) =>
     canvasStateDispatcher({ type: 'mode', mode: newMode });
@@ -49,6 +61,22 @@ const LeftBar = () => {
         event.preventDefault();
         onClickRedo(event);
       }
+      if (event.ctrlKey && event.key === 'ArrowLeft') {
+        event.preventDefault();
+        moveSelected(-1, 0);
+      }
+      if (event.ctrlKey && event.key === 'ArrowRight') {
+        event.preventDefault();
+        moveSelected(1, 0);
+      }
+      if (event.ctrlKey && event.key === 'ArrowUp') {
+        event.preventDefault();
+        moveSelected(0, -1);
+      }
+      if (event.ctrlKey && event.key === 'ArrowDown') {
+        event.preventDefault();
+        moveSelected(0, 1);
+      }
     });
 
     return document.removeEventListener('keydown', (event) => {
@@ -65,7 +93,7 @@ const LeftBar = () => {
         onClickRedo(event);
       }
     });
-  }, [canvas]);
+  }, [canvas, selectedElement]);
 
   const [imgSrc, setimgSrc] = useState(null);
   const imageRef = useRef(null);
