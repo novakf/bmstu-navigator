@@ -29,8 +29,12 @@ export const Scheme: FC = () => {
   const schemes = useSchemes();
   const toolTipRef = useRef<HTMLDivElement>(null);
 
+  const [transformLeft, setTransformLeft] = useState<number>(0);
+  const [transformTop, setTransformTop] = useState<number>(0);
+
+  const [zoom, setZoom] = useState(1);
+
   useEffect(() => {
-    let zoom = 1;
     const transformContainer = document.querySelector<HTMLElement>(
       '.transform-container'
     );
@@ -40,23 +44,72 @@ export const Scheme: FC = () => {
 
     const wheelListener = (e: WheelEvent) => {
       if (e.deltaY > 0) {
-        zoom += 0.02;
+        setZoom(zoom - 0.02);
       } else {
-        zoom -= 0.02;
+        setZoom(zoom + 0.02);
       }
 
       if (zoom < 0.5) return;
       if (zoom > 4) return;
 
+      const rect = canvas.getBoundingClientRect();
+
+      console.log(
+        `scale(${zoom}) translate(${transformLeft}px, ${transformTop}px);`
+      );
+
       canvas.style.transform = `scale(${zoom})`;
     };
 
+    const moveAt = (e: MouseEvent, shiftX: number, shiftY: number) => {
+      transformContainer.style.left = e.pageX - shiftX + 'px';
+      transformContainer.style.top = e.pageY - shiftY + 'px';
+      setTransformLeft(e.pageX - shiftX);
+      setTransformTop(e.pageY - shiftY);
+    };
+
+    const getCoords = (elem: HTMLElement) => {
+      // кроме IE8-
+      var box = elem.getBoundingClientRect();
+      return {
+        top: box.top + window.scrollY,
+        left: box.left + window.scrollX,
+      };
+    };
+
+    const dragAndDrop = (e: MouseEvent) => {
+      var coords = getCoords(transformContainer);
+      var shiftX = e.pageX - coords.left;
+      var shiftY = e.pageY - coords.top;
+
+      transformContainer.style.position = 'absolute';
+      document.body.appendChild(transformContainer);
+      moveAt(e, shiftX, shiftY);
+
+      document.onmousemove = function (e) {
+        moveAt(e, shiftX, shiftY);
+      };
+
+      transformContainer.onmouseup = function () {
+        document.onmousemove = null;
+        transformContainer.onmouseup = null;
+      };
+    };
+
     transformContainer.addEventListener('wheel', wheelListener);
+    transformContainer.addEventListener('mousedown', dragAndDrop);
+    transformContainer.addEventListener('dragstart', () => {
+      return false;
+    });
 
     return () => {
       transformContainer.removeEventListener('wheel', wheelListener);
+      transformContainer.removeEventListener('mousedown', dragAndDrop);
+      transformContainer.removeEventListener('dragstart', () => {
+        return false;
+      });
     };
-  }, []);
+  }, [transformLeft, transformTop, zoom]);
 
   useEffect(() => {
     const schemeContainer = document.querySelector('.scheme-container');
@@ -91,17 +144,15 @@ export const Scheme: FC = () => {
         return;
       }
 
-      let toolTipText =  text
+      let toolTipText = text;
 
-      if (el)
-
-      tooltip.innerHTML = text;
+      if (el) tooltip.innerHTML = text;
       tooltip.style.display = 'block';
       const elProps = el.getBoundingClientRect();
       const elWidth = elProps.width;
       const elHeight = elProps.height;
-      tooltip.style.left = elProps.left + elWidth / 2 + 'px';
-      tooltip.style.top = elProps.top + elHeight / 2 + 'px';
+      tooltip.style.left = elProps.left + elWidth / 2 - transformLeft + 'px';
+      tooltip.style.top = elProps.top + elHeight / 2 - transformTop + 'px';
       tooltip.style.opacity = '1';
     };
 
@@ -133,7 +184,7 @@ export const Scheme: FC = () => {
 
       el.style.display = 'none';
     }
-  }, [currFloorSvg, toolTipRef]);
+  }, [currFloorSvg, toolTipRef, transformLeft, transformTop]);
 
   return (
     <Container className={'transform-container'}>
@@ -158,7 +209,6 @@ const Tooltip = styled.div`
 `;
 
 const Container = styled.div`
-  overflow: hidden;
   width: 100%;
   height: 100vh;
   display: flex;
