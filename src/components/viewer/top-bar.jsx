@@ -42,7 +42,7 @@ const TopBar = ({ setLoginOpen }) => {
 
   let campuses = [];
   schemes.map((scheme) => {
-    if (!campuses.includes(scheme.corpus)) {
+    if (!campuses.includes(scheme.corpus) && scheme.status === 'Public') {
       campuses.push(scheme.corpus);
     }
   });
@@ -55,7 +55,7 @@ const TopBar = ({ setLoginOpen }) => {
   let floors = [];
 
   schemes.map((scheme) => {
-    if (scheme.corpus === currentCampus) {
+    if (scheme.corpus === currentCampus && scheme.status === 'Public') {
       floors.push(scheme.floor);
     }
   });
@@ -69,7 +69,7 @@ const TopBar = ({ setLoginOpen }) => {
   const handlePlaceChange = (value) => {
     const newFloors = [];
     schemes.map((scheme) => {
-      if (scheme.corpus === value) {
+      if (scheme.corpus === value && scheme.status === 'Public') {
         newFloors.push(scheme.floor);
       }
     });
@@ -88,7 +88,7 @@ const TopBar = ({ setLoginOpen }) => {
     console.log('schems', schemes);
 
     schemes.map((scheme) => {
-      if (scheme.corpus === currentCampus) {
+      if (scheme.corpus === currentCampus && scheme.status === 'Public') {
         floors.push(scheme.floor);
       }
     });

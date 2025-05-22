@@ -92,10 +92,39 @@ const TopBar = ({ svgUpdate, onClose }) => {
         return;
     }
     onClose();
+    if (currSchemeStatus !== 'Public') {
+      const newFloors = floorValues.filter((floor) => {
+        return floor.value !== currentFloor;
+      });
+
+      const newCorpuses = campusArray.filter((campus) => {
+        return campus !== currentCampus;
+      });
+
+      if (newFloors.length > 0) {
+        dispatch(setFloorAction(newFloors[0].value));
+      } else {
+        if (newCorpuses.length > 0) {
+          const newFloors = [];
+          schemes.map((scheme) => {
+            if (scheme.corpus === newCorpuses[0]) {
+              newFloors.push(scheme.floor);
+            }
+          });
+
+          dispatch(setCampusAction(newCorpuses[0]));
+          dispatch(setFloorAction(newFloors[0]));
+        } else {
+          dispatch(setFloorAction(null));
+          dispatch(setCampusAction(null));
+        }
+      }
+    }
   };
 
   useEffect(() => {
     console.log('currSVG', currFloorSvg);
+    setCurrStatus(currSchemeStatus);
     window.editorNew.load(currFloorSvg);
   }, [currFloorSvg, currentCampus, currentFloor]);
 

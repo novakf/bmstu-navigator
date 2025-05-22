@@ -293,7 +293,7 @@ export const useUoHolders = () => useSelector(selectUoHolders);
 
 export const useCurrFloorSvg = () => useSelector(selectCurrScheme);
 
-export const useCurrSchemeStatus = () => useSelector(selectCurrScheme);
+export const useCurrSchemeStatus = () => useSelector(selectCurrSchemeStatus);
 
 export const useUpdated = () => useSelector(selectUpdated);
 
