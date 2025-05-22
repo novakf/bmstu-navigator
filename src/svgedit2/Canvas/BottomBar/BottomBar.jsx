@@ -29,16 +29,6 @@ const BottomBar = () => {
     canvasStateDispatcher({ type: 'zoom', zoom: Number(newZoom), event });
   };
 
-  useEffect(() => {
-    if (!selectedElement) {
-      canvasStateDispatcher({
-        type: 'color',
-        colorType: 'fill',
-        color: '#ff0000',
-      });
-    }
-  }, [selectedElement]);
-
   const svgroot = document.getElementById('svgroot');
 
   if (!svgroot) {

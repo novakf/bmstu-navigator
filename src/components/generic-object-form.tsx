@@ -120,7 +120,7 @@ export const GenericUniverObjectForm: FC<Props> = ({ onSubmit, onCancel }) => {
       canvasStateDispatcher({
         type: 'color',
         colorType: 'fill',
-        color: '#bcb9b2',
+        color: values.closed ? '#9b741b' : '#bcb9b2',
       });
 
       const elX = Number(selectedElement.element.getAttribute('x'));
@@ -131,7 +131,9 @@ export const GenericUniverObjectForm: FC<Props> = ({ onSubmit, onCancel }) => {
       const textX = elX + elWidth / 2 - 15;
       const textY = elY + elHeight / 2 + 10;
 
-      const currText = document.querySelectorAll(`text.${values.id}`)[0];
+      const currText = document.querySelectorAll(
+        `text[class~="${values.id}"]`
+      )[0];
 
       console.log(currText);
 

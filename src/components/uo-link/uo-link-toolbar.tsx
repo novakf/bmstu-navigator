@@ -5,6 +5,7 @@ import {
   addUoToHolderAction,
   setUoItemsAction,
   setUoLinksAction,
+  useCorpus,
   useFloor,
   useScale,
   useSelectedElement,
@@ -41,6 +42,7 @@ export const UOLinkToolbar = ({
   const uoItems = useUoItems();
   const uoLinks = useUoLinks();
   const floor = useFloor();
+  const corpus = useCorpus()
   const scale = useScale();
   const [leftNodeId, setLeftNodeId] = useState('');
   const [rightNodeId, setRightNodeId] = useState('');
@@ -96,6 +98,11 @@ export const UOLinkToolbar = ({
       return;
     }
 
+    if (!corpus) {
+      message.error('Заполните корпус');
+      return;
+    }
+
     if (!leftNodeId || !rightNodeId) {
       message.error('Заполните поля связки');
       return;
@@ -147,6 +154,7 @@ export const UOLinkToolbar = ({
         const hallwayPoint = createHallwayPoint({
           ...hallwayPointProto,
           floor,
+          corpus,
         });
         addHallwayPointToCanvas(hallwayPoint);
 

@@ -10,7 +10,7 @@ import {
   useSchemes,
   useUoItems,
 } from '../../state/editor/slice';
-import { UniverObjectType } from '../../interfaces';
+import { UniverObject, UniverObjectType } from '../../interfaces';
 import { isSearchable } from '../../utils';
 import { useDispatch } from 'react-redux';
 
@@ -149,16 +149,37 @@ export const Scheme: FC<{
     });
     const hiddenObjects = hiddenObjectKeys.map((key) => uoItems[key]);
 
-    const showTooltip = ({ text, el }: { text?: string; el: HTMLElement }) => {
-      if (!text) {
+    const showTooltip = ({
+      obj,
+      el,
+    }: {
+      obj: UniverObject;
+      el: HTMLElement;
+    }) => {
+      if (!obj.description && !obj.closed) {
         return;
       }
 
       if (!tooltip) return;
 
-      let toolTipText = text;
+      let toolTipText = obj.description || '';
 
-      if (el) tooltip.innerHTML = text;
+      if (obj.closed) {
+        if (obj.description) {
+          toolTipText += '- ';
+        }
+        toolTipText += 'Закрыта';
+      }
+
+      if (obj.closeCause) {
+        toolTipText += ` (${obj.closeCause})`;
+      }
+
+      if (!toolTipText) {
+        return;
+      }
+
+      if (el) tooltip.innerHTML = toolTipText;
       tooltip.style.display = 'block';
       const elProps = el.getBoundingClientRect();
       const elWidth = elProps.width;
@@ -185,7 +206,7 @@ export const Scheme: FC<{
       });
       el.addEventListener('mouseenter', (e) => {
         console.log(interObject);
-        showTooltip({ text: interObject.description, el: el });
+        showTooltip({ obj: interObject, el: el });
       });
       el.addEventListener('mouseleave', (e) => {
         hideTooltip();
@@ -211,7 +232,7 @@ export const Scheme: FC<{
           dispatch(setRouteEdgeAction(interObject.id));
         });
         el.removeEventListener('mouseenter', (e) => {
-          showTooltip({ text: interObject.description, el: el });
+          showTooltip({ obj: interObject, el: el });
         });
         el.removeEventListener('mouseleave', (e) => {
           hideTooltip();

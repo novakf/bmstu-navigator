@@ -32,6 +32,9 @@ export type UniverObject = {
   name: string;
   type: UniverObjectType;
   floor: number;
+  corpus: string;
+  closed?: boolean;
+  closeCause?: string;
   description?: string;
   // for points
   xCoord?: number;
@@ -47,6 +50,7 @@ export type UniverPointObject = {
   name: string;
   type: UniverObjectType;
   floor: number;
+  corpus: string;
   xCoord: number;
   yCoord: number;
 };
@@ -57,5 +61,6 @@ export type UniverGuideObject = {
   name: string;
   type: UniverObjectType;
   floor: number;
+  corpus: string;
   lines: LinePointed[];
 };

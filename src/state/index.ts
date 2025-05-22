@@ -10,11 +10,17 @@ const persistEditorConfig = {
   storage,
 };
 
+const persistUserConfig = {
+  key: 'user',
+  storage,
+};
+
 const persistedEditor = persistReducer(persistEditorConfig, editorReducer);
+const persistedUser = persistReducer(persistUserConfig, userReducer);
 
 const rootReducer = combineReducers({
   editor: persistedEditor,
-  user: userReducer,
+  user: persistedUser,
   viewer: viewerReducer,
 });
 

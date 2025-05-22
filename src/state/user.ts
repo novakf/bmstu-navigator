@@ -1,30 +1,40 @@
-import { createSlice, PayloadAction } from "@reduxjs/toolkit"
-import { RootState } from "."
-import { useSelector } from "react-redux"
+import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { RootState } from '.';
+import { useSelector } from 'react-redux';
 
 type State = {
-  user: { id: string; login: string } | null
-}
+  user: { id: string; login: string } | null;
+  isFormOpen: boolean;
+};
 
 const initialState = {
   user: null,
+  isFormOpen: false,
   // user: { id: "user", login: "admin" },
-} as State
+} as State;
 
 const userSlice = createSlice({
-  name: "user",
+  name: 'user',
   initialState,
   reducers: {
-    setUser(state, { payload }: PayloadAction<State["user"]>) {
-      state.user = payload
+    setUser(state, { payload }: PayloadAction<State['user']>) {
+      state.user = payload;
+    },
+    setFormOpen(state, { payload }: PayloadAction<boolean>) {
+      state.isFormOpen = payload;
     },
   },
-})
+});
 
-const selectUser = (state: RootState) => state.user.user
+const selectUser = (state: RootState) => state.user.user;
 
-export const useCurrentUser = () => useSelector(selectUser)
+const selectFormOpen = (state: RootState) => state.user.isFormOpen;
 
-export const { setUser: setUserAction } = userSlice.actions
+export const useCurrentUser = () => useSelector(selectUser);
 
-export default userSlice.reducer
+export const useFormOpen = () => useSelector(selectFormOpen);
+
+export const { setUser: setUserAction, setFormOpen: setFormOpenAction } =
+  userSlice.actions;
+
+export default userSlice.reducer;

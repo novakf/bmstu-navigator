@@ -182,7 +182,7 @@
   bottom: 0px;
   left: 225px;
 }
-.top-bar button {
+.top-bar-container button {
   display: flex;
   border: 0px;
   margin: 1px;
@@ -196,10 +196,10 @@
   align-items: center;
   justify-content: center;
 }
-.top-bar button:hover {
+.top-bar-container button:hover {
   background-color: #e5e5e582;
 }
-.top-bar button.disabled {
+.top-bar-container button.disabled {
   color: lightgrey;
 }
 

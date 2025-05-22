@@ -12,12 +12,15 @@ import { EditOutlined } from '@ant-design/icons';
 import { useNavigate } from 'react-router-dom';
 import TopBar from '../components/viewer/top-bar';
 import ZoomBar from '../components/viewer/zoom-bar';
+import PopupForm from '../components/viewer/auth-modal';
 
 export const Viewer: FC = () => {
   const dispatch = useDispatch<AppDispatch>();
   const [isInit, setIsInit] = useState(false);
 
   const [zoom, setZoom] = useState(1);
+
+  const [loginOpen, setLoginOpen] = useState(false);
 
   useEffect(() => {
     dispatch(initEditor());
@@ -28,10 +31,19 @@ export const Viewer: FC = () => {
 
   return (
     <Container>
-      <TopBar svgUpdate={() => {}} onClose={() => {}} />
+      <TopBar
+        onClose={() => {}}
+        svgUpdate={() => {}}
+        setLoginOpen={setLoginOpen}
+      />
       <Scheme zoom={zoom} setZoom={setZoom} />
       <ZoomBar zoom={zoom} setZoom={setZoom} />
       <RouteStepper />
+      <PopupForm
+        open={loginOpen}
+        onClose={() => setLoginOpen(false)}
+        type="Login"
+      />
     </Container>
   );
 };

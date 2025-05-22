@@ -111,16 +111,16 @@ const editorSlice = createSlice({
       state.currScheme = payload;
     },
     setUoItems(state, { payload }: PayloadAction<State['uoItems']>) {
-      localStorage.setItem('uoItems', JSON.stringify(payload));
+      localStorage.setItem('uoItems', JSON.stringify(payload || {}));
       state.uoItems = payload;
     },
     setUoLinks(state, { payload }: PayloadAction<State['uoLinks']>) {
-      localStorage.setItem('uoLinks', JSON.stringify(payload));
+      localStorage.setItem('uoLinks', JSON.stringify(payload || {}));
 
       state.uoLinks = payload;
     },
     setUoHolders(state, { payload }: PayloadAction<State['uoHolders']>) {
-      localStorage.setItem('uoHolders', JSON.stringify(payload));
+      localStorage.setItem('uoHolders', JSON.stringify(payload || {}));
 
       state.uoHolders = payload;
     },
@@ -300,12 +300,16 @@ export const useUpdated = () => useSelector(selectUpdated);
 export const useSaved = () => useSelector(selectSaved);
 
 export const initEditor = createAsyncThunk('initEditor', (_, { dispatch }) => {
-  const uoItems =
-    JSON.parse(localStorage.getItem('uoItems') || 'null') || uoItemsMock;
-  const uoLinks =
-    JSON.parse(localStorage.getItem('uoLinks') || 'null') || uoLinksMock;
-  const uoHolders =
-    JSON.parse(localStorage.getItem('uoHolders') || 'null') || uoHoldersMock;
+  // const uoItems =
+  //   JSON.parse(localStorage.getItem('uoItems') || 'null') || uoItemsMock;
+  // const uoLinks =
+  //   JSON.parse(localStorage.getItem('uoLinks') || 'null') || uoLinksMock;
+  // const uoHolders =
+  //   JSON.parse(localStorage.getItem('uoHolders') || 'null') || uoHoldersMock;
+
+  const uoItems = JSON.parse(localStorage.getItem('uoItems') || 'null');
+  const uoLinks = JSON.parse(localStorage.getItem('uoLinks') || 'null');
+  const uoHolders = JSON.parse(localStorage.getItem('uoHolders') || 'null');
 
   dispatch(setUoItemsAction(uoItems));
   dispatch(setUoLinksAction(uoLinks));

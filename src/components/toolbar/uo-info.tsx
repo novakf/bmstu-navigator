@@ -1,49 +1,49 @@
-import { DeleteOutlined, InfoOutlined } from "@ant-design/icons"
-import { Button, Drawer, List, Modal } from "antd"
-import { FC, useState } from "react"
+import { DeleteOutlined, InfoOutlined } from '@ant-design/icons';
+import { Button, Drawer, List, Modal } from 'antd';
+import { FC, useState } from 'react';
 import {
   removeObjectFromUoHoldersAction,
   removeObjectFromUoItemsAction,
   removeObjectFromUoLinksAction,
   useUoItems,
-} from "../../state/editor/slice"
-import { useDispatch } from "react-redux"
-import styled, { isStyledComponent } from "styled-components"
+} from '../../state/editor/slice';
+import { useDispatch } from 'react-redux';
+import styled, { isStyledComponent } from 'styled-components';
 
 export const UoInfo: FC = () => {
-  const dispatch = useDispatch()
-  const uoItems = useUoItems()
-  const [isInfoOpen, setIsInfoOpen] = useState(false)
+  const dispatch = useDispatch();
+  const uoItems = useUoItems();
+  const [isInfoOpen, setIsInfoOpen] = useState(false);
 
   const openInfo = () => {
-    setIsInfoOpen(true)
-  }
+    setIsInfoOpen(true);
+  };
 
   const deleteItem = (id: string) => {
-    dispatch(removeObjectFromUoItemsAction({ id }))
-    dispatch(removeObjectFromUoLinksAction({ id }))
-    dispatch(removeObjectFromUoHoldersAction({ id }))
-  }
+    dispatch(removeObjectFromUoItemsAction({ id }));
+    dispatch(removeObjectFromUoLinksAction({ id }));
+    dispatch(removeObjectFromUoHoldersAction({ id }));
+  };
 
   const hoverItem = (id: string) => {
-    const svgId = uoItems[id].svgId
-    const svgEl = document.getElementById(svgId)
+    const svgId = uoItems[id].svgId;
+    const svgEl = document.getElementById(svgId);
 
-    if (!svgEl) return
+    if (!svgEl) return;
 
-    svgEl.style.stroke = "green"
-    svgEl.style.strokeWidth = "2px"
-  }
+    svgEl.style.stroke = 'green';
+    svgEl.style.strokeWidth = '2px';
+  };
 
   const unhoverItem = (id: string) => {
-    const svgId = uoItems[id].svgId
-    const svgEl = document.getElementById(svgId)
+    const svgId = uoItems[id].svgId;
+    const svgEl = document.getElementById(svgId);
 
-    if (!svgEl) return
+    if (!svgEl) return;
 
-    svgEl.style.stroke = ""
-    svgEl.style.strokeWidth = ""
-  }
+    svgEl.style.stroke = '';
+    svgEl.style.strokeWidth = '';
+  };
 
   return (
     <>
@@ -51,8 +51,8 @@ export const UoInfo: FC = () => {
         open={isInfoOpen}
         onClose={() => setIsInfoOpen(false)}
         width={350}
-        placement={"left"}
-        styles={{ mask: { background: "transparent", pointerEvents: "none" } }}
+        placement={'left'}
+        styles={{ mask: { background: 'transparent', pointerEvents: 'none' } }}
       >
         <List>
           {Object.keys(uoItems).map((key) => (
@@ -75,8 +75,8 @@ export const UoInfo: FC = () => {
       </Drawer>
       <Button icon={<InfoOutlined />} onClick={openInfo} />
     </>
-  )
-}
+  );
+};
 
 const ListItem = styled(List.Item)`
   transition: 0.2s;
@@ -87,4 +87,4 @@ const ListItem = styled(List.Item)`
   &:hover {
     background: lightgrey;
   }
-`
+`;

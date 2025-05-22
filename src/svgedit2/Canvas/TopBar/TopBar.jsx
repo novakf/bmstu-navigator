@@ -9,6 +9,7 @@ import Icon from '../Icon/Icon.jsx';
 import {
   Button,
   Divider,
+  Dropdown,
   Input,
   InputNumber,
   Modal,
@@ -17,7 +18,12 @@ import {
   Upload,
   message,
 } from 'antd';
-import { PlusOutlined, UploadOutlined } from '@ant-design/icons';
+import {
+  EditOutlined,
+  EnterOutlined,
+  PlusOutlined,
+  UploadOutlined,
+} from '@ant-design/icons';
 import { styled } from 'styled-components';
 import {
   removeFloorAction,
@@ -36,6 +42,8 @@ import {
 } from '../../../state/editor/slice.ts';
 import { useDispatch } from 'react-redux';
 import { UOLinkToolbar } from '../../../components/uo-link/uo-link-toolbar';
+import { UoInfo } from '../../../components/toolbar/uo-info.tsx';
+import { setUserAction, useCurrentUser } from '../../../state/user';
 
 let index = 0;
 
@@ -47,6 +55,8 @@ const TopBar = ({ svgUpdate, onClose }) => {
   const schemes = useSchemes();
   const currentCampus = useCorpus();
   const currentFloor = useFloor();
+
+  const user = useCurrentUser();
 
   console.log(currentFloor);
 
@@ -69,6 +79,20 @@ const TopBar = ({ svgUpdate, onClose }) => {
   const currSchemeStatus = useCurrSchemeStatus();
 
   const [currStatus, setCurrStatus] = useState(currSchemeStatus);
+
+  const onClickClose = () => {
+    console.log('UPD', updated, saved);
+    if (updated && !saved) {
+      // eslint-disable-next-line no-alert
+      if (
+        !window.confirm(
+          'Схема была изменена, уверены, что хотите выйти? Несохраненные данные будут потеряны'
+        )
+      )
+        return;
+    }
+    onClose();
+  };
 
   useEffect(() => {
     console.log('currSVG', currFloorSvg);
@@ -96,20 +120,6 @@ const TopBar = ({ svgUpdate, onClose }) => {
   useEffect(() => {
     dispatch(setSavedAction(false));
   }, [updated]);
-
-  const onClickClose = () => {
-    console.log('UPD', updated, saved);
-    if (updated && !saved) {
-      // eslint-disable-next-line no-alert
-      if (
-        !window.confirm(
-          'Схема была изменена, уверены, что хотите выйти? Несохраненные данные будут потеряны'
-        )
-      )
-        return;
-    }
-    onClose();
-  };
 
   const handlePlaceChange = (value) => {
     const newFloors = [];
@@ -311,6 +321,30 @@ const TopBar = ({ svgUpdate, onClose }) => {
 
   const [linkMode, setLinkMode] = useState(false);
 
+  const profileItems = [
+    {
+      key: '1',
+      label: user?.login || 'Гость',
+      disabled: true,
+    },
+  ];
+
+  const handleMenuClick = (e) => {
+    if (e.key === '2') {
+      window.navigate('/');
+    }
+    if (e.key === '3') {
+      dispatch(setUserAction(null));
+    }
+  };
+
+  useEffect(() => {
+    if (!user) {
+      message.error('Необходимо авторизоваться!');
+      window.navigate('/');
+    }
+  }, [user]);
+
   return (
     <div className="top-bar">
       <div style={{ flex: 1 }}>
@@ -371,6 +405,17 @@ const TopBar = ({ svgUpdate, onClose }) => {
         </div>
       </div>
       <div style={{ display: 'flex', gap: 4 }}>
+        <div
+          className="top-bar-container"
+          style={{
+            height: 38,
+            width: 38,
+            justifyContent: 'center',
+          }}
+        >
+          <UoInfo />
+        </div>
+
         <div
           className="top-bar-container"
           style={{
@@ -506,9 +551,26 @@ const TopBar = ({ svgUpdate, onClose }) => {
           />
         </div>
       </div>
-      <div style={{ flex: 1 }}>
+      <div style={{ flex: 1, display: 'flex', alignItems: 'center' }}>
         <div className="top-bar-container" style={{ marginLeft: 'auto' }}>
-          <IconButton icon="Avatar" text={'Профиль'} tooltipPlace={'bottom'} />
+          {/* <IconButton
+              icon="Avatar"
+              text={'Профиль'}
+              tooltipPlace={'bottom'}
+              onClick={() => {}}
+            /> */}
+          <Dropdown menu={{ items: profileItems, onClick: handleMenuClick }} on>
+            <a onClick={(e) => e.preventDefault()}>
+              <Space>
+                <IconButton
+                  icon="Avatar"
+                  text={''}
+                  tooltipPlace={'bottom'}
+                  onClick={() => {}}
+                />
+              </Space>
+            </a>
+          </Dropdown>
         </div>
       </div>
       <StyledModal
@@ -618,6 +680,22 @@ TopBar.propTypes = {
   svgUpdate: PropTypes.func.isRequired,
   onClose: PropTypes.func.isRequired,
 };
+
+const LoginButton = styled.button`
+  background: #0064ff;
+  border-radius: 10px;
+  border: none;
+  cursor: pointer;
+  font-size: 15px;
+  color: #fff;
+  padding: 5px 14px 7px 14px;
+  transition: all 0.2s;
+  height: 38px;
+
+  &:hover {
+    background: #0042a7;
+  }
+`;
 
 const StyledUOLinkToolbar = styled.div`
   position: absolute;

@@ -4,6 +4,11 @@ import config from './config';
 const updateCanvas = (svgCanvas, center, event, newCtr = {}) => {
   // workarea node is the parent of the svg canvas
   const cnvs = document.getElementById('svgcanvas');
+
+  if (!cnvs) {
+    return;
+  }
+
   const workarea = cnvs.parentNode;
   //  let w = workarea.width(), h = workarea.height();
   let w = parseFloat(getComputedStyle(workarea, null).width.replace('px', ''));

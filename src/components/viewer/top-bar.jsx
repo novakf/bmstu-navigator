@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import './top-bar.less';
 import IconButton from '../../svgedit2/Canvas/IconButton/IconButton.jsx';
 import Icon from '../../svgedit2/Canvas/Icon/Icon.jsx';
-import { Button, Modal, Select, Tooltip } from 'antd';
+import { Button, Dropdown, Modal, Select, Space, Tooltip } from 'antd';
 import { styled } from 'styled-components';
 import {
   setCampusAction,
@@ -16,11 +16,17 @@ import {
   useSchemes,
 } from '../../state/editor/slice';
 import { useDispatch } from 'react-redux';
-import { EditOutlined } from '@ant-design/icons';
+import {
+  DownOutlined,
+  EditOutlined,
+  EnterOutlined,
+  SettingOutlined,
+} from '@ant-design/icons';
 import { useNavigate } from 'react-router-dom';
 import { RouteToolbar } from './route-toolbar';
+import { setUserAction, useCurrentUser } from '../../state/user';
 
-const TopBar = () => {
+const TopBar = ({ setLoginOpen }) => {
   const dispatch = useDispatch();
   const schemes = useSchemes();
   const currentCampus = useCorpus();
@@ -29,6 +35,8 @@ const TopBar = () => {
   const navigate = useNavigate();
 
   const [showRouteBar, setShowRouteBar] = useState(false);
+
+  const user = useCurrentUser();
 
   console.log(currentFloor);
 
@@ -91,6 +99,38 @@ const TopBar = () => {
 
     setFloorValues(newFloorValues);
   }, [schemes]);
+
+  const items = [
+    {
+      key: '1',
+      label: user?.login || 'Гость',
+      disabled: true,
+    },
+    {
+      type: 'divider',
+    },
+    {
+      key: '2',
+      label: 'Редактор',
+      icon: <EditOutlined />,
+    },
+    {
+      key: '3',
+      label: 'Выйти',
+      danger: true,
+      icon: <EnterOutlined />,
+      extra: '⌘B',
+    },
+  ];
+
+  const handleMenuClick = (e) => {
+    if (e.key === '2') {
+      navigate('/editor');
+    }
+    if (e.key === '3') {
+      dispatch(setUserAction(null));
+    }
+  };
 
   return (
     <div className="top-bar" style={{ marginLeft: 7, position: 'relative' }}>
@@ -189,15 +229,35 @@ const TopBar = () => {
           />
         </div>{' '}
       </div>
-      <div style={{ flex: 1 }}>
-        <div className="top-bar-container" style={{ marginLeft: 'auto' }}>
-          <IconButton
-            icon="Avatar"
-            text={'Профиль'}
-            tooltipPlace={'bottom'}
-            onClick={() => {}}
-          />
-        </div>
+      <div style={{ flex: 1, display: 'flex', alignItems: 'center' }}>
+        {user ? (
+          <div className="top-bar-container" style={{ marginLeft: 'auto' }}>
+            {/* <IconButton
+              icon="Avatar"
+              text={'Профиль'}
+              tooltipPlace={'bottom'}
+              onClick={() => {}}
+            /> */}
+            <Dropdown menu={{ items, onClick: handleMenuClick }} on>
+              <a onClick={(e) => e.preventDefault()}>
+                <Space>
+                  <IconButton
+                    icon="Avatar"
+                    text={''}
+                    tooltipPlace={'bottom'}
+                    onClick={() => {}}
+                  />
+                </Space>
+              </a>
+            </Dropdown>
+          </div>
+        ) : (
+          <div
+            style={{ marginLeft: 'auto', width: 'fit-content', fontSize: 16 }}
+          >
+            <LoginButton onClick={() => setLoginOpen(true)}>Войти</LoginButton>
+          </div>
+        )}
       </div>
       <StyledRouteBar $active={showRouteBar}>
         <RouteToolbar />
@@ -205,6 +265,22 @@ const TopBar = () => {
     </div>
   );
 };
+
+const LoginButton = styled.button`
+  background: #0064ff;
+  border-radius: 10px;
+  border: none;
+  cursor: pointer;
+  font-size: 15px;
+  color: #fff;
+  padding: 5px 14px 7px 14px;
+  transition: all 0.2s;
+  height: 38px;
+
+  &:hover {
+    background: #0042a7;
+  }
+`;
 
 const StyledRouteBar = styled.div`
   position: absolute;
@@ -229,6 +305,27 @@ const StyledRouteBar = styled.div`
     top: 66px;
     opacity: 1;
   `}
+
+  button {
+    display: flex;
+    border: 0px;
+    margin: 1px;
+    padding: 2px;
+    border-radius: 5px;
+    font-size: 0.5em;
+    width: 30px;
+    height: 30px;
+    background-color: #ffffff00;
+    cursor: pointer;
+    align-items: center;
+    justify-content: center;
+  }
+  button:hover {
+    background-color: #e5e5e582;
+  }
+  button.disabled {
+    color: lightgrey;
+  }
 `;
 
 TopBar.propTypes = {

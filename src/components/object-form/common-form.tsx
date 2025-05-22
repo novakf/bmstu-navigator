@@ -1,4 +1,12 @@
-import { Form, Input, InputRef, Space, message } from 'antd';
+import {
+  Checkbox,
+  CheckboxRef,
+  Form,
+  Input,
+  InputRef,
+  Space,
+  message,
+} from 'antd';
 import {
   useCorpus,
   useFloor,
@@ -7,7 +15,7 @@ import {
 } from '../../state/editor/slice';
 import { createLineFrom, fixed } from '../../utils';
 import { SVG_ID_SLICE } from '../../constants';
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
 export const CommonFormItems = {
   Name: () => {
@@ -42,6 +50,44 @@ export const CommonFormItems = {
       <Form.Item name={'description'} label={'Описание'} initialValue={value}>
         <Input ref={ref} value={'sdf'} />
       </Form.Item>
+    );
+  },
+  Status: () => {
+    const se = useSelectedElement();
+    const ref = useRef<CheckboxRef | null>(null);
+    const uoItems = useUoItems();
+
+    let value = undefined;
+
+    let cause = undefined;
+
+    if (se?.element) {
+      value = uoItems[se.element?.id.replace('svg_', '')]?.closed;
+      cause = uoItems[se.element?.id.replace('svg_', '')]?.closeCause;
+    }
+
+    const [val, setVal] = useState(value);
+
+    return (
+      <>
+        <Form.Item
+          name={'closed'}
+          label={'Закрыта'}
+          initialValue={value}
+          valuePropName="checked"
+        >
+          <Checkbox ref={ref} onChange={(e) => setVal(e.target.checked)} />
+        </Form.Item>
+        {val && (
+          <Form.Item
+            name={'closeCause'}
+            label={'*Причина'}
+            initialValue={cause}
+          >
+            <Input value={'sdf'} />
+          </Form.Item>
+        )}
+      </>
     );
   },
   Id: () => {

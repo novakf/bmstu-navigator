@@ -9,12 +9,19 @@ import {
   useRouteTo,
 } from '../../state/viewer';
 import { useDispatch } from 'react-redux';
-import { useUoHolders, useUoItems, useUoLinks } from '../../state/editor/slice';
+import {
+  useCorpus,
+  useFloor,
+  useUoHolders,
+  useUoItems,
+  useUoLinks,
+} from '../../state/editor/slice';
 import { isSearchable } from '../../utils';
 import { WeightedGraph } from '../../dijkstra';
 import { Link } from '../../interfaces';
 import { DefaultOptionType, FilterFunc } from 'rc-select/lib/Select';
 import IconButton from '../../svgedit2/Canvas/IconButton/IconButton.jsx';
+import { BaseOptionType } from 'antd/es/select';
 
 const textTypeMapper: Record<string, string> = {
   auditorium: 'аудитория',
@@ -29,15 +36,26 @@ export const RouteToolbar: FC = () => {
   const routeFrom = useRouteFrom();
   const routeTo = useRouteTo();
 
+  const currentFloor = useFloor();
+  const currentCorpus = useCorpus();
+
   const uoItemsSearchable = Object.keys(uoItems)
     .map((key) => uoItems[key])
     .filter(isSearchable);
 
-  const searchableOptions = uoItemsSearchable.map((item) => {
-    return {
-      label: `${item.name} (${textTypeMapper[item.type]})`,
-      value: item.id,
-    };
+  const searchableOptions: BaseOptionType[] = [];
+
+  uoItemsSearchable.map((item) => {
+    if (
+      item.floor === currentFloor &&
+      item.corpus === currentCorpus &&
+      !item.closed
+    ) {
+      searchableOptions.push({
+        label: `${item.name} (${textTypeMapper[item.type]})`,
+        value: item.id,
+      });
+    }
   });
 
   const buildRoute = () => {
