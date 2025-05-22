@@ -151,7 +151,7 @@ export const addHallwayPointToCanvas = (uoPoint: UniverPointObject) => {
     },
   });
 
-  window.editor.svgCanvas.call('changed', [element]);
+  window.svgEditor.call('changed', [element]);
 
   return element;
 };

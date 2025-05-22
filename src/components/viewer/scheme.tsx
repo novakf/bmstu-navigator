@@ -247,9 +247,23 @@ export const Scheme: FC<{
         <SchemeContainer className={'scheme-container'} />
       </Canvas>
       <Tooltip ref={toolTipRef} />
+      {!currentCampus && !currentFloor && (
+        <NotFound>Цифровые карты еще не добавлены</NotFound>
+      )}
     </Container>
   );
 };
+
+const NotFound = styled.div`
+  position: absolute;
+  left: 0;
+  right: 0;
+  margin-inline: auto;
+  height: fit-content;
+  width: fit-content;
+  font-size: 24px;
+  color: #b1b1b1;
+`;
 
 const Tooltip = styled.div`
   position: absolute;
